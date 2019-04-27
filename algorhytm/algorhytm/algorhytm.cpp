@@ -22,14 +22,23 @@ int main()
 	//Инициализация матриц связи между слоями
 	double **w01 = new double*[17];
 	for (int i = 0; i < 17; i++) {
-		w01[i] = new double[9];
+		w01[i] = new double[9]; //Количество столбцов на 1 меньше размера след. массива из-за нейрона смещения
+		for (int j = 0; j < 9; j++) {
+			w01[i][j] = 1; //Изначально все веса заполняются еденицами
+		}
 	}
 	double **w12 = new double*[10];
 	for (int i = 0; i < 10; i++) {
-		w01[i] = new double[6];
+		w12[i] = new double[6];
+		for (int j = 0; j < 6; j++) {
+			w12[i][j] = 1;
+		}
 	}
 	double **w23 = new double*[7];
 	for (int i = 0; i < 7; i++) {
-		w01[i] = new double[4];
+		w23[i] = new double[4];
+		for (int j = 0; j < 4; j++) {
+			w23[i][j] = 1;
+		}
 	}
 }
