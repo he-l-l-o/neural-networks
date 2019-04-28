@@ -43,6 +43,29 @@ int main()
 			// Кроме обычного способа наше окно будет закрываться по нажатию на Escape
 			if (event.type == Event::Closed || (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape))
 				window.close();
+
+			if (event.type == sf::Event::MouseButtonPressed)
+			{
+				if (IntRect(422, 532, 27, 27).contains(Mouse::getPosition(window))) { LoadpapImageSprite.setColor(Color::Blue); }
+				if (IntRect(952, 532, 26, 26).contains(Mouse::getPosition(window))) { SavepapImageSprite.setColor(Color::Blue); }
+
+				if (event.mouseButton.button == sf::Mouse::Left)
+				{
+					if (event.mouseButton.x >= 422 && event.mouseButton.x <= 449 && event.mouseButton.y >= 532 && event.mouseButton.y <= 558) {
+						cout << "the right button was pressed on Loadpap" << endl;
+						cout << "mouse x: " << event.mouseButton.x << endl;
+						cout << "mouse y: " << event.mouseButton.y << endl;
+					}
+				}
+				if (event.mouseButton.button == sf::Mouse::Left)
+				{
+					if (event.mouseButton.x >= 952 && event.mouseButton.x <= 978 && event.mouseButton.y >= 532 && event.mouseButton.y <= 558) {
+						cout << "the right button was pressed on Save" << endl;
+						cout << "mouse x: " << event.mouseButton.x << endl;
+						cout << "mouse y: " << event.mouseButton.y << endl;
+					}
+				}
+			}
 		}
 
 		// Очистка
