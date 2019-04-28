@@ -29,6 +29,15 @@ void backward(neuron *next, int next_size, neuron *prev, int prev_size, double *
 	}
 }
 
+//функция обновления весов
+void weights_update(neuron *prev, int prev_size, neuron *next, int next_size, double **weight, double learning_coefficient) {
+	for (int i = 0; i < prev_size; i++) {
+		for (int j = 0; j < next_size; j++) {
+			weight[i][j] += learning_coefficient * next[j].error * next[j].out * (1 - next[j].out) * prev[i].out;
+		}
+	}
+}
+
 int main()
 {
 	//Инициализация слоев нейронной сети
