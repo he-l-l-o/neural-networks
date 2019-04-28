@@ -18,6 +18,44 @@ int main()
 	Sprite main_sprite;
 	main_sprite.setTexture(main_texture);
 	main_sprite.setPosition(0, 0);
+	//load picture
+	Image load_image;
+	load_image.loadFromFile("img/load.jpg");
+
+	Texture load_image_texture;
+	load_image_texture.loadFromImage(load_image);
+
+	Sprite load_image_sprite;
+	load_image_sprite.setTexture(load_image_texture);
+	load_image_sprite.setPosition(22, 20);
+
+	int size_of_x = load_image.getSize().x;
+	int size_of_y = load_image.getSize().y;
+	cout << "x = " << size_of_x << " y = " << size_of_y << endl;
+
+	double relationship_x_y = (double)size_of_x / size_of_y;
+	cout << "Relationshio x -> y: " << relationship_x_y;
+
+	int save_size_of_x = size_of_x;
+	int save_size_of_y = size_of_y;
+
+	if (size_of_x > size_of_y) {
+		while (size_of_x > 608) {
+			size_of_x = size_of_x - 1;
+		}
+		size_of_y = size_of_x / relationship_x_y;
+	}
+	else if (size_of_y > size_of_x) {
+		while (size_of_y > 600) {
+			size_of_y = size_of_y - 1;
+		}
+		if ((save_size_of_x > 608) && (save_size_of_y > 600)) {
+			size_of_x = size_of_x * relationship_x_y;
+		}
+	}
+	cout << endl;
+	cout << size_of_x << " " << size_of_y << endl;
+	cout << save_size_of_x << " " << save_size_of_y;
 
 	while (window.isOpen())
 	{
