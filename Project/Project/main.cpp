@@ -1,24 +1,43 @@
 #include <SFML/Graphics.hpp>
+#include <iostream>
+
+using namespace sf;
+using namespace std;
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(200, 200), "SFMLworks");
-	sf::CircleShape shape(100.f);
-	shape.setFillColor(sf::Color::Green);
+	// Создаем главное окно приложения
+	RenderWindow window(VideoMode(1000, 600), "NeuralNetworks");
 
+	Image MenuImage;//создаем меню
+	MenuImage.loadFromFile("images/menu.png");
+
+	Texture MenuImageTexture;//создаем текстуру меню
+	MenuImageTexture.loadFromImage(MenuImage);
+
+	Sprite MenuImageSprite; //создаем спрайт меню
+	MenuImageSprite.setTexture(MenuImageTexture);
+	MenuImageSprite.setPosition(0, 0);
+
+	// Главный цикл приложения
 	while (window.isOpen())
 	{
-		sf::Event event;
+		// Обрабатываем события в цикле
+		Event event;
 		while (window.pollEvent(event))
 		{
-			if (event.type == sf::Event::Closed)
+			// Кроме обычного способа наше окно будет закрываться по нажатию на Escape
+			if (event.type == Event::Closed || (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape))
 				window.close();
 		}
 
+		// Очистка
 		window.clear();
-		window.draw(shape);
+		// Тут будут вызываться функции обновления и отрисовки объектов
+		// Отрисовка
+		window.draw(MenuImageSprite);//рисуем меню
+		
 		window.display();
 	}
-
 	return 0;
 }
