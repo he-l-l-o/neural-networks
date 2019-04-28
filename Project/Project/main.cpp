@@ -11,13 +11,27 @@ int main()
 
 	Image MenuImage;//создаем меню
 	MenuImage.loadFromFile("images/menu.png");
+	Image LoadpapImage;//кнопка загрузки
+	LoadpapImage.loadFromFile("images/Loadpap.png");
+	Image SavepapImage;//кнопка сохранения
+	SavepapImage.loadFromFile("images/Save.png");
 
 	Texture MenuImageTexture;//создаем текстуру меню
 	MenuImageTexture.loadFromImage(MenuImage);
-
+	Texture LoadpapImageTexture;//создаем текстуру кнопки загрузки
+	LoadpapImageTexture.loadFromImage(LoadpapImage);
+	Texture SavepapImageTexture;//создаем текстуру кнопки сохранения
+	SavepapImageTexture.loadFromImage(SavepapImage);
+	
 	Sprite MenuImageSprite; //создаем спрайт меню
 	MenuImageSprite.setTexture(MenuImageTexture);
 	MenuImageSprite.setPosition(0, 0);
+	Sprite LoadpapImageSprite; //создаем спрайт кнопки загрузки
+	LoadpapImageSprite.setTexture(LoadpapImageTexture);
+	LoadpapImageSprite.setPosition(422, 532);
+	Sprite SavepapImageSprite; //создаем спрайт кнопки сохранения
+	SavepapImageSprite.setTexture(SavepapImageTexture);
+	SavepapImageSprite.setPosition(952, 532);
 
 	// Главный цикл приложения
 	while (window.isOpen())
@@ -37,6 +51,10 @@ int main()
 		// Отрисовка
 		window.draw(MenuImageSprite);//рисуем меню
 		
+		window.draw(LoadpapImageSprite);//рисуем иконку папки
+
+		window.draw(SavepapImageSprite);//рисуем иконку сохранения
+
 		window.display();
 	}
 	return 0;
