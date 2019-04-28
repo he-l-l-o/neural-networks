@@ -1,10 +1,22 @@
 #include "pch.h"
 #include <iostream>
+#include <cmath>
 
 struct neuron{
 	double out, error;
 };
 
+//функция вычисления значений следующего слоя сети
+void forward(neuron *prev, int prev_size, neuron *next, int next_size, double **weight) {
+	int temp;
+	for (int i = 0; i < next_size - 1; i++) {
+		temp = 0;
+		for (int j = 0; j < prev_size; j++) {
+			temp += prev[j].out * weight[j][i];
+		}
+		next[i].out = 1 / (1 + exp(-temp));
+	}
+}
 
 int main()
 {
@@ -18,7 +30,7 @@ int main()
 	neuron *neuro2 = new neuron[7];
 	neuro2[6].out = 1;
 	neuro2[6].error = 0;
-	neuron *n3 = new neuron[4]; //Нейроны выходного слоя по одному под каждое направление линии
+	neuron *neuro3 = new neuron[4]; //Нейроны выходного слоя по одному под каждое направление линии
 
 	//Инициализация матриц связи между слоями
 	double **weight01 = new double*[17];
