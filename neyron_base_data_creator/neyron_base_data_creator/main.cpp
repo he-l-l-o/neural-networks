@@ -56,6 +56,11 @@ int main()
 	cout << endl;
 	cout << size_of_x << " " << size_of_y << endl;
 	cout << save_size_of_x << " " << save_size_of_y;
+	
+	Vector2f targetSize(608, 600);
+	load_image_sprite.setScale(
+		targetSize.x / load_image_sprite.getGlobalBounds().width,
+		targetSize.y / load_image_sprite.getGlobalBounds().height);
 
 	while (window.isOpen())
 	{
@@ -67,6 +72,8 @@ int main()
 		}
 
 		window.clear();
+		window.draw(main_sprite);
+		window.draw(load_image_sprite);
 		window.display();
 	}
 
