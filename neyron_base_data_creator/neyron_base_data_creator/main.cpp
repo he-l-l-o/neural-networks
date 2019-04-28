@@ -35,7 +35,12 @@ int main()
 	//объявление шрифта
 	//Font font;
 	//font.loadFromFile("9041.ttf");
-
+	//объявление окна-разметчика
+	RectangleShape rectangle_razmer(Vector2f(8,8));
+	rectangle_razmer.setFillColor(Color::Red);
+	rectangle_razmer.setOutlineThickness(10);
+	rectangle_razmer.setOutlineColor(Color(250, 150, 100));
+	rectangle_razmer.setPosition(22, 20);
 
 	int size_of_x = load_image.getSize().x;
 	int size_of_y = load_image.getSize().y;
@@ -81,9 +86,23 @@ int main()
 			if (event.type == Event::Closed)
 				window.close();
 		}
+
+		if (Keyboard::isKeyPressed(Keyboard::Left)) {
+			rectangle_razmer.move(-1, 0);
+		}
+		if (Keyboard::isKeyPressed(Keyboard::Right)) {
+			rectangle_razmer.move(1, 0);
+		}
+		if (Keyboard::isKeyPressed(Keyboard::Up)) {
+			rectangle_razmer.move(0, -1);
+		}
+		if (Keyboard::isKeyPressed(Keyboard::Down)) {
+			rectangle_razmer.move(0, 1);
+		}
 		window.clear();
 		window.draw(main_sprite);
 		window.draw(load_image_sprite);
+		window.draw(rectangle_razmer);
 		window.display();
 	}
 
