@@ -28,6 +28,11 @@ int main()
 	Sprite load_image_sprite;
 	load_image_sprite.setTexture(load_image_texture);
 	load_image_sprite.setPosition(22, 20);
+	//text string
+	//объявление шрифта
+	Font font;
+	font.loadFromFile("9041.ttf");
+
 
 	int size_of_x = load_image.getSize().x;
 	int size_of_y = load_image.getSize().y;
@@ -70,10 +75,10 @@ int main()
 			if (event.type == Event::Closed)
 				window.close();
 		}
-
 		window.clear();
 		window.draw(main_sprite);
 		window.draw(load_image_sprite);
+		window.draw(txt);
 		window.display();
 	}
 
