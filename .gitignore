@@ -259,3 +259,6 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+/neyron_base_data_creator/neyron_base_data_creator/img/load.jpg
+/neyron_base_data_creator/neyron_base_data_creator/img/menu.png
+/neyron_base_data_creator/neyron_base_data_creator/img/verical.PNG
