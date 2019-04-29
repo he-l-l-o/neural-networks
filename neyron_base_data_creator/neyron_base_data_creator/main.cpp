@@ -41,7 +41,8 @@ int main()
 	rectangle_razmer.setOutlineThickness(10);
 	rectangle_razmer.setOutlineColor(Color(250, 150, 100));
 	rectangle_razmer.setPosition(22, 20);
-
+	//new .cpp and .h
+	/////////////////////////////////////
 	int size_of_x = load_image.getSize().x;
 	int size_of_y = load_image.getSize().y;
 	cout << "x = " << size_of_x << " y = " << size_of_y << endl;
@@ -70,13 +71,16 @@ int main()
 	cout << size_of_x << " " << size_of_y << endl;
 	cout << save_size_of_x << " " << save_size_of_y;
 	cout << endl;
-	
-
+	///////////////////////////////////////////////
 	Vector2f targetSize(608, 600);
 	load_image_sprite.setScale(
 		targetSize.x / load_image_sprite.getGlobalBounds().width,
 		targetSize.y / load_image_sprite.getGlobalBounds().height);
-
+	int location_marker_x;
+	int location_marker_y;
+	location_marker_x = rectangle_razmer.getPosition().x;
+	location_marker_y = rectangle_razmer.getPosition().y;
+	RectangleShape rect_save;
 
 	while (window.isOpen())
 	{
@@ -85,8 +89,26 @@ int main()
 		{
 			if (event.type == Event::Closed)
 				window.close();
+			if (event.KeyPressed)
+			{
+				if ((event.key.code == Keyboard::Right) || (event.key.code == Keyboard::Left))
+				{
+					location_marker_x = rectangle_razmer.getPosition().x;
+				}
+				if ((event.key.code == Keyboard::Up) || (event.key.code == Keyboard::Down))
+				{
+					location_marker_y = rectangle_razmer.getPosition().y;
+				}
+			}
+			if (event.KeyReleased)
+			{
+				if ((event.key.code == Keyboard::Up) || (event.key.code == Keyboard::Down) || (event.key.code == Keyboard::Right) || (event.key.code == Keyboard::Left))
+				{
+					cout << "x = " << location_marker_x << "  " << "y = " << location_marker_y << endl;
+				}
+			}
 		}
-
+		
 		if (Keyboard::isKeyPressed(Keyboard::Left)) {
 			rectangle_razmer.move(-1, 0);
 		}
@@ -99,6 +121,9 @@ int main()
 		if (Keyboard::isKeyPressed(Keyboard::Down)) {
 			rectangle_razmer.move(0, 1);
 		}
+		
+		///////new cppp
+
 		window.clear();
 		window.draw(main_sprite);
 		window.draw(load_image_sprite);
