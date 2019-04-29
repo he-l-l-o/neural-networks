@@ -31,6 +31,8 @@ int main()
 	Sprite load_image_sprite;
 	load_image_sprite.setTexture(load_image_texture);
 	load_image_sprite.setPosition(22, 20);
+
+	Sprite save_image_sprite;
 	//text string
 	//объявление шрифта
 	//Font font;
@@ -76,10 +78,13 @@ int main()
 	load_image_sprite.setScale(
 		targetSize.x / load_image_sprite.getGlobalBounds().width,
 		targetSize.y / load_image_sprite.getGlobalBounds().height);
+	
 	int location_marker_x;
 	int location_marker_y;
+
 	location_marker_x = rectangle_razmer.getPosition().x;
 	location_marker_y = rectangle_razmer.getPosition().y;
+	
 	RectangleShape rect_save;
 
 	while (window.isOpen())
@@ -106,6 +111,16 @@ int main()
 				{
 					cout << "x = " << location_marker_x << "  " << "y = " << location_marker_y << endl;
 				}
+				if (event.key.code == Keyboard::Enter)
+				{
+					IntRect form;
+					form = (IntRect)rectangle_razmer.getGlobalBounds();
+					//form.left -= 22;
+					//form.top -= 20;
+					save_image_sprite.setTexture(load_image_texture);
+					save_image_sprite.setTextureRect(form);
+					save_image_sprite.setPosition(600, 300);
+				}
 			}
 		}
 		
@@ -128,6 +143,7 @@ int main()
 		window.draw(main_sprite);
 		window.draw(load_image_sprite);
 		window.draw(rectangle_razmer);
+		window.draw(save_image_sprite);
 		window.display();
 	}
 
