@@ -67,6 +67,19 @@ int main()
 	Texture load_image_texture;//создаем текстуру загруженной картинки
 	load_image_texture.loadFromImage(load_image);
 
+	Image save_image;//—оздание нового изображени€
+	save_image.create(save_size_x, save_size_y, Color(255, 255, 100, 100));
+
+	//—оздание изображени€ из массива пискелей
+	for (int i = 0; i < save_size_y; i++) {
+		for (int j = 0; j < save_size_x; j++) {
+			save_image.setPixel(j, i, Color(arr_image[i][j][0], arr_image[i][j][1], arr_image[i][j][2], 255));
+		}
+	}
+
+	Texture save_image_texture;//—оздание текстуры под новое изображение
+	save_image_texture.loadFromImage(save_image);
+
 	Sprite menu_image_sprite; //создаем спрайт меню
 	menu_image_sprite.setTexture(menu_image_texture);
 	menu_image_sprite.setPosition(0, 0);
@@ -79,11 +92,18 @@ int main()
 	Sprite load_image_sprite; //создаем спрайт загруженной картинки
 	load_image_sprite.setTexture(load_image_texture);
 	load_image_sprite.setPosition(23, 23);
+	Sprite save_image_sprite;
+	save_image_sprite.setTexture(save_image_texture);
+	save_image_sprite.setPosition(503, 23);
 
 	Vector2f target_size(size_x, size_y); //целевой размеp
 	load_image_sprite.setScale(
 		target_size.x / load_image_sprite.getGlobalBounds().width,
 		target_size.y / load_image_sprite.getGlobalBounds().height);
+	Vector2f target_size1(size_x, size_y); //целевой размеp
+	save_image_sprite.setScale(
+		target_size1.x / save_image_sprite.getGlobalBounds().width,
+		target_size1.y / save_image_sprite.getGlobalBounds().height);
 
 	// √лавный цикл приложени€
 	while (window.isOpen())
@@ -131,6 +151,10 @@ int main()
 		window.draw(save_pap_image_sprite);//рисуем иконку сохранени€
 
 		window.draw(load_image_sprite);//рисуем «агруженную картинку
+
+		window.draw(save_image_sprite);//рисуем полученную картинку
+
+		save_image.saveToFile("images/SaveImage.jpg");//—охранение картинки
 
 		window.display();
 	}
