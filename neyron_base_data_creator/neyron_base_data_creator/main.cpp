@@ -1,4 +1,5 @@
-﻿#include <SFML/Graphics.hpp>
+﻿#include "image_conversion.h"
+#include <SFML/Graphics.hpp>
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -23,7 +24,6 @@ int main()
 	struct entry entry1;
 	string file_location;
 	cout << "Please enter the location of the loaded picture.\n WARNING!!!\n The path to the file should not contain Cyrillic characters, but only Latin letters and numbers.\n";
-	getline(cin, file_location);
 	getline(cin, file_location);
 	//создание главного окна приложения
 	//графика основного интерфейса
@@ -54,14 +54,13 @@ int main()
 	RectangleShape rectangle_razmer(Vector2f(8, 8));
 	rectangle_razmer.setFillColor(Color::Red);
 	rectangle_razmer.setPosition(22, 20);
-	//new .cpp and .h
-	/////////////////////////////////////
+
 	int size_of_x = load_image.getSize().x;
 	int size_of_y = load_image.getSize().y;
 	cout << "x = " << size_of_x << " y = " << size_of_y << endl;
 
-	double relationship_x_y = (double)size_of_x / size_of_y;
-	cout << "Relationship x -> y: " << relationship_x_y;
+	double ratio_x_y = (double)size_of_x / size_of_y;
+	cout << "Relationship x -> y: " << ratio_x_y;
 	//масштабирование относительно изображения относительно окна
 	int save_size_of_x = size_of_x;
 	int save_size_of_y = size_of_y;
@@ -69,14 +68,14 @@ int main()
 		while (size_of_x > 608) {
 			size_of_x = size_of_x - 1;
 		}
-		size_of_y = size_of_x / relationship_x_y;
+		size_of_y = size_of_x / ratio_x_y;
 	}
 	else if (size_of_y > size_of_x) {
 		while (size_of_y > 600) {
 			size_of_y = size_of_y - 1;
 		}
 		if ((save_size_of_x > 608) && (save_size_of_y > 600)) {
-			size_of_x = size_of_x * relationship_x_y;
+			size_of_x = size_of_x * ratio_x_y;
 		}
 	}
 	cout << endl;
