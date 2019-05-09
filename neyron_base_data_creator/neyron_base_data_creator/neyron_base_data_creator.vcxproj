@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="image_conversion.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="image_conversion.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="image_conversion.h" />

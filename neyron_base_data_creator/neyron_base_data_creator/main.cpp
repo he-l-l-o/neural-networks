@@ -55,32 +55,23 @@ int main()
 	rectangle_razmer.setFillColor(Color::Red);
 	rectangle_razmer.setPosition(22, 20);
 
-	int size_of_x = load_image.getSize().x;
-	int size_of_y = load_image.getSize().y;
+	int size_x = load_image.getSize().x;
+	int size_y = load_image.getSize().y;
 	cout << "x = " << size_of_x << " y = " << size_of_y << endl;
 
 	double ratio_x_y = (double)size_of_x / size_of_y;
-	cout << "Relationship x -> y: " << ratio_x_y;
-	//масштабирование относительно изображения относительно окна
-	int save_size_of_x = size_of_x;
-	int save_size_of_y = size_of_y;
-	if (size_of_x > size_of_y) {
-		while (size_of_x > 608) {
-			size_of_x = size_of_x - 1;
-		}
-		size_of_y = size_of_x / ratio_x_y;
-	}
-	else if (size_of_y > size_of_x) {
-		while (size_of_y > 600) {
-			size_of_y = size_of_y - 1;
-		}
-		if ((save_size_of_x > 608) && (save_size_of_y > 600)) {
-			size_of_x = size_of_x * ratio_x_y;
-		}
-	}
+	cout << "Ratio x -> y: " << ratio_x_y;
+
+	int save_size_x = size_x;
+	int save_size_y = size_y;
+	
+	scaling(size_x, size_y, save_size_x, save_size_y, ratio_x_y);
+	
+	double ratio_load_img_menu = (double)save_size_x / size_x;
 	cout << endl;
-	cout << "Now size X " << size_of_x << " Now size Y " << size_of_y << endl;
-	cout << "Save size X " << save_size_of_x << " Save size Y " << save_size_of_y;
+	cout << "Now size X " << size_x << " Now size Y " << size_y << endl;
+	cout << "Save size X " << save_size_x << " Save size Y " << save_size_y << endl;
+	cout << "Ratio loadIMG -> window " << ratio_load_img_menu << endl;
 	cout << endl;
 	///////////////////////////////////////////////
 	Vector2f targetSize(608, 600);
