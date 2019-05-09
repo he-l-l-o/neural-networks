@@ -1,6 +1,8 @@
 ﻿#include <SFML/Graphics.hpp>
 #include <iostream>
 #include <string>
+#include <fstream>
+#include <stdlib.h>
 
 using namespace std;
 using namespace sf;
@@ -9,17 +11,16 @@ using namespace sf;
 	[x][y][2] = G;
 	[x][y][3] = B;
 
-	x = size_of_x;
-	y = size_of_y;
+	0 .. x = size_x;
+	0 .. y = size_y;
 */
 int main()
 {
-	short*** color_of_image_pixels;
-
-	string file_location = "D:\\load.jpg";
-	//getline(cin, file_location);
-	//ñîçäàíèå ãëàâíîãî îêíà ïðèëîæåíèÿ
-	//ãðàôèêà îñíîâíîãî èíòåðôåéñà
+	string file_location;
+	cout << "Please enter the location of the loaded picture.\n WARNING!!!\n The path to the file should not contain Cyrillic characters, but only Latin letters and numbers.\n";
+	getline(cin, file_location);
+	//создание главного окна приложения
+	//графика основного интерфейса
 	RenderWindow window(VideoMode(1200, 720), "NeyronBaseDataCreator");
 
 	Image main_image;
