@@ -14,10 +14,16 @@ using namespace sf;
 	0 .. x = size_x;
 	0 .. y = size_y;
 */
+struct entry {
+	short color_of_image_pixels[8][8][3];
+	int type_lien;
+};
 int main()
 {
+	struct entry entry1;
 	string file_location;
 	cout << "Please enter the location of the loaded picture.\n WARNING!!!\n The path to the file should not contain Cyrillic characters, but only Latin letters and numbers.\n";
+	getline(cin, file_location);
 	getline(cin, file_location);
 	//создание главного окна приложения
 	//графика основного интерфейса
@@ -25,27 +31,25 @@ int main()
 	window.setVerticalSyncEnabled(true);
 	window.setFramerateLimit(60);
 
-	Image main_image;
+	Image main_image;//меню image
 	main_image.loadFromFile("img/menu.png");
+	Image load_image;//меню текстура
+	load_image.loadFromFile(file_location);
+	Image save_image;// меню спрайт
 
 	Texture main_texture;
 	main_texture.loadFromImage(main_image);
+	Texture load_image_texture;
+	load_image_texture.loadFromImage(load_image);
+	Texture save_image_texture;
 
 	Sprite main_sprite;
 	main_sprite.setTexture(main_texture);
 	main_sprite.setPosition(0, 0);
-	//load picture
-	Image load_image;
-	load_image.loadFromFile(file_location);
-
-	Texture load_image_texture;
-	load_image_texture.loadFromImage(load_image);
-
 	Sprite load_image_sprite;
 	load_image_sprite.setTexture(load_image_texture);
 	load_image_sprite.setPosition(22, 20);
-
-	Sprite save_image_sprite;
+	Sprite save_image_sprite;//вырезанный кусочек изображения
 
 	RectangleShape rectangle_razmer(Vector2f(8, 8));
 	rectangle_razmer.setFillColor(Color::Red);
@@ -58,7 +62,7 @@ int main()
 
 	double relationship_x_y = (double)size_of_x / size_of_y;
 	cout << "Relationship x -> y: " << relationship_x_y;
-	//ìàñøòàáèðîâàíèå îòíîñèòåëüíî èçîáðàæåíèÿ îòíîñèòåëüíî îêíà
+	//масштабирование относительно изображения относительно окна
 	int save_size_of_x = size_of_x;
 	int save_size_of_y = size_of_y;
 	if (size_of_x > size_of_y) {
