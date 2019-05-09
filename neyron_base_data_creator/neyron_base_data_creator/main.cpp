@@ -22,6 +22,8 @@ int main()
 	//создание главного окна приложения
 	//графика основного интерфейса
 	RenderWindow window(VideoMode(1200, 720), "NeyronBaseDataCreator");
+	window.setVerticalSyncEnabled(true);
+	window.setFramerateLimit(60);
 
 	Image main_image;
 	main_image.loadFromFile("img/menu.png");
