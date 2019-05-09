@@ -1,4 +1,4 @@
-#include <SFML/Graphics.hpp>
+п»ї#include <SFML/Graphics.hpp>
 #include <iostream>
 #include <string>
 
@@ -8,18 +8,18 @@ using namespace sf;
 	[x][y][1] = R;
 	[x][y][2] = G;
 	[x][y][3] = B;
-	 
+
 	x = size_of_x;
 	y = size_of_y;
 */
 int main()
 {
-	short ***color_of_image_pixels;
+	short*** color_of_image_pixels;
 
 	string file_location = "D:\\load.jpg";
 	//getline(cin, file_location);
-	//создание главного окна приложения
-	//графика основного интерфейса
+	//Г±Г®Г§Г¤Г Г­ГЁГҐ ГЈГ«Г ГўГ­Г®ГЈГ® Г®ГЄГ­Г  ГЇГ°ГЁГ«Г®Г¦ГҐГ­ГЁГї
+	//ГЈГ°Г ГґГЁГЄГ  Г®Г±Г­Г®ГўГ­Г®ГЈГ® ГЁГ­ГІГҐГ°ГґГҐГ©Г±Г 
 	RenderWindow window(VideoMode(1200, 720), "NeyronBaseDataCreator");
 
 	Image main_image;
@@ -41,7 +41,7 @@ int main()
 	Sprite load_image_sprite;
 	load_image_sprite.setTexture(load_image_texture);
 	load_image_sprite.setPosition(22, 20);
-	
+
 	Sprite save_image_sprite;
 
 	RectangleShape rectangle_razmer(Vector2f(8, 8));
@@ -55,7 +55,7 @@ int main()
 
 	double relationship_x_y = (double)size_of_x / size_of_y;
 	cout << "Relationship x -> y: " << relationship_x_y;
-	//масштабирование относительно изображения относительно окна
+	//Г¬Г Г±ГёГІГ ГЎГЁГ°Г®ГўГ Г­ГЁГҐ Г®ГІГ­Г®Г±ГЁГІГҐГ«ГјГ­Г® ГЁГ§Г®ГЎГ°Г Г¦ГҐГ­ГЁГї Г®ГІГ­Г®Г±ГЁГІГҐГ«ГјГ­Г® Г®ГЄГ­Г 
 	int save_size_of_x = size_of_x;
 	int save_size_of_y = size_of_y;
 	if (size_of_x > size_of_y) {
