@@ -51,15 +51,15 @@ int main()
 	load_image_sprite.setPosition(22, 20);
 	Sprite save_image_sprite;//вырезанный кусочек изображения
 
-	RectangleShape rectangle_razmer(Vector2f(8, 8));
-	rectangle_razmer.setFillColor(Color::Red);
-	rectangle_razmer.setPosition(22, 20);
+	RectangleShape rectangle_pointer(Vector2f(8, 8));
+	rectangle_pointer.setFillColor(Color::Red);
+	rectangle_pointer.setPosition(22, 20);
 
 	int size_x = load_image.getSize().x;
 	int size_y = load_image.getSize().y;
-	cout << "x = " << size_of_x << " y = " << size_of_y << endl;
+	cout << "x = " << size_x << " y = " << size_y << endl;
 
-	double ratio_x_y = (double)size_of_x / size_of_y;
+	double ratio_x_y = (double)size_x / size_y;
 	cout << "Ratio x -> y: " << ratio_x_y;
 
 	int save_size_x = size_x;
@@ -73,8 +73,8 @@ int main()
 	cout << "Save size X " << save_size_x << " Save size Y " << save_size_y << endl;
 	cout << "Ratio loadIMG -> window " << ratio_load_img_menu << endl;
 	cout << endl;
-	///////////////////////////////////////////////
-	Vector2f targetSize(608, 600);
+
+	Vector2f targetSize(size_x, size_y);
 	load_image_sprite.setScale(
 		targetSize.x / load_image_sprite.getGlobalBounds().width,
 		targetSize.y / load_image_sprite.getGlobalBounds().height);
@@ -84,8 +84,8 @@ int main()
 	int location_marker_x;
 	int location_marker_y;
 
-	location_marker_x = rectangle_razmer.getPosition().x;
-	location_marker_y = rectangle_razmer.getPosition().y;
+	location_marker_x = rectangle_pointer.getPosition().x;
+	location_marker_y = rectangle_pointer.getPosition().y;
 	cout << "loaction x = " << location_marker_x << " location y = " << location_marker_y;
 	RectangleShape rect_save;
 
@@ -99,10 +99,10 @@ int main()
 			}
 			if (event.KeyPressed) {
 				if ((event.key.code == Keyboard::Right) || (event.key.code == Keyboard::Left)) {
-					location_marker_x = rectangle_razmer.getPosition().x;
+					location_marker_x = rectangle_pointer.getPosition().x;
 				}
 				if ((event.key.code == Keyboard::Up) || (event.key.code == Keyboard::Down)) {
-					location_marker_y = rectangle_razmer.getPosition().y;
+					location_marker_y = rectangle_pointer.getPosition().y;
 				}
 			}
 			if (event.KeyReleased)
@@ -114,7 +114,7 @@ int main()
 				if (event.key.code == Keyboard::Enter)
 				{
 					IntRect form;
-					form = (IntRect)rectangle_razmer.getGlobalBounds();
+					form = (IntRect)rectangle_pointer.getGlobalBounds();
 					//form.left -= 22;
 					//form.top -= 20;
 					save_image_sprite.setTexture(load_image_texture);
@@ -128,16 +128,39 @@ int main()
 		}
 
 		if (Keyboard::isKeyPressed(Keyboard::Left)) {
-			rectangle_razmer.move(-1, 0);
+			if ((rectangle_pointer.getPosition().x < 620) && (rectangle_pointer.getPosition().x > 21)) {
+				rectangle_pointer.move(-0.1, 0);
+			}
+			else {
+				rectangle_pointer.move(10, 0);
+			}
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Right)) {
-			rectangle_razmer.move(1, 0);
+			if ((rectangle_pointer.getPosition().x < 620) && (rectangle_pointer.getPosition().x > 21)) {
+				rectangle_pointer.move(0.1, 0);
+			}
+			else {
+				rectangle_pointer.move(-10, 0);
+			}
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Up)) {
-			rectangle_razmer.move(0, -1);
+			if ((rectangle_pointer.getPosition().y < 619) && (rectangle_pointer.getPosition().y > 19)) {
+				rectangle_pointer.move(0, -0.1);
+			}
+			else {
+				rectangle_pointer.move(0, 10);
+			}
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Down)) {
-			rectangle_razmer.move(0, 1);
+			if ((rectangle_pointer.getPosition().y < 619) && (rectangle_pointer.getPosition().y > 19)) {
+				rectangle_pointer.move(0, 0.1);
+			}
+			else {
+				rectangle_pointer.move(0, -10);
+			}
+		}
+		if (Keyboard::isKeyPressed(Keyboard::Escape)) {
+			window.close();
 		}
 
 		///////new cppp
@@ -145,7 +168,7 @@ int main()
 		window.clear();
 		window.draw(main_sprite);
 		window.draw(load_image_sprite);
-		window.draw(rectangle_razmer);
+		window.draw(rectangle_pointer);
 		window.draw(save_image_sprite);
 		window.display();
 	}
