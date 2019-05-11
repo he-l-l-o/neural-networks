@@ -132,12 +132,100 @@ int main()
 						target_Size_save.y / 8);
 				}
 				if ((event.key.code == Keyboard::Num0) || (event.key.code == Keyboard::Num1) || (event.key.code == Keyboard::Num2) || (event.key.code == Keyboard::Num3) || (event.key.code == Keyboard::Num4))
-				{
-					//////new_func_cpp
-					//mirror_image.copy(load_image, 8, 8, IntRect(8, 8, location_marker_x, location_marker_y))
-					//для save_image
-					get_color_array(entry1.color_of_image_pixels, entry1.type_lien, load_image, event, location_marker_x, location_marker_y);
+				{ 
+					Image mirror_image(save_image_sprite.getTexture()->copyToImage());
+					get_color_array(entry1.color_of_image_pixels, load_image, event, location_marker_x, location_marker_y);
+					entry1.type_lien = event.key.code - 26;
+					for (int i = 0; i < 8; i++) {
+						for (int j = 0; j < 8; j++) {
+							cout << entry1.color_of_image_pixels[j][i][0] << " ";
+							cout << entry1.color_of_image_pixels[j][i][1] << " ";
+							cout << entry1.color_of_image_pixels[j][i][2] << " ";
+							cout << entry1.type_lien << endl;	
+						}
+					}
+					cout << endl;
+					mirror_image.flipHorizontally();
+					if (entry1.type_lien == 3) {
+								get_color_array(entry1.color_of_image_pixels, mirror_image, event, location_marker_x, location_marker_y);
+								entry1.type_lien = 4;
+								for (int i = 0; i < 8; i++) {
+									for (int j = 0; j < 8; j++) {
+										cout << entry1.color_of_image_pixels[j][i][0] << " ";
+										cout << entry1.color_of_image_pixels[j][i][1] << " ";
+										cout << entry1.color_of_image_pixels[j][i][2] << "  ";
+										cout << entry1.type_lien << endl;
+									}
+								}
+								cout << endl;
+					} else if (entry1.type_lien == 4) {
+								get_color_array(entry1.color_of_image_pixels, mirror_image, event, location_marker_x, location_marker_y);
+								entry1.type_lien = 3;
+								for (int i = 0; i < 8; i++) {
+									for (int j = 0; j < 8; j++) {
+										cout << entry1.color_of_image_pixels[j][i][0] << " ";
+										cout << entry1.color_of_image_pixels[j][i][1] << " ";
+										cout << entry1.color_of_image_pixels[j][i][2] << "  ";
+										cout << entry1.type_lien << endl << endl;
+									}
+								}
+								cout << endl;
+					} else {
+						get_color_array(entry1.color_of_image_pixels, mirror_image, event, location_marker_x, location_marker_y);
+						entry1.type_lien = event.key.code - 26;
+						for (int i = 0; i < 8; i++) {
+							for (int j = 0; j < 8; j++) {
+								cout << entry1.color_of_image_pixels[j][i][0] << " ";
+								cout << entry1.color_of_image_pixels[j][i][1] << " ";
+								cout << entry1.color_of_image_pixels[j][i][2] << "  ";
+								cout << entry1.type_lien << endl << endl;
+							}
+						}
+						cout << endl;
+					}
+
+					mirror_image.flipVertically();
+					if (entry1.type_lien == 3) {
+						get_color_array(entry1.color_of_image_pixels, mirror_image, event, location_marker_x, location_marker_y);
+						entry1.type_lien = 4;
+						for (int i = 0; i < 8; i++) {
+							for (int j = 0; j < 8; j++) {
+								cout << entry1.color_of_image_pixels[j][i][0] << " ";
+								cout << entry1.color_of_image_pixels[j][i][1] << " ";
+								cout << entry1.color_of_image_pixels[j][i][2] << "  ";
+								cout << entry1.type_lien << endl;
+							}
+						}
+						cout << endl;
+					}
+					else if (entry1.type_lien == 4) {
+						get_color_array(entry1.color_of_image_pixels, mirror_image, event, location_marker_x, location_marker_y);
+						entry1.type_lien = 3;
+						for (int i = 0; i < 8; i++) {
+							for (int j = 0; j < 8; j++) {
+								cout << entry1.color_of_image_pixels[j][i][0] << " ";
+								cout << entry1.color_of_image_pixels[j][i][1] << " ";
+								cout << entry1.color_of_image_pixels[j][i][2] << "  ";
+								cout << entry1.type_lien << endl << endl;
+							}
+						}
+						cout << endl;
+					}
+					else {
+						get_color_array(entry1.color_of_image_pixels, mirror_image, event, location_marker_x, location_marker_y);
+						entry1.type_lien = event.key.code - 26;
+						for (int i = 0; i < 8; i++) {
+							for (int j = 0; j < 8; j++) {
+								cout << entry1.color_of_image_pixels[j][i][0] << " ";
+								cout << entry1.color_of_image_pixels[j][i][1] << " ";
+								cout << entry1.color_of_image_pixels[j][i][2] << "  ";
+								cout << entry1.type_lien << endl << endl;
+							}
+						}
+						cout << endl;
+					}
 				}
+				
 			}
 		}
 
@@ -176,8 +264,6 @@ int main()
 		if (Keyboard::isKeyPressed(Keyboard::Escape)) {
 			window.close();
 		}
-
-		///////new cppp
 
 		window.clear();
 		window.draw(main_sprite);
