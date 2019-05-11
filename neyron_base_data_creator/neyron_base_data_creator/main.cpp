@@ -51,30 +51,33 @@ int main()
 	load_image_sprite.setPosition(22, 20);
 	Sprite save_image_sprite;//вырезанный кусочек изображения
 
+	//разметчик
 	RectangleShape rectangle_pointer(Vector2f(8, 8));
 	rectangle_pointer.setFillColor(Color::Red);
 	rectangle_pointer.setPosition(22, 20);
 
 	int size_x = load_image.getSize().x;
 	int size_y = load_image.getSize().y;
+	//вывод осуществялть через функции
 	cout << "x = " << size_x << " y = " << size_y << endl;
 
 	double ratio_x_y = (double)size_x / size_y;
-	cout << "Ratio x -> y: " << ratio_x_y;
+	cout << "Ratio x - > y: " << ratio_x_y;
 
 	int save_size_x = size_x;
 	int save_size_y = size_y;
-	
+
 	scaling(size_x, size_y, save_size_x, save_size_y, ratio_x_y);
-	
+
 	double ratio_load_img_menu = (double)save_size_x / size_x;
 	cout << endl;
 	cout << "Now size X " << size_x << " Now size Y " << size_y << endl;
 	cout << "Save size X " << save_size_x << " Save size Y " << save_size_y << endl;
 	cout << "Ratio loadIMG -> window " << ratio_load_img_menu << endl;
 	cout << endl;
-
+	///////////////////////////////////////////////
 	Vector2f targetSize(size_x, size_y);
+
 	load_image_sprite.setScale(
 		targetSize.x / load_image_sprite.getGlobalBounds().width,
 		targetSize.y / load_image_sprite.getGlobalBounds().height);
@@ -83,10 +86,11 @@ int main()
 
 	int location_marker_x;
 	int location_marker_y;
+	bool counter = 0;
+	location_marker_x = (rectangle_pointer.getPosition().x - 22) * ratio_load_img_menu;
+	location_marker_y = (rectangle_pointer.getPosition().y - 20) * ratio_load_img_menu;
+	cout << "loaction x = " << location_marker_x << " location y = " << location_marker_y << endl;
 
-	location_marker_x = rectangle_pointer.getPosition().x;
-	location_marker_y = rectangle_pointer.getPosition().y;
-	cout << "loaction x = " << location_marker_x << " location y = " << location_marker_y;
 	RectangleShape rect_save;
 
 	while (window.isOpen())
@@ -99,10 +103,10 @@ int main()
 			}
 			if (event.KeyPressed) {
 				if ((event.key.code == Keyboard::Right) || (event.key.code == Keyboard::Left)) {
-					location_marker_x = rectangle_pointer.getPosition().x;
+					location_marker_x = (rectangle_pointer.getPosition().x - 22) * ratio_load_img_menu;
 				}
 				if ((event.key.code == Keyboard::Up) || (event.key.code == Keyboard::Down)) {
-					location_marker_y = rectangle_pointer.getPosition().y;
+					location_marker_y = (rectangle_pointer.getPosition().y - 20) * ratio_load_img_menu;
 				}
 			}
 			if (event.KeyReleased)
@@ -111,18 +115,21 @@ int main()
 				{
 					cout << "x = " << location_marker_x << "  " << "y = " << location_marker_y << endl;
 				}
-				if (event.key.code == Keyboard::Enter)
+				if ((event.key.code == Keyboard::Up) || (event.key.code == Keyboard::Down) || (event.key.code == Keyboard::Right) || (event.key.code == Keyboard::Left))
 				{
 					IntRect form;
-					form = (IntRect)rectangle_pointer.getGlobalBounds();
-					//form.left -= 22;
-					//form.top -= 20;
+					form.height = 8;
+					form.width = 8;
+					form.top = location_marker_y;
+					form.left = location_marker_x;
+
 					save_image_sprite.setTexture(load_image_texture);
 					save_image_sprite.setTextureRect(form);
-					save_image_sprite.setScale(
-						target_Size_save.x / save_image_sprite.getGlobalBounds().width,
-						target_Size_save.y / save_image_sprite.getGlobalBounds().height);
 					save_image_sprite.setPosition(649, 21);
+
+					save_image_sprite.setScale(
+						target_Size_save.x / 8,
+						target_Size_save.y / 8);
 				}
 			}
 		}
