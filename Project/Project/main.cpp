@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <sstream>
+#include "ratio.h"
 
 using namespace sf;
 using namespace std;
@@ -16,10 +17,10 @@ int main()
 	Font font;//инициализация шрифта
 	font.loadFromFile("Times New Roman.ttf");//передаем файл с шрифтом в font 
 	
-	Text text_load("", font, 20);//инициализация текста с путем для загрузки
+	Text text_load(L"", font, 20);//инициализация текста с путем для загрузки
 	text_load.setStyle(Text::Bold);//делаем текст загрузки жирным
 	text_load.setPosition(27, 532);//местоположение текста загрузки
-	Text text_save("", font, 20);//инициализация текста с путем для сохранения
+	Text text_save(L"", font, 20);//инициализация текста с путем для сохранения
 	text_save.setStyle(Text::Bold);//делаем текст загрузки жирным
 	text_save.setPosition(557, 532);//местоположение текста загрузки
 
@@ -87,18 +88,7 @@ int main()
 						int save_size_x = size_x, save_size_y = size_y;//сохраняем кол-во пикселей
 
 						////////////////////////СЖАТИЕ ИЗОБРАЖЕНИЯ ДО РАЗМЕРОВ ОКНА////////////////
-						if (size_x > size_y) {
-							while (size_x > 475) {
-								size_x = size_x - 1;
-							}
-							size_y = size_x / ratio;
-						}
-						else if (size_y > size_x) {
-							while (size_y > 475) {
-								size_y = size_y - 1;
-							}
-							size_x = size_y * ratio;
-						}
+						ratio_func(size_x, size_y, ratio);//расчет нового разрешения загруженного изображения
 						///////////////////////////////////////////////////////////////////////////
 
 						////////////////////////ТРЕХМЕРНЫЙ ДИНАМИЧЕСКИЙ МАССИВ/////////////////////
