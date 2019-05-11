@@ -18,10 +18,10 @@ using namespace sf;
 struct entry {
 	short color_of_image_pixels[8][8][3];
 	int type_lien;
-};
+} entry1;
+
 int main()
 {
-	struct entry entry1;
 	string file_location;
 	cout << "Please enter the location of the loaded picture.\n WARNING!!!\n The path to the file should not contain Cyrillic characters, but only Latin letters and numbers.\n";
 	getline(cin, file_location);
@@ -130,6 +130,13 @@ int main()
 					save_image_sprite.setScale(
 						target_Size_save.x / 8,
 						target_Size_save.y / 8);
+				}
+				if ((event.key.code == Keyboard::Num0) || (event.key.code == Keyboard::Num1) || (event.key.code == Keyboard::Num2) || (event.key.code == Keyboard::Num3) || (event.key.code == Keyboard::Num4))
+				{
+					//////new_func_cpp
+					//mirror_image.copy(load_image, 8, 8, IntRect(8, 8, location_marker_x, location_marker_y))
+					//для save_image
+					get_color_array(entry1.color_of_image_pixels, entry1.type_lien, load_image, event, location_marker_x, location_marker_y);
 				}
 			}
 		}
