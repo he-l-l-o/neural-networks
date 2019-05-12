@@ -87,8 +87,8 @@ int main()
 	int location_marker_x;
 	int location_marker_y;
 	bool counter = 0;
-	location_marker_x = (rectangle_pointer.getPosition().x - 22) * ratio_load_img_menu;
-	location_marker_y = (rectangle_pointer.getPosition().y - 20) * ratio_load_img_menu;
+	location_marker_x = (int)(rectangle_pointer.getPosition().x - 22) * ratio_load_img_menu;
+	location_marker_y = (int)(rectangle_pointer.getPosition().y - 20) * ratio_load_img_menu;
 	cout << "loaction x = " << location_marker_x << " location y = " << location_marker_y << endl;
 
 	RectangleShape rect_save;
@@ -166,7 +166,7 @@ int main()
 										cout << entry1.color_of_image_pixels[j][i][0] << " ";
 										cout << entry1.color_of_image_pixels[j][i][1] << " ";
 										cout << entry1.color_of_image_pixels[j][i][2] << "  ";
-										cout << entry1.type_lien << endl << endl;
+										cout << entry1.type_lien << endl;
 									}
 								}
 								cout << endl;
@@ -178,9 +178,9 @@ int main()
 								cout << entry1.color_of_image_pixels[j][i][0] << " ";
 								cout << entry1.color_of_image_pixels[j][i][1] << " ";
 								cout << entry1.color_of_image_pixels[j][i][2] << "  ";
-								cout << entry1.type_lien << endl << endl;
+								cout << entry1.type_lien << endl;
 							}
-						}
+						} 
 						cout << endl;
 					}
 
@@ -206,7 +206,7 @@ int main()
 								cout << entry1.color_of_image_pixels[j][i][0] << " ";
 								cout << entry1.color_of_image_pixels[j][i][1] << " ";
 								cout << entry1.color_of_image_pixels[j][i][2] << "  ";
-								cout << entry1.type_lien << endl << endl;
+								cout << entry1.type_lien << endl;
 							}
 						}
 						cout << endl;
@@ -219,7 +219,7 @@ int main()
 								cout << entry1.color_of_image_pixels[j][i][0] << " ";
 								cout << entry1.color_of_image_pixels[j][i][1] << " ";
 								cout << entry1.color_of_image_pixels[j][i][2] << "  ";
-								cout << entry1.type_lien << endl << endl;
+								cout << entry1.type_lien << endl;
 							}
 						}
 						cout << endl;
