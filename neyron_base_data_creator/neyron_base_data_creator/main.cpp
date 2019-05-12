@@ -18,10 +18,10 @@ using namespace sf;
 struct entry {
 	short color_of_image_pixels[8][8][3];
 	int type_lien;
-};
+} entry1;
+
 int main()
 {
-	struct entry entry1;
 	string file_location;
 	cout << "Please enter the location of the loaded picture.\n WARNING!!!\n The path to the file should not contain Cyrillic characters, but only Latin letters and numbers.\n";
 	getline(cin, file_location);
@@ -51,22 +51,24 @@ int main()
 	load_image_sprite.setPosition(22, 20);
 	Sprite save_image_sprite;//вырезанный кусочек изображения
 
-	RectangleShape rectangle_razmer(Vector2f(8, 8));
-	rectangle_razmer.setFillColor(Color::Red);
-	rectangle_razmer.setPosition(22, 20);
+	//разметчик
+	RectangleShape rectangle_pointer(Vector2f(8, 8));
+	rectangle_pointer.setFillColor(Color::Red);
+	rectangle_pointer.setPosition(22, 20);
 
 	int size_x = load_image.getSize().x;
 	int size_y = load_image.getSize().y;
-	cout << "x = " << size_of_x << " y = " << size_of_y << endl;
+	//вывод осуществялть через функции
+	cout << "x = " << size_x << " y = " << size_y << endl;
 
-	double ratio_x_y = (double)size_of_x / size_of_y;
-	cout << "Ratio x -> y: " << ratio_x_y;
+	double ratio_x_y = (double)size_x / size_y;
+	cout << "Ratio x - > y: " << ratio_x_y;
 
 	int save_size_x = size_x;
 	int save_size_y = size_y;
-	
+
 	scaling(size_x, size_y, save_size_x, save_size_y, ratio_x_y);
-	
+
 	double ratio_load_img_menu = (double)save_size_x / size_x;
 	cout << endl;
 	cout << "Now size X " << size_x << " Now size Y " << size_y << endl;
@@ -74,7 +76,8 @@ int main()
 	cout << "Ratio loadIMG -> window " << ratio_load_img_menu << endl;
 	cout << endl;
 	///////////////////////////////////////////////
-	Vector2f targetSize(608, 600);
+	Vector2f targetSize(size_x, size_y);
+
 	load_image_sprite.setScale(
 		targetSize.x / load_image_sprite.getGlobalBounds().width,
 		targetSize.y / load_image_sprite.getGlobalBounds().height);
@@ -83,10 +86,11 @@ int main()
 
 	int location_marker_x;
 	int location_marker_y;
+	bool counter = 0;
+	location_marker_x = (int)(rectangle_pointer.getPosition().x - 22) * ratio_load_img_menu;
+	location_marker_y = (int)(rectangle_pointer.getPosition().y - 20) * ratio_load_img_menu;
+	cout << "loaction x = " << location_marker_x << " location y = " << location_marker_y << endl;
 
-	location_marker_x = rectangle_razmer.getPosition().x;
-	location_marker_y = rectangle_razmer.getPosition().y;
-	cout << "loaction x = " << location_marker_x << " location y = " << location_marker_y;
 	RectangleShape rect_save;
 
 	while (window.isOpen())
@@ -99,10 +103,10 @@ int main()
 			}
 			if (event.KeyPressed) {
 				if ((event.key.code == Keyboard::Right) || (event.key.code == Keyboard::Left)) {
-					location_marker_x = rectangle_razmer.getPosition().x;
+					location_marker_x = (rectangle_pointer.getPosition().x - 22) * ratio_load_img_menu;
 				}
 				if ((event.key.code == Keyboard::Up) || (event.key.code == Keyboard::Down)) {
-					location_marker_y = rectangle_razmer.getPosition().y;
+					location_marker_y = (rectangle_pointer.getPosition().y - 20) * ratio_load_img_menu;
 				}
 			}
 			if (event.KeyReleased)
@@ -111,41 +115,160 @@ int main()
 				{
 					cout << "x = " << location_marker_x << "  " << "y = " << location_marker_y << endl;
 				}
-				if (event.key.code == Keyboard::Enter)
+				if ((event.key.code == Keyboard::Up) || (event.key.code == Keyboard::Down) || (event.key.code == Keyboard::Right) || (event.key.code == Keyboard::Left))
 				{
 					IntRect form;
-					form = (IntRect)rectangle_razmer.getGlobalBounds();
-					//form.left -= 22;
-					//form.top -= 20;
+					form.height = 8;
+					form.width = 8;
+					form.top = location_marker_y;
+					form.left = location_marker_x;
+
 					save_image_sprite.setTexture(load_image_texture);
 					save_image_sprite.setTextureRect(form);
-					save_image_sprite.setScale(
-						target_Size_save.x / save_image_sprite.getGlobalBounds().width,
-						target_Size_save.y / save_image_sprite.getGlobalBounds().height);
 					save_image_sprite.setPosition(649, 21);
+
+					save_image_sprite.setScale(
+						target_Size_save.x / 8,
+						target_Size_save.y / 8);
 				}
+				if ((event.key.code == Keyboard::Num0) || (event.key.code == Keyboard::Num1) || (event.key.code == Keyboard::Num2) || (event.key.code == Keyboard::Num3) || (event.key.code == Keyboard::Num4))
+				{ 
+					Image mirror_image(save_image_sprite.getTexture()->copyToImage());
+					get_color_array(entry1.color_of_image_pixels, load_image, event, location_marker_x, location_marker_y);
+					entry1.type_lien = event.key.code - 26;
+					for (int i = 0; i < 8; i++) {
+						for (int j = 0; j < 8; j++) {
+							cout << entry1.color_of_image_pixels[j][i][0] << " ";
+							cout << entry1.color_of_image_pixels[j][i][1] << " ";
+							cout << entry1.color_of_image_pixels[j][i][2] << " ";
+							cout << entry1.type_lien << endl;	
+						}
+					}
+					cout << endl;
+					mirror_image.flipHorizontally();
+					if (entry1.type_lien == 3) {
+								get_color_array(entry1.color_of_image_pixels, mirror_image, event, location_marker_x, location_marker_y);
+								entry1.type_lien = 4;
+								for (int i = 0; i < 8; i++) {
+									for (int j = 0; j < 8; j++) {
+										cout << entry1.color_of_image_pixels[j][i][0] << " ";
+										cout << entry1.color_of_image_pixels[j][i][1] << " ";
+										cout << entry1.color_of_image_pixels[j][i][2] << "  ";
+										cout << entry1.type_lien << endl;
+									}
+								}
+								cout << endl;
+					} else if (entry1.type_lien == 4) {
+								get_color_array(entry1.color_of_image_pixels, mirror_image, event, location_marker_x, location_marker_y);
+								entry1.type_lien = 3;
+								for (int i = 0; i < 8; i++) {
+									for (int j = 0; j < 8; j++) {
+										cout << entry1.color_of_image_pixels[j][i][0] << " ";
+										cout << entry1.color_of_image_pixels[j][i][1] << " ";
+										cout << entry1.color_of_image_pixels[j][i][2] << "  ";
+										cout << entry1.type_lien << endl;
+									}
+								}
+								cout << endl;
+					} else {
+						get_color_array(entry1.color_of_image_pixels, mirror_image, event, location_marker_x, location_marker_y);
+						entry1.type_lien = event.key.code - 26;
+						for (int i = 0; i < 8; i++) {
+							for (int j = 0; j < 8; j++) {
+								cout << entry1.color_of_image_pixels[j][i][0] << " ";
+								cout << entry1.color_of_image_pixels[j][i][1] << " ";
+								cout << entry1.color_of_image_pixels[j][i][2] << "  ";
+								cout << entry1.type_lien << endl;
+							}
+						} 
+						cout << endl;
+					}
+
+					mirror_image.flipVertically();
+					if (entry1.type_lien == 3) {
+						get_color_array(entry1.color_of_image_pixels, mirror_image, event, location_marker_x, location_marker_y);
+						entry1.type_lien = 4;
+						for (int i = 0; i < 8; i++) {
+							for (int j = 0; j < 8; j++) {
+								cout << entry1.color_of_image_pixels[j][i][0] << " ";
+								cout << entry1.color_of_image_pixels[j][i][1] << " ";
+								cout << entry1.color_of_image_pixels[j][i][2] << "  ";
+								cout << entry1.type_lien << endl;
+							}
+						}
+						cout << endl;
+					}
+					else if (entry1.type_lien == 4) {
+						get_color_array(entry1.color_of_image_pixels, mirror_image, event, location_marker_x, location_marker_y);
+						entry1.type_lien = 3;
+						for (int i = 0; i < 8; i++) {
+							for (int j = 0; j < 8; j++) {
+								cout << entry1.color_of_image_pixels[j][i][0] << " ";
+								cout << entry1.color_of_image_pixels[j][i][1] << " ";
+								cout << entry1.color_of_image_pixels[j][i][2] << "  ";
+								cout << entry1.type_lien << endl;
+							}
+						}
+						cout << endl;
+					}
+					else {
+						get_color_array(entry1.color_of_image_pixels, mirror_image, event, location_marker_x, location_marker_y);
+						entry1.type_lien = event.key.code - 26;
+						for (int i = 0; i < 8; i++) {
+							for (int j = 0; j < 8; j++) {
+								cout << entry1.color_of_image_pixels[j][i][0] << " ";
+								cout << entry1.color_of_image_pixels[j][i][1] << " ";
+								cout << entry1.color_of_image_pixels[j][i][2] << "  ";
+								cout << entry1.type_lien << endl;
+							}
+						}
+						cout << endl;
+					}
+				}
+				
 			}
 		}
 
 		if (Keyboard::isKeyPressed(Keyboard::Left)) {
-			rectangle_razmer.move(-1, 0);
+			if ((rectangle_pointer.getPosition().x < 620) && (rectangle_pointer.getPosition().x > 21)) {
+				rectangle_pointer.move(-0.1, 0);
+			}
+			else {
+				rectangle_pointer.move(10, 0);
+			}
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Right)) {
-			rectangle_razmer.move(1, 0);
+			if ((rectangle_pointer.getPosition().x < 620) && (rectangle_pointer.getPosition().x > 21)) {
+				rectangle_pointer.move(0.1, 0);
+			}
+			else {
+				rectangle_pointer.move(-10, 0);
+			}
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Up)) {
-			rectangle_razmer.move(0, -1);
+			if ((rectangle_pointer.getPosition().y < 619) && (rectangle_pointer.getPosition().y > 19)) {
+				rectangle_pointer.move(0, -0.1);
+			}
+			else {
+				rectangle_pointer.move(0, 10);
+			}
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Down)) {
-			rectangle_razmer.move(0, 1);
+			if ((rectangle_pointer.getPosition().y < 619) && (rectangle_pointer.getPosition().y > 19)) {
+				rectangle_pointer.move(0, 0.1);
+			}
+			else {
+				rectangle_pointer.move(0, -10);
+			}
 		}
-
-		///////new cppp
+		if (Keyboard::isKeyPressed(Keyboard::Escape)) {
+			window.close();
+		}
 
 		window.clear();
 		window.draw(main_sprite);
 		window.draw(load_image_sprite);
-		window.draw(rectangle_razmer);
+		window.draw(rectangle_pointer);
 		window.draw(save_image_sprite);
 		window.display();
 	}
