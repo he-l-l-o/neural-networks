@@ -19,7 +19,14 @@ struct entry {
 	short color_of_image_pixels[8][8][3];
 	int type_lien;
 } entry1;
-
+/*
+void check_file(string file_location, Image load_image) {
+	if (load_image.loadFromFile(file_location) == false) {
+		cout << "file not location. PLease, try input again" << endl;
+		getline(cin, file_location);
+		check_file(file_location, load_image);
+	}
+}*/
 int main()
 {
 	string file_location;
@@ -35,6 +42,8 @@ int main()
 	main_image.loadFromFile("img/menu.png");
 	Image load_image;//меню текстура
 	load_image.loadFromFile(file_location);
+//	check_file(file_location, load_image);
+
 	Image save_image;// меню спрайт
 
 	Texture main_texture;
@@ -50,7 +59,10 @@ int main()
 	load_image_sprite.setTexture(load_image_texture);
 	load_image_sprite.setPosition(22, 20);
 	Sprite save_image_sprite;//вырезанный кусочек изображения
-
+	
+	FILE* binary_database;
+	fopen_s(&binary_database, "data\\database.data", "ab+");
+	
 	//разметчик
 	RectangleShape rectangle_pointer(Vector2f(8, 8));
 	rectangle_pointer.setFillColor(Color::Red);
@@ -87,10 +99,10 @@ int main()
 	int location_marker_x;
 	int location_marker_y;
 	bool counter = 0;
-	location_marker_x = (int)(rectangle_pointer.getPosition().x - 22) * ratio_load_img_menu;
-	location_marker_y = (int)(rectangle_pointer.getPosition().y - 20) * ratio_load_img_menu;
+	location_marker_x = (rectangle_pointer.getPosition().x - 22) * ratio_load_img_menu;
+	location_marker_y = (rectangle_pointer.getPosition().y - 20) * ratio_load_img_menu;
 	cout << "loaction x = " << location_marker_x << " location y = " << location_marker_y << endl;
-
+	
 	RectangleShape rect_save;
 
 	while (window.isOpen())
@@ -98,22 +110,29 @@ int main()
 		Event event;
 		while (window.pollEvent(event))
 		{
+			bool check_button = 0;
 			if (event.type == Event::Closed) {
 				window.close();
 			}
 			if (event.KeyPressed) {
 				if ((event.key.code == Keyboard::Right) || (event.key.code == Keyboard::Left)) {
 					location_marker_x = (rectangle_pointer.getPosition().x - 22) * ratio_load_img_menu;
+					check_button = 1;
 				}
 				if ((event.key.code == Keyboard::Up) || (event.key.code == Keyboard::Down)) {
 					location_marker_y = (rectangle_pointer.getPosition().y - 20) * ratio_load_img_menu;
+					check_button = 1;
+				}
+				if ((event.key.code == Keyboard::Num0) || (event.key.code == Keyboard::Num1) || (event.key.code == Keyboard::Num2) || (event.key.code == Keyboard::Num3) || (event.key.code == Keyboard::Num4)) {
+					check_button = 1;
 				}
 			}
-			if (event.KeyReleased)
+			if (event.KeyReleased && check_button)
 			{
 				if ((event.key.code == Keyboard::Up) || (event.key.code == Keyboard::Down) || (event.key.code == Keyboard::Right) || (event.key.code == Keyboard::Left))
 				{
 					cout << "x = " << location_marker_x << "  " << "y = " << location_marker_y << endl;
+					check_button = 0;
 				}
 				if ((event.key.code == Keyboard::Up) || (event.key.code == Keyboard::Down) || (event.key.code == Keyboard::Right) || (event.key.code == Keyboard::Left))
 				{
@@ -130,25 +149,32 @@ int main()
 					save_image_sprite.setScale(
 						target_Size_save.x / 8,
 						target_Size_save.y / 8);
+					check_button = 0;
 				}
 				if ((event.key.code == Keyboard::Num0) || (event.key.code == Keyboard::Num1) || (event.key.code == Keyboard::Num2) || (event.key.code == Keyboard::Num3) || (event.key.code == Keyboard::Num4))
 				{ 
 					Image mirror_image(save_image_sprite.getTexture()->copyToImage());
 					get_color_array(entry1.color_of_image_pixels, load_image, event, location_marker_x, location_marker_y);
 					entry1.type_lien = event.key.code - 26;
+					fwrite(&entry1, sizeof(entry1), 1, binary_database);
+
 					for (int i = 0; i < 8; i++) {
 						for (int j = 0; j < 8; j++) {
 							cout << entry1.color_of_image_pixels[j][i][0] << " ";
 							cout << entry1.color_of_image_pixels[j][i][1] << " ";
 							cout << entry1.color_of_image_pixels[j][i][2] << " ";
-							cout << entry1.type_lien << endl;	
+							cout << entry1.type_lien << endl;
 						}
 					}
 					cout << endl;
 					mirror_image.flipHorizontally();
+					cout<< endl << "FLIP HORIZ" << endl;
 					if (entry1.type_lien == 3) {
 								get_color_array(entry1.color_of_image_pixels, mirror_image, event, location_marker_x, location_marker_y);
 								entry1.type_lien = 4;
+								fwrite(&entry1, sizeof(entry1), 1, binary_database);
+
+								cout << "SMENA 3 NA 4" << endl;
 								for (int i = 0; i < 8; i++) {
 									for (int j = 0; j < 8; j++) {
 										cout << entry1.color_of_image_pixels[j][i][0] << " ";
@@ -161,6 +187,8 @@ int main()
 					} else if (entry1.type_lien == 4) {
 								get_color_array(entry1.color_of_image_pixels, mirror_image, event, location_marker_x, location_marker_y);
 								entry1.type_lien = 3;
+								fwrite(&entry1, sizeof(entry1), 1, binary_database);
+								cout << "SMENA 4 NA 3" << endl;
 								for (int i = 0; i < 8; i++) {
 									for (int j = 0; j < 8; j++) {
 										cout << entry1.color_of_image_pixels[j][i][0] << " ";
@@ -173,6 +201,7 @@ int main()
 					} else {
 						get_color_array(entry1.color_of_image_pixels, mirror_image, event, location_marker_x, location_marker_y);
 						entry1.type_lien = event.key.code - 26;
+						fwrite(&entry1, sizeof(entry1), 1, binary_database);
 						for (int i = 0; i < 8; i++) {
 							for (int j = 0; j < 8; j++) {
 								cout << entry1.color_of_image_pixels[j][i][0] << " ";
@@ -180,14 +209,18 @@ int main()
 								cout << entry1.color_of_image_pixels[j][i][2] << "  ";
 								cout << entry1.type_lien << endl;
 							}
-						} 
+						}
 						cout << endl;
 					}
 
 					mirror_image.flipVertically();
+					cout << endl <<"FLIP VERT" << endl;
 					if (entry1.type_lien == 3) {
 						get_color_array(entry1.color_of_image_pixels, mirror_image, event, location_marker_x, location_marker_y);
 						entry1.type_lien = 4;
+						fwrite(&entry1, sizeof(entry1), 1, binary_database);
+						cout << "SMENA 3 NA 4" << endl;
+
 						for (int i = 0; i < 8; i++) {
 							for (int j = 0; j < 8; j++) {
 								cout << entry1.color_of_image_pixels[j][i][0] << " ";
@@ -201,12 +234,15 @@ int main()
 					else if (entry1.type_lien == 4) {
 						get_color_array(entry1.color_of_image_pixels, mirror_image, event, location_marker_x, location_marker_y);
 						entry1.type_lien = 3;
+						fwrite(&entry1, sizeof(entry1), 1, binary_database);
+						cout << "SMENA 4 NA 3" << endl;
+						
 						for (int i = 0; i < 8; i++) {
 							for (int j = 0; j < 8; j++) {
 								cout << entry1.color_of_image_pixels[j][i][0] << " ";
 								cout << entry1.color_of_image_pixels[j][i][1] << " ";
 								cout << entry1.color_of_image_pixels[j][i][2] << "  ";
-								cout << entry1.type_lien << endl;
+								cout << entry1.type_lien << endl << endl;
 							}
 						}
 						cout << endl;
@@ -214,6 +250,8 @@ int main()
 					else {
 						get_color_array(entry1.color_of_image_pixels, mirror_image, event, location_marker_x, location_marker_y);
 						entry1.type_lien = event.key.code - 26;
+						fwrite(&entry1, sizeof(entry1), 1, binary_database);
+
 						for (int i = 0; i < 8; i++) {
 							for (int j = 0; j < 8; j++) {
 								cout << entry1.color_of_image_pixels[j][i][0] << " ";
@@ -224,6 +262,7 @@ int main()
 						}
 						cout << endl;
 					}
+					check_button = 0;
 				}
 				
 			}
@@ -272,4 +311,5 @@ int main()
 		window.draw(save_image_sprite);
 		window.display();
 	}
+	fclose(binary_database);
 }
