@@ -9,14 +9,14 @@ using namespace std;
 int main()
 {
 	// Создаем главное окно приложения
-	RenderWindow window(VideoMode(1000, 600), "NeuralNetworks");
-
+	RenderWindow window(VideoMode(1000, 600), "NeuralNetworks"); 
+	
 	string stroka_load;//переменная для ввода текста пути загрузки
 	string stroka_save;//переменная для ввода текста пути сохранения
 
 	Font font;//инициализация шрифта
 	font.loadFromFile("Times New Roman.ttf");//передаем файл с шрифтом в font 
-	
+
 	Text text_load(L"", font, 20);//инициализация текста с путем для загрузки
 	text_load.setStyle(Text::Bold);//делаем текст загрузки жирным
 	text_load.setPosition(27, 532);//местоположение текста загрузки
@@ -27,12 +27,12 @@ int main()
 	Image menu_image;//инициализация изображения меню
 	menu_image.loadFromFile("images/menu.png");//передаем изображение в menu_image
 	Image load_pap_image;//инициализация изображения кнопки загрузки
-	load_pap_image.loadFromFile("images/Loadpap.png");//передаем изображение в load_pap_image
+	load_pap_image.loadFromFile("images/Load_pap.png");//передаем изображение в load_pap_image
 	Image save_pap_image;//инициализация изображения кнопки сохранения
 	save_pap_image.loadFromFile("images/Save.png");//передаем изображение в save_pap_image
 	Image load_image;//инициализация загруженного изображения
 	Image save_image;//инициализация сохраненного изображения
-	
+
 	Texture menu_image_texture;//инциализация текстуры для menu_image
 	menu_image_texture.loadFromImage(menu_image);//передача menu_image в menu_image_texture
 	Texture load_pap_image_texture;//инциализация текстуры для load_pap_image
@@ -77,9 +77,9 @@ int main()
 						cout << "the right button was pressed on Loadpap" << endl;
 						cout << "mouse x: " << event.mouseButton.x << endl;
 						cout << "mouse y: " << event.mouseButton.y << endl;
-						
+
 						getline(cin, stroka_load);//консольный ввод
-						
+
 						load_image.loadFromFile(stroka_load);//взятие изображения по адресу(строки)
 
 						double size_x = load_image.getSize().x, size_y = load_image.getSize().y;//Считываем размеры картинки
@@ -111,7 +111,7 @@ int main()
 							}
 						}
 						///////////////////////////////////////////////////////////////////////////
-					
+
 						load_image_texture.loadFromImage(load_image);//передача load_image в load_image_texture
 
 						save_image.create(save_size_x, save_size_y, Color(255, 255, 100, 100));//создание нового изображения
@@ -124,10 +124,10 @@ int main()
 						}
 
 						save_image_texture.loadFromImage(save_image);//передача save_image в save_image_texture
-					
+
 						load_image_sprite.setTexture(load_image_texture);//передача load_image_texture в load_image_texture
 						load_image_sprite.setPosition(23, 23);//установка позиции load_image_sprite
-						
+
 						save_image_sprite.setTexture(save_image_texture);//передача save_image_texture в save_image_sprite 
 						save_image_sprite.setPosition(503, 23);//установка позиции save_image_sprite
 
@@ -173,14 +173,14 @@ int main()
 		window.draw(load_pap_image_sprite);//рисуем иконку папки
 
 		window.draw(save_pap_image_sprite);//рисуем иконку сохранения
-		
+
 		window.draw(load_image_sprite);//рисуем Загруженную картинку
 
 		window.draw(save_image_sprite);//рисуем полученную картинку
 
 		text_load.setString(stroka_load);//передача stroka_load в text_load
 		window.draw(text_load);//рисуем текст для загрузки картинки
-		
+
 		text_save.setString(stroka_save);//передача stroka_save в text_save
 		window.draw(text_save);//рисуем текст для сохранения картинки
 
