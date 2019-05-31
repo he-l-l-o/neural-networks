@@ -1,3 +1,4 @@
+#pragma once
 void ratio_func(double &size_x, double &size_y, double &ratio) {
 	if (size_x > size_y) {
 		while (size_x > 475) {

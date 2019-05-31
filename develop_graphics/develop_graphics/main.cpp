@@ -8,9 +8,11 @@ using namespace std;
 
 int main()
 {
+	setlocale(0, "");
+
 	// Создаем главное окно приложения
-	RenderWindow window(VideoMode(1000, 600), "NeuralNetworks"); 
-	
+	RenderWindow window(VideoMode(1000, 600), "NeuralNetworks");
+
 	string stroka_load;//переменная для ввода текста пути загрузки
 	string stroka_save;//переменная для ввода текста пути сохранения
 
@@ -67,16 +69,14 @@ int main()
 			}
 			if (event.type == sf::Event::MouseButtonPressed) {
 				if (IntRect(422, 532, 27, 27).contains(Mouse::getPosition(window))) {
-					load_pap_image_sprite.setColor(Color::Blue);
+					load_pap_image_sprite.setColor(Color(180, 180, 180, 255));
 				}
 				if (IntRect(952, 532, 26, 26).contains(Mouse::getPosition(window))) {
-					save_pap_image_sprite.setColor(Color::Blue);
+					save_pap_image_sprite.setColor(Color(180,180,180,255));
 				}
 				if (event.mouseButton.button == sf::Mouse::Left) {
 					if (event.mouseButton.x >= 422 && event.mouseButton.x <= 449 && event.mouseButton.y >= 532 && event.mouseButton.y <= 558) {
-						cout << "the right button was pressed on Loadpap" << endl;
-						cout << "mouse x: " << event.mouseButton.x << endl;
-						cout << "mouse y: " << event.mouseButton.y << endl;
+						cout << "Введите путь к файлу: ";
 
 						getline(cin, stroka_load);//консольный ввод
 
@@ -93,10 +93,10 @@ int main()
 
 						////////////////////////ТРЕХМЕРНЫЙ ДИНАМИЧЕСКИЙ МАССИВ/////////////////////
 						//1)Инициализация
-						int ***arr_image = new int **[save_size_y];
+						int*** arr_image = new int** [save_size_y];
 						for (int i = 0; i < save_size_y; i++)
 						{
-							arr_image[i] = new int *[save_size_x];
+							arr_image[i] = new int* [save_size_x];
 							for (int j = 0; j < save_size_x; j++)
 								arr_image[i][j] = new int[3];
 						}
@@ -152,9 +152,7 @@ int main()
 				}
 				if (event.mouseButton.button == sf::Mouse::Left) {
 					if (event.mouseButton.x >= 952 && event.mouseButton.x <= 978 && event.mouseButton.y >= 532 && event.mouseButton.y <= 558) {
-						cout << "the right button was pressed on Save" << endl;
-						cout << "mouse x: " << event.mouseButton.x << endl;
-						cout << "mouse y: " << event.mouseButton.y << endl;
+						cout << "Введите путь к файлу: ";
 
 						getline(cin, stroka_save);//консольный ввод
 
