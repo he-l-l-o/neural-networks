@@ -42,24 +42,40 @@ void weights_update(neuron *prev, int prev_size, neuron *next, int next_size, do
 	}
 }
 
-int main()
-{
+//структура для чтения базы данных
+struct entry {
+	short img[8][8][3];
+	int line_type;
+};
+
+
+void neural_learning(char *path) {
+	entry zap; //запись в базе данных
+
 	//Инициализация слоев нейронной сети
 
- 	int size0 = 17, size1 = 10, size2 = 7, size3 = 5; //размеры массивов нейронов
-	neuron *neuro0 = new neuron[size0]; //Нейроны входного слоя. 16 под пиксели + нейрон смещения //временно черно-белые
+	int size0 = 193, size1 = 100, size2 = 50, size3 = 25, size4 = 10, size5 = 5; //размеры массивов нейронов
+	neuron *neuro0 = new neuron[size0]; //Нейроны входного слоя. 8 * 8 * 3 под пиксели + нейрон смещения
 	for (int i = 0; i < size0; i++) { //ошибка входных нейронов равна 0
 		neuro0[i].error = 0;
 		neuro0[i].out = 0;
 	}
-	neuro0[16].out = 1;
+	neuro0[size0 - 1].out = 1;
 	neuron *neuro1 = new neuron[size1]; //Нейроны первого слоя (скрытый)
-	neuro1[9].out = 1;
-	neuro1[9].error = 0;
+	neuro1[size1 - 1].out = 1;
+	neuro1[size1 - 1].error = 0;
 	neuron *neuro2 = new neuron[size2]; //Нейроны второго слоя (скрытый)
-	neuro2[6].out = 1;
-	neuro2[6].error = 0;
-	neuron *neuro3 = new neuron[size3]; //Нейроны выходного слоя по одному под каждое направление линии(один нейрон лишний, нужен для упрощения функций)
+	neuro2[size2 - 1].out = 1;
+	neuro2[size2 - 1].error = 0;
+	neuron *neuro3 = new neuron[size3]; //Нейроны третьего слоя (скрытый)
+	neuro3[size3 - 1].out = 1;
+	neuro3[size3 - 1].error = 0;
+	neuron *neuro4 = new neuron[size4]; //Нейроны четвертого слоя (скрытый)
+	neuro4[size4 - 1].out = 1;
+	neuro4[size4 - 1].error = 0;
+	neuron *neuro5 = new neuron[size5]; //Нейроны выходного слоя по одному под каждое направление линии(один нейрон лишний, нужен для упрощения функций)
+	neuro5[size5 - 1].out = 1;
+	neuro5[size5 - 1].error = 0;
 
 	//Инициализация матриц связи между слоями
 
@@ -67,7 +83,7 @@ int main()
 	for (int i = 0; i < size0; i++) {
 		weight01[i] = new double[size1 - 1]; //Количество столбцов на 1 меньше размера след. массива из-за нейрона смещения
 		for (int j = 0; j < size1 - 1; j++) {
-			weight01[i][j] = (rand() % 100) / 100.0; //Изначально все веса заполняются еденицами
+			weight01[i][j] = (rand() % 100) / 100.0; //Изначально все веса заполняются рандомно
 		}
 	}
 	double **weight12 = new double*[size1]; //Веса связей между первым и вторым слоями
@@ -84,65 +100,392 @@ int main()
 			weight23[i][j] = (rand() % 100) / 100.0;
 		}
 	}
+	double **weight34 = new double*[size3]; //Веса связей между третьим и четвертым слоями
+	for (int i = 0; i < size3; i++) {
+		weight34[i] = new double[size4 - 1];
+		for (int j = 0; j < size4 - 1; j++) {
+			weight34[i][j] = (rand() % 100) / 100.0;
+		}
+	}
+	double **weight45 = new double*[size4]; //Веса связей между четвертым и пятым слоями
+	for (int i = 0; i < size4; i++) {
+		weight45[i] = new double[size5 - 1];
+		for (int j = 0; j < size5 - 1; j++) {
+			weight45[i][j] = (rand() % 100) / 100.0;
+		}
+	}
 
 	srand(time(0));
 	FILE *data;
-	fopen_s(&data, "..\\data.txt", "rt");
-	char *input = new char[100];
-	int string_number;
+	fopen_s(&data, path, "rb");
+	/*for (int i = 0; i < 1000; i++) {
+		fread(&zap, sizeof(zap), 1, data);
+		cout << zap.line_type << endl;
+	}*/
+
 	double error = 1;
 	while (error > 0.01) {
 		error = 0;
 		for (int n = 0; n < 200; n++) {
-			string_number = rand() % 16;
-			for (int i = 0; i < string_number; i++) {
-				if (fgets(input, 100, data) == NULL) {
+			int r = rand() % 100 + 1;
+			for (int i = 0; i < r; i++) {
+				if (fread(&zap, sizeof(zap), 1, data) == 0) { //считывание данных из базы
 					rewind(data);
-					fgets(input, 100, data);
+					fread(&zap, sizeof(zap), 1, data);
 				}
 			}
 
-			for (int i = 0; i < 16; i += 2) {
-				neuro0[i / 2].out = input[i] - '0';
+			for (int i = 0; i < 8; i++) {
+				for (int j = 0; j < 8; j++) {
+					for (int k = 0; k < 3; k++) {
+						neuro0[i].out = zap.img[i][j][k]; //заполнение входного слоя
+					}
+				}
 			}
-			forward(neuro0, size0, neuro1, size1, weight01);
+			forward(neuro0, size0, neuro1, size1, weight01); //вычисление выходных значений нейронов
 			forward(neuro1, size1, neuro2, size2, weight12);
 			forward(neuro2, size2, neuro3, size3, weight23);
-			if(n % 50 == 0)
-			cout << input[18] << " " << input[20] << " | " << neuro3[0].out << " " << neuro3[1].out << endl;
-			
+			forward(neuro3, size3, neuro4, size4, weight34);
+			forward(neuro4, size4, neuro5, size5, weight45);
+			if (n % 50 == 0)
+				cout << zap.line_type << " | " << neuro5[0].out << " " << neuro5[1].out << " " << neuro5[2].out << " " << neuro5[3].out << endl;
 
-			if (abs(input[18] - '0' - neuro3[0].out) < 0.2) {
-				neuro3[0].error = 0;
+			if (zap.line_type == 0) { //вычисление ошибки выходного слоя
+				if (neuro5[0].out > 0.2 || neuro5[1].out > 0.2 || neuro5[2].out > 0.2 || neuro5[3].out > 0.2) {
+					neuro5[0].error = 0 - neuro5[0].out;
+					neuro5[1].error = 0 - neuro5[1].out;
+					neuro5[2].error = 0 - neuro5[2].out;
+					neuro5[3].error = 0 - neuro5[3].out;
+					error++;
+				}
 			}
-			else {
-				neuro3[0].error = input[18] - '0' - neuro3[0].out;
-				error++;
+			if (zap.line_type == 1) {
+				if (neuro5[0].out < 0.8 || neuro5[1].out > 0.2 || neuro5[2].out > 0.2 || neuro5[3].out > 0.2) {
+					neuro5[0].error = 1 - neuro5[0].out;
+					neuro5[1].error = 0 - neuro5[1].out;
+					neuro5[2].error = 0 - neuro5[2].out;
+					neuro5[3].error = 0 - neuro5[3].out;
+					error++;
+				}
+			}
+			if (zap.line_type == 2) {
+				if (neuro5[0].out > 0.2 || neuro5[1].out < 0.8 || neuro5[2].out > 0.2 || neuro5[3].out > 0.2) {
+					neuro5[0].error = 0 - neuro5[0].out;
+					neuro5[1].error = 1 - neuro5[1].out;
+					neuro5[2].error = 0 - neuro5[2].out;
+					neuro5[3].error = 0 - neuro5[3].out;
+					error++;
+				}
+			}
+			if (zap.line_type == 3) {
+				if (neuro5[0].out > 0.2 || neuro5[1].out > 0.2 || neuro5[2].out < 0.8 || neuro5[3].out > 0.2) {
+					neuro5[0].error = 0 - neuro5[0].out;
+					neuro5[1].error = 0 - neuro5[1].out;
+					neuro5[2].error = 1 - neuro5[2].out;
+					neuro5[3].error = 0 - neuro5[3].out;
+					error++;
+				}
+			}
+			if (zap.line_type == 4) {
+				if (neuro5[0].out > 0.2 || neuro5[1].out > 0.2 || neuro5[2].out > 0.2 || neuro5[3].out < 0.8) {
+					neuro5[0].error = 0 - neuro5[0].out;
+					neuro5[1].error = 0 - neuro5[1].out;
+					neuro5[2].error = 0 - neuro5[2].out;
+					neuro5[3].error = 1 - neuro5[3].out;
+					error++;
+				}
 			}
 
-			if (abs(input[20] - '0' - neuro3[1].out) < 0.2) {
-				neuro3[1].error = 0;
-			}
-			else {
-				neuro3[1].error = input[20] - '0' - neuro3[1].out;
-				error++;
-			}
-			neuro3[2].error = 0 - neuro3[2].out;
-			neuro3[3].error = 0 - neuro3[3].out;
-
+			backward(neuro5, size5, neuro4, size4, weight45); //вычисление ошибки нейронов
+			backward(neuro4, size4, neuro3, size3, weight34);
 			backward(neuro3, size3, neuro2, size2, weight23);
 			backward(neuro2, size2, neuro1, size1, weight12);
 			backward(neuro1, size1, neuro0, size0, weight01);
 
-			weights_update(neuro0, size0, neuro1, size1, weight01, 0.1);
+			weights_update(neuro0, size0, neuro1, size1, weight01, 0.1); //вычисление новых весов связей (0.1 - коэффицент обучения)
 			weights_update(neuro1, size1, neuro2, size2, weight12, 0.1);
 			weights_update(neuro2, size2, neuro3, size3, weight23, 0.1);
+			weights_update(neuro3, size3, neuro4, size4, weight34, 0.1);
+			weights_update(neuro4, size4, neuro5, size5, weight45, 0.1);
+
+		}
+		error /= 200;
+		cout << error << endl;
+	}
+	FILE *weights;
+	fopen_s(&weights, "..\\weights.data", "wb");
+	fwrite(weight01, sizeof(double), size0 * size1, weights);
+	fwrite(weight12, sizeof(double), size1 * size2, weights);
+	fwrite(weight23, sizeof(double), size2 * size3, weights);
+	fwrite(weight34, sizeof(double), size3 * size4, weights);
+	fwrite(weight45, sizeof(double), size4 * size5, weights);
+	fclose(weights);
+}
+
+int* neural_processing(short arr[8][8][3]) {
+	//Инициализация слоев нейронной сети
+
+	int size0 = 193, size1 = 100, size2 = 50, size3 = 25, size4 = 10, size5 = 5; //размеры массивов нейронов
+	neuron *neuro0 = new neuron[size0]; //Нейроны входного слоя. 8 * 8 * 3 под пиксели + нейрон смещения
+	for (int i = 0; i < size0; i++) { //ошибка входных нейронов равна 0
+		neuro0[i].error = 0;
+		neuro0[i].out = 0;
+	}
+	neuro0[size0 - 1].out = 1;
+	neuron *neuro1 = new neuron[size1]; //Нейроны первого слоя (скрытый)
+	neuro1[size1 - 1].out = 1;
+	neuro1[size1 - 1].error = 0;
+	neuron *neuro2 = new neuron[size2]; //Нейроны второго слоя (скрытый)
+	neuro2[size2 - 1].out = 1;
+	neuro2[size2 - 1].error = 0;
+	neuron *neuro3 = new neuron[size3]; //Нейроны третьего слоя (скрытый)
+	neuro3[size3 - 1].out = 1;
+	neuro3[size3 - 1].error = 0;
+	neuron *neuro4 = new neuron[size4]; //Нейроны четвертого слоя (скрытый)
+	neuro4[size4 - 1].out = 1;
+	neuro4[size4 - 1].error = 0;
+	neuron *neuro5 = new neuron[size5]; //Нейроны выходного слоя по одному под каждое направление линии(один нейрон лишний, нужен для упрощения функций)
+	neuro5[size5 - 1].out = 1;
+	neuro5[size5 - 1].error = 0;
+
+	//Инициализация матриц связи между слоями
+
+	double **weight01 = new double*[size0]; //Веса связей между нулевым и первым слоями
+	for (int i = 0; i < size0; i++) {
+		weight01[i] = new double[size1 - 1]; //Количество столбцов на 1 меньше размера след. массива из-за нейрона смещения
+		for (int j = 0; j < size1 - 1; j++) {
+			weight01[i][j] = (rand() % 100) / 100.0; //Изначально все веса заполняются рандомно
+		}
+	}
+	double **weight12 = new double*[size1]; //Веса связей между первым и вторым слоями
+	for (int i = 0; i < size1; i++) {
+		weight12[i] = new double[size2 - 1];
+		for (int j = 0; j < size2 - 1; j++) {
+			weight12[i][j] = (rand() % 100) / 100.0;
+		}
+	}
+	double **weight23 = new double*[size2]; //Веса связей между вторым и третьим слоями
+	for (int i = 0; i < size2; i++) {
+		weight23[i] = new double[size3 - 1];
+		for (int j = 0; j < size3 - 1; j++) {
+			weight23[i][j] = (rand() % 100) / 100.0;
+		}
+	}
+	double **weight34 = new double*[size3]; //Веса связей между третьим и четвертым слоями
+	for (int i = 0; i < size3; i++) {
+		weight34[i] = new double[size4 - 1];
+		for (int j = 0; j < size4 - 1; j++) {
+			weight34[i][j] = (rand() % 100) / 100.0;
+		}
+	}
+	double **weight45 = new double*[size4]; //Веса связей между четвертым и пятым слоями
+	for (int i = 0; i < size4; i++) {
+		weight45[i] = new double[size5 - 1];
+		for (int j = 0; j < size5 - 1; j++) {
+			weight45[i][j] = (rand() % 100) / 100.0;
+		}
+	}
+
+	srand(time(0));
+	FILE *data;
+	/*for (int i = 0; i < 1000; i++) {
+		fread(&zap, sizeof(zap), 1, data);
+		cout << zap.line_type << endl;
+	}*/
+
+	for (int n = 0; n < 200; n++) {
+
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				for (int k = 0; k < 3; k++) {
+					neuro0[i].out = arr[i][j][k]; //заполнение входного слоя
+				}
+			}
+		}
+		forward(neuro0, size0, neuro1, size1, weight01); //вычисление выходных значений нейронов
+		forward(neuro1, size1, neuro2, size2, weight12);
+		forward(neuro2, size2, neuro3, size3, weight23);
+		forward(neuro3, size3, neuro4, size4, weight34);
+		forward(neuro4, size4, neuro5, size5, weight45);
+
+	}
+	int *out = new int[4];
+	for (int i = 0; i < 4; i++) {
+		if (neuro5[i].out > 0.8) {
+			out[i] = 1;
+		}
+	}
+	return out;
+}
+
+
+int main()
+{
+	char path[100] = "..\\database.data\0";
+	neural_learning(path);
+	/*entry zap; //запись в базе данных
+
+	//Инициализация слоев нейронной сети
+
+ 	int size0 = 193, size1 = 100, size2 = 50, size3 = 25, size4 = 10, size5 = 5; //размеры массивов нейронов
+	neuron *neuro0 = new neuron[size0]; //Нейроны входного слоя. 8 * 8 * 3 под пиксели + нейрон смещения
+	for (int i = 0; i < size0; i++) { //ошибка входных нейронов равна 0
+		neuro0[i].error = 0;
+		neuro0[i].out = 0;
+	}
+	neuro0[size0 - 1].out = 1;
+	neuron *neuro1 = new neuron[size1]; //Нейроны первого слоя (скрытый)
+	neuro1[size1 - 1].out = 1;
+	neuro1[size1 - 1].error = 0;
+	neuron *neuro2 = new neuron[size2]; //Нейроны второго слоя (скрытый)
+	neuro2[size2 - 1].out = 1;
+	neuro2[size2 - 1].error = 0;
+	neuron *neuro3 = new neuron[size3]; //Нейроны третьего слоя (скрытый)
+	neuro3[size3 - 1].out = 1;
+	neuro3[size3 - 1].error = 0;
+	neuron *neuro4 = new neuron[size4]; //Нейроны четвертого слоя (скрытый)
+	neuro4[size4 - 1].out = 1;
+	neuro4[size4 - 1].error = 0;
+	neuron *neuro5 = new neuron[size5]; //Нейроны выходного слоя по одному под каждое направление линии(один нейрон лишний, нужен для упрощения функций)
+	neuro5[size5 - 1].out = 1;
+	neuro5[size5 - 1].error = 0;
+
+	//Инициализация матриц связи между слоями
+
+	double **weight01 = new double*[size0]; //Веса связей между нулевым и первым слоями
+	for (int i = 0; i < size0; i++) {
+		weight01[i] = new double[size1 - 1]; //Количество столбцов на 1 меньше размера след. массива из-за нейрона смещения
+		for (int j = 0; j < size1 - 1; j++) {
+			weight01[i][j] = (rand() % 100) / 100.0; //Изначально все веса заполняются рандомно
+		}
+	}
+	double **weight12 = new double*[size1]; //Веса связей между первым и вторым слоями
+	for (int i = 0; i < size1; i++) {
+		weight12[i] = new double[size2 - 1];
+		for (int j = 0; j < size2 - 1; j++) {
+			weight12[i][j] = (rand() % 100) / 100.0;
+		}
+	}
+	double **weight23 = new double*[size2]; //Веса связей между вторым и третьим слоями
+	for (int i = 0; i < size2; i++) {
+		weight23[i] = new double[size3 - 1];
+		for (int j = 0; j < size3 - 1; j++) {
+			weight23[i][j] = (rand() % 100) / 100.0;
+		}
+	}
+	double **weight34 = new double*[size3]; //Веса связей между третьим и четвертым слоями
+	for (int i = 0; i < size3; i++) {
+		weight34[i] = new double[size4 - 1];
+		for (int j = 0; j < size4 - 1; j++) {
+			weight34[i][j] = (rand() % 100) / 100.0;
+		}
+	}
+	double **weight45 = new double*[size4]; //Веса связей между четвертым и пятым слоями
+	for (int i = 0; i < size4; i++) {
+		weight45[i] = new double[size5 - 1];
+		for (int j = 0; j < size5 - 1; j++) {
+			weight45[i][j] = (rand() % 100) / 100.0;
+		}
+	}
+
+	srand(time(0));
+	FILE *data;
+	fopen_s(&data, "..\\database.data", "rb");
+	/*for (int i = 0; i < 1000; i++) {
+		fread(&zap, sizeof(zap), 1, data);
+		cout << zap.line_type << endl;
+	}*/
+	/*
+	double error = 1;
+	while (error > 0.01) {
+		error = 0;
+		for (int n = 0; n < 200; n++) {
+			int r = rand() % 100 + 1;
+			for (int i = 0; i < r; i++) {
+				if (fread(&zap, sizeof(zap), 1, data) == 0) { //считывание данных из базы
+					rewind(data);
+					fread(&zap, sizeof(zap), 1, data);
+				}
+			}
+
+			for (int i = 0; i < 8; i ++) {
+				for (int j = 0; j < 8; j++) {
+					for (int k = 0; k < 3; k++) {
+						neuro0[i].out = zap.img[i][j][k]; //заполнение входного слоя
+					}
+				}
+			}
+			forward(neuro0, size0, neuro1, size1, weight01); //вычисление выходных значений нейронов
+			forward(neuro1, size1, neuro2, size2, weight12);
+			forward(neuro2, size2, neuro3, size3, weight23);
+			forward(neuro3, size3, neuro4, size4, weight34);
+			forward(neuro4, size4, neuro5, size5, weight45);
+			if(n % 50 == 0)
+			cout << zap.line_type << " | " << neuro5[0].out << " " << neuro5[1].out << " " << neuro5[2].out << " " << neuro5[3].out << endl;
+			
+			if (zap.line_type == 0) { //вычисление ошибки выходного слоя
+				if (neuro5[0].out > 0.2 || neuro5[1].out > 0.2 || neuro5[2].out > 0.2 || neuro5[3].out > 0.2) {
+					neuro5[0].error = 0 - neuro5[0].out;
+					neuro5[1].error = 0 - neuro5[1].out;
+					neuro5[2].error = 0 - neuro5[2].out;
+					neuro5[3].error = 0 - neuro5[3].out;
+					error++;
+				}
+			}
+			if (zap.line_type == 1) {
+				if (neuro5[0].out < 0.8 || neuro5[1].out > 0.2 || neuro5[2].out > 0.2 || neuro5[3].out > 0.2) {
+					neuro5[0].error = 1 - neuro5[0].out;
+					neuro5[1].error = 0 - neuro5[1].out;
+					neuro5[2].error = 0 - neuro5[2].out;
+					neuro5[3].error = 0 - neuro5[3].out;
+					error++;
+				}
+			}
+			if (zap.line_type == 2) {
+				if (neuro5[0].out > 0.2 || neuro5[1].out < 0.8 || neuro5[2].out > 0.2 || neuro5[3].out > 0.2) {
+					neuro5[0].error = 0 - neuro5[0].out;
+					neuro5[1].error = 1 - neuro5[1].out;
+					neuro5[2].error = 0 - neuro5[2].out;
+					neuro5[3].error = 0 - neuro5[3].out;
+					error++;
+				}
+			}
+			if (zap.line_type == 3) {
+				if (neuro5[0].out > 0.2 || neuro5[1].out > 0.2 || neuro5[2].out < 0.8 || neuro5[3].out > 0.2) {
+					neuro5[0].error = 0 - neuro5[0].out;
+					neuro5[1].error = 0 - neuro5[1].out;
+					neuro5[2].error = 1 - neuro5[2].out;
+					neuro5[3].error = 0 - neuro5[3].out;
+					error++;
+				}
+			}
+			if (zap.line_type == 4) {
+				if (neuro5[0].out > 0.2 || neuro5[1].out > 0.2 || neuro5[2].out > 0.2 || neuro5[3].out < 0.8) {
+					neuro5[0].error = 0 - neuro5[0].out;
+					neuro5[1].error = 0 - neuro5[1].out;
+					neuro5[2].error = 0 - neuro5[2].out;
+					neuro5[3].error = 1 - neuro5[3].out;
+					error++;
+				}
+			}
+
+			backward(neuro5, size5, neuro4, size4, weight45); //вычисление ошибки нейронов
+			backward(neuro4, size4, neuro3, size3, weight34);
+			backward(neuro3, size3, neuro2, size2, weight23);
+			backward(neuro2, size2, neuro1, size1, weight12);
+			backward(neuro1, size1, neuro0, size0, weight01);
+
+			weights_update(neuro0, size0, neuro1, size1, weight01, 0.1); //вычисление новых весов связей (0.1 - коэффицент обучения)
+			weights_update(neuro1, size1, neuro2, size2, weight12, 0.1);
+			weights_update(neuro2, size2, neuro3, size3, weight23, 0.1);
+			weights_update(neuro3, size3, neuro4, size4, weight34, 0.1);
+			weights_update(neuro4, size4, neuro5, size5, weight45, 0.1);
 
 		}
 		error  /= 200;
 		cout << error << endl;
-		//getchar();
+		getchar();
 	}
 
-
+	*/
 }
