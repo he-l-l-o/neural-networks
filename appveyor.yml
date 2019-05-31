@@ -1,5 +1,6 @@
+matrix:
+  -project_name: algorhytm/algorhytm.sln
+  -project_name: neyron_base_data_creator/neyron_base_data_creator.sln
+  -project_name: project/project.sln
 build:
-  project:
-    - algorhytm/algorhytm.sln
-    - neyron_base_data_creator/neyron_base_data_creator.sln
-    - project/project.sln
+  project: $(project_name)
