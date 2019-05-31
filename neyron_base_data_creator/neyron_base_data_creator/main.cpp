@@ -16,7 +16,7 @@ using namespace sf;
 	0 .. y = size_y;
 */
 struct entry {
-	short color_of_image_pixels[8][8][3];
+	short color_of_image_pixels[4][4];
 	int type_lien;
 } entry1;
 /*
@@ -67,7 +67,7 @@ int main()
 	fopen_s(&binary_database, "data\\database.data", "ab+");
 
 	//разметчик
-	RectangleShape rectangle_pointer(Vector2f(8, 8));
+	RectangleShape rectangle_pointer(Vector2f(4, 4));
 	rectangle_pointer.setFillColor(Color::Red);
 	rectangle_pointer.setPosition(22, 20);
 
@@ -135,8 +135,8 @@ int main()
 				{
 					cout << "x = " << location_marker_x << "  " << "y = " << location_marker_y << endl;
 					IntRect form;
-					form.height = 8;
-					form.width = 8;
+					form.height = 4;
+					form.width = 4;
 					form.top = location_marker_y;
 					form.left = location_marker_x;
 
@@ -145,8 +145,8 @@ int main()
 					save_image_sprite.setPosition(649, 21);
 
 					save_image_sprite.setScale(
-						target_Size_save.x / 8,
-						target_Size_save.y / 8);
+						target_Size_save.x / 4,
+						target_Size_save.y / 4);
 					check_button = 0;
 				}
 			}
@@ -158,17 +158,15 @@ int main()
 					get_color_array(entry1.color_of_image_pixels, load_image, event, location_marker_x, location_marker_y);
 					entry1.type_lien = event.key.code - 26;
 					fwrite(&entry1, sizeof(entry1), 1, binary_database);
-					for (int i = 0; i < 8; i++) {
-						for (int j = 0; j < 8; j++) {
-							cout << entry1.color_of_image_pixels[j][i][0] << " ";
-							cout << entry1.color_of_image_pixels[j][i][1] << " ";
-							cout << entry1.color_of_image_pixels[j][i][2] << " ";
+					for (int i = 0; i < 4; i++) {
+						for (int j = 0; j < 4; j++) {
+							cout << entry1.color_of_image_pixels[j][i] << " ";
 							cout << entry1.type_lien << endl;
 						}
 					}
 					check_button_num = 1;
-					check_image_sprite.setTextureRect(save_image_sprite.getTextureRect);
-					save_image_sprite.setPosition(649, 300);
+				//	check_image_sprite.setTextureRect(save_image_sprite.getTextureRect);
+					//save_image_sprite.setPosition(649, 300);
 				}
 
 			}
