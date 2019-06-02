@@ -31,7 +31,8 @@ void check_file(string file_location, Image load_image) {
 int main()
 {
 	string file_location;
-	cout << "Please enter the location of the loaded picture.\n WARNING!!!\n The path to the file should not contain Cyrillic characters, but only Latin letters and numbers.\n";
+	cout << "Please enter the location of the loaded picture.\n WARNING!!!\n"
+			"The path to the file should not contain Cyrillic characters, but only Latin letters and numbers.\n";
 	getline(cin, file_location);
 	//создание главного окна приложения
 	//графика основного интерфейса
@@ -44,13 +45,37 @@ int main()
 	Image load_image; //меню текстура
 	load_image.loadFromFile(file_location);
 	//	check_file(file_location, load_image);
-
 	Image save_image; // меню спрайт
+	//////КНОПЕКИ//////////
+	Image button_type_0_image;
+	button_type_0_image.loadFromFile("img/button_type_0.png");
+	Image button_type_1_image;
+	button_type_1_image.loadFromFile("img/button_type_1.png");
+	Image button_type_2_image;
+	button_type_2_image.loadFromFile("img/button_type_2.png");
+	Image button_type_3_image;
+	button_type_3_image.loadFromFile("img/button_type_3.png");
+	Image button_type_4_image;
+	button_type_4_image.loadFromFile("img/button_type_4.png");
 
-	Texture main_texture;
+	Texture main_texture;//главная текстура меню
 	main_texture.loadFromImage(main_image);
-	Texture load_image_texture;
+	
+	Texture load_image_texture;//текстура загружаемого изображения
 	load_image_texture.loadFromImage(load_image);
+	
+	Texture button_type_0_texture;//текстура кнопки 0
+	button_type_0_texture.loadFromImage(button_type_0_image);
+	Texture button_type_1_texture;//текстура кнопки 1
+	button_type_1_texture.loadFromImage(button_type_1_image);
+	Texture button_type_2_texture;
+	button_type_2_texture.loadFromImage(button_type_2_image);
+	Texture button_type_3_texture;
+	button_type_3_texture.loadFromImage(button_type_3_image);
+	Texture button_type_4_texture;
+	button_type_4_texture.loadFromImage(button_type_4_image);
+
+
 	Texture save_image_texture;
 
 	Sprite main_sprite;
@@ -59,7 +84,28 @@ int main()
 	Sprite load_image_sprite;
 	load_image_sprite.setTexture(load_image_texture);
 	load_image_sprite.setPosition(22, 20);
+
 	Sprite save_image_sprite; //вырезанный кусочек изображения
+
+	Sprite button_type_0_sprite;//текстура кнопки 0
+	button_type_0_sprite.setTexture(button_type_0_texture);
+	button_type_0_sprite.setPosition(654, 286);
+	/*
+	Sprite button_type_1_sprite;//текстура кнопки 1
+	button_type_1_sprite.setTexture(button_type_1_texture);
+	button_type_0_sprite.setPosition(892, 19);
+
+	Sprite button_type_2_sprite;//текстура кнопки 2
+	button_type_2_sprite.setTexture(button_type_2_texture);
+	button_type_0_sprite.setPosition(892, 109);
+
+	Sprite button_type_3_sprite;//текстура кнопки 3
+	button_type_3_sprite.setTexture(button_type_3_texture);
+	button_type_0_sprite.setPosition(892, 194);
+
+	Sprite button_type_4_sprite;//текстура кнопки 4
+	button_type_4_sprite.setTexture(button_type_4_texture);
+	button_type_0_sprite.setPosition(892, 284);*/
 
 	Sprite check_image_sprite;
 	Texture check_image_texture;
@@ -104,12 +150,14 @@ int main()
 	int location_marker_y;
 	bool check_button = 0;
 	bool check_button_num = 0;
+	bool check_button_sprite = 0;
+
 	location_marker_x = (rectangle_pointer.getPosition().x - 22) * ratio_load_img_menu;
 	location_marker_y = (rectangle_pointer.getPosition().y - 20) * ratio_load_img_menu;
 	cout << "loaction x = " << location_marker_x << " location y = " << location_marker_y << endl;
 
 	RectangleShape rect_save;
-
+	
 	while (window.isOpen())
 	{
 		Event event;
@@ -118,6 +166,23 @@ int main()
 			if (event.type == Event::Closed)
 			{
 				window.close();
+			}
+			if (event.type == Event::MouseButtonPressed) 
+			{
+				if (IntRect(654, 286, 212, 81).contains(Mouse::getPosition(window)))
+				{
+					button_type_0_sprite.setColor(Color(180, 180, 180, 255));
+					check_button_num = 1;
+				}
+
+			} 
+			if (event.type == Event::MouseButtonReleased)
+			{
+				if (check_button_num == 1)
+				{
+					button_type_0_sprite.setColor(Color(255, 255, 255, 255));
+					check_button_num = 0;
+				}
 			}
 			if (event.KeyPressed)
 			{
@@ -129,14 +194,17 @@ int main()
 				{
 					location_marker_y = (rectangle_pointer.getPosition().y - 20) * ratio_load_img_menu;
 				}
-				if ((event.key.code == Keyboard::Num0) || (event.key.code == Keyboard::Num1) || (event.key.code == Keyboard::Num2) || (event.key.code == Keyboard::Num3) || (event.key.code == Keyboard::Num4))
+				if ((event.key.code == Keyboard::Num0) || (event.key.code == Keyboard::Num1) || (event.key.code == Keyboard::Num2) ||
+					(event.key.code == Keyboard::Num3) || (event.key.code == Keyboard::Num4))
 				{
 					check_button_num = 1;
 				}
 			}
+
 			if (event.KeyReleased)
 			{
-				if ((event.key.code == Keyboard::Up) || (event.key.code == Keyboard::Down) || (event.key.code == Keyboard::Right) || (event.key.code == Keyboard::Left))
+				if ((event.key.code == Keyboard::Up) || (event.key.code == Keyboard::Down) ||
+					(event.key.code == Keyboard::Right) || (event.key.code == Keyboard::Left))
 				{
 					cout << "x = " << location_marker_x << "  "
 						 << "y = " << location_marker_y << endl;
@@ -230,10 +298,12 @@ int main()
 		}
 
 		window.clear();
+
 		window.draw(main_sprite);
 		window.draw(load_image_sprite);
 		window.draw(rectangle_pointer);
 		window.draw(save_image_sprite);
+		window.draw(button_type_0_sprite);
 		window.display();
 	}
 	fclose(binary_database);
