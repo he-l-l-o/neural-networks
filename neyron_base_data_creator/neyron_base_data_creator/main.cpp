@@ -21,16 +21,6 @@ struct entry
 	int type_lien;
 } entry1;
 
-int check_load_img(Image load_image, string& file_location) {
-	while (load_image.loadFromFile(file_location) == false) {
-		cout << "NOPE! This file is empty in folder. Plesae, input correct road. Good luck!\n";
-		getline(cin, file_location);
-		load_image.loadFromFile(file_location);
-	}
-	if (load_image.loadFromFile(file_location) == true) {
-		return 1;
-	}
-}
 int main()
 {
 	string file_location;

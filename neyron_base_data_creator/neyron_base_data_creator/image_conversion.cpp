@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include "image_conversion.h"
 #include <iostream>
+#include <string>
 
 void scaling(int& size_x, int& size_y, int save_size_x, int save_size_y, double ratio_x_y)
 {
@@ -24,9 +25,20 @@ void get_color_array(short color_of_image_pixels[4][4], sf::Image load_image, sf
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 4; j++) {
 			color_of_image_pixels[j][i] = load_image.getPixel(location_marker_x + j, location_marker_y + i).r;
-		//	color_of_image_pixels[j][i][1] = load_image.getPixel(location_marker_x + j, location_marker_y + i).g;
-		//	color_of_image_pixels[j][i][2] = load_image.getPixel(location_marker_x + j, location_marker_y + i).b;
+			//	color_of_image_pixels[j][i][1] = load_image.getPixel(location_marker_x + j, location_marker_y + i).g;
+			//	color_of_image_pixels[j][i][2] = load_image.getPixel(location_marker_x + j, location_marker_y + i).b;
 		}
+	}
+}
+
+int check_load_img(sf::Image load_image, std::string & file_location) {
+	while (load_image.loadFromFile(file_location) == false) {
+		std::cout << "NOPE! This file is empty in folder. Plesae, input correct road. Good luck!\n";
+		std::getline(std::cin, file_location);
+		load_image.loadFromFile(file_location);
+	}
+	if (load_image.loadFromFile(file_location) == true) {
+		return 1;
 	}
 }
 
