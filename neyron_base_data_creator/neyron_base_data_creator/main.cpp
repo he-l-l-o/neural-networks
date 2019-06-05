@@ -20,14 +20,7 @@ struct entry
 	short color_of_image_pixels[4][4];
 	int type_lien;
 } entry1;
-/*
-void check_file(string file_location, Image load_image) {
-	if (load_image.loadFromFile(file_location) == false) {
-		cout << "file not location. PLease, try input again" << endl;
-		getline(cin, file_location);
-		check_file(file_location, load_image);
-	}
-}*/
+
 int main()
 {
 	string file_location;
@@ -203,28 +196,7 @@ int main()
 				button_type_2_sprite.setColor(Color(255, 255, 255, 255));
 				check_button_horizontal = 0;
 			}
-			///////////////////////
-			if ((event.mouseButton.button == Mouse::Button::Left) && (event.type == Event::MouseButtonPressed) && (IntRect(892, 194, 212, 81).contains(Mouse::getPosition(window))))
-			{
-				button_type_3_sprite.setColor(Color(180, 180, 180, 255));
-				check_button_left_diagonal = 1;
-			}
-			if ((event.mouseButton.button == Mouse::Button::Left) && (event.type == Event::MouseButtonReleased) && (check_button_left_diagonal == 1))
-			{
-				button_type_3_sprite.setColor(Color(255, 255, 255, 255));
-				check_button_left_diagonal = 0;
-			}
-			///////////////////////
-			if ((event.mouseButton.button == Mouse::Button::Left) && (event.type == Event::MouseButtonPressed) && (IntRect(892, 284, 212, 81).contains(Mouse::getPosition(window))))
-			{
-				button_type_4_sprite.setColor(Color(180, 180, 180, 255));
-				check_button_right_diagonal = 1;
-			}
-			if ((event.mouseButton.button == Mouse::Button::Left) && (event.type == Event::MouseButtonReleased) && (check_button_right_diagonal == 1))
-			{
-				button_type_4_sprite.setColor(Color(255, 255, 255, 255));
-				check_button_right_diagonal = 0;
-			}
+			
 			//////////////////////
 			if ((event.KeyPressed) && (event.key.code == Keyboard::Right) || (event.key.code == Keyboard::Left))
 			{
