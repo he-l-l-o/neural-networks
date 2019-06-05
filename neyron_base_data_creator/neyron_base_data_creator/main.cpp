@@ -196,7 +196,18 @@ int main()
 				button_type_2_sprite.setColor(Color(255, 255, 255, 255));
 				check_button_horizontal = 0;
 			}
-			
+			///////////////////////
+			if ((event.mouseButton.button == Mouse::Button::Left) && (event.type == Event::MouseButtonPressed) && (IntRect(892, 194, 212, 81).contains(Mouse::getPosition(window))))
+			{
+				button_type_3_sprite.setColor(Color(180, 180, 180, 255));
+				check_button_left_diagonal = 1;
+			}
+			if ((event.mouseButton.button == Mouse::Button::Left) && (event.type == Event::MouseButtonReleased) && (check_button_left_diagonal == 1))
+			{
+				button_type_3_sprite.setColor(Color(255, 255, 255, 255));
+				check_button_left_diagonal = 0;
+			}
+		
 			//////////////////////
 			if ((event.KeyPressed) && (event.key.code == Keyboard::Right) || (event.key.code == Keyboard::Left))
 			{
