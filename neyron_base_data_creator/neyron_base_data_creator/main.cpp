@@ -17,7 +17,7 @@ using namespace sf;
 */
 struct entry
 {
-	short color_of_image_pixels[4][4];
+	short color_of_image_pixels[4][4][3];
 	int type_lien;
 } entry1;
 
@@ -36,7 +36,7 @@ int main()
 	}
 	//создание главного окна приложения
 	//графика основного интерфейса
-	RenderWindow window(VideoMode(1200, 720), "NeyronBaseDataCreator");
+	RenderWindow window(VideoMode(1200, 720), "NeyronBaseDataCreator", Style::Close);
 	window.setVerticalSyncEnabled(true);
 	window.setFramerateLimit(60);
 
@@ -156,8 +156,8 @@ int main()
 	location_marker_y = (rectangle_pointer.getPosition().y - 20) * ratio_load_img_menu;
 
 	cout << "loaction x = " << location_marker_x << " location y = " << location_marker_y << endl;
-
-	RectangleShape rect_save;
+	//IntRect form;
+	increase(load_image_texture, save_image_sprite, location_marker_y, location_marker_x, target_Size_save);
 
 	while (window.isOpen())
 	{
@@ -183,7 +183,9 @@ int main()
 				{
 					for (int j = 0; j < 4; j++)
 					{
-						cout << entry1.color_of_image_pixels[j][i] << " ";
+						cout << entry1.color_of_image_pixels[j][i][0] << " ";
+						cout << entry1.color_of_image_pixels[j][i][1] << " ";
+						cout << entry1.color_of_image_pixels[j][i][2] << " ";
 						cout << entry1.type_lien << endl;
 					}
 				}
@@ -206,7 +208,9 @@ int main()
 				{
 					for (int j = 0; j < 4; j++)
 					{
-						cout << entry1.color_of_image_pixels[j][i] << " ";
+						cout << entry1.color_of_image_pixels[j][i][0] << " ";
+						cout << entry1.color_of_image_pixels[j][i][1] << " ";
+						cout << entry1.color_of_image_pixels[j][i][2] << " ";
 						cout << entry1.type_lien << endl;
 					}
 				}
@@ -228,7 +232,9 @@ int main()
 				{
 					for (int j = 0; j < 4; j++)
 					{
-						cout << entry1.color_of_image_pixels[j][i] << " ";
+						cout << entry1.color_of_image_pixels[j][i][0] << " ";
+						cout << entry1.color_of_image_pixels[j][i][1] << " ";
+						cout << entry1.color_of_image_pixels[j][i][2] << " ";
 						cout << entry1.type_lien << endl;
 					}
 				}
@@ -250,7 +256,7 @@ int main()
 				{
 					for (int j = 0; j < 4; j++)
 					{
-						cout << entry1.color_of_image_pixels[j][i] << " ";
+						cout << entry1.color_of_image_pixels[j][i][0] << " ";
 						cout << entry1.type_lien << endl;
 					}
 				}
@@ -272,7 +278,9 @@ int main()
 				{
 					for (int j = 0; j < 4; j++)
 					{
-						cout << entry1.color_of_image_pixels[j][i] << " ";
+						cout << entry1.color_of_image_pixels[j][i][0] << " ";
+						cout << entry1.color_of_image_pixels[j][i][1] << " ";
+						cout << entry1.color_of_image_pixels[j][i][2] << " ";
 						cout << entry1.type_lien << endl;
 					}
 				}
@@ -291,19 +299,7 @@ int main()
 			{
 
 				cout << "x = " << location_marker_x << "  " << "y = " << location_marker_y << endl;
-				IntRect form;
-				form.height = 4;
-				form.width = 4;
-				form.top = location_marker_y;
-				form.left = location_marker_x;
-
-				save_image_sprite.setTexture(load_image_texture);
-				save_image_sprite.setTextureRect(form);
-				save_image_sprite.setPosition(649, 21);
-
-				save_image_sprite.setScale(
-					target_Size_save.x / 4,
-					target_Size_save.y / 4);
+				increase(load_image_texture, save_image_sprite, location_marker_y, location_marker_x, target_Size_save);
 			}
 			if ((event.KeyReleased) && ((event.key.code == Keyboard::Num0) || (event.key.code == Keyboard::Num1) || (event.key.code == Keyboard::Num2) || (event.key.code == Keyboard::Num3) || (event.key.code == Keyboard::Num4)))
 			{
@@ -316,7 +312,7 @@ int main()
 				{
 					for (int j = 0; j < 4; j++)
 					{
-						cout << entry1.color_of_image_pixels[j][i] << " ";
+						cout << entry1.color_of_image_pixels[j][i][0] << " ";
 						cout << entry1.type_lien << endl;
 					}
 				}
