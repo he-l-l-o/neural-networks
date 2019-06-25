@@ -42,7 +42,7 @@ int check_load_img(sf::Image load_image, std::string & file_location) {
 	}
 }
 
-void increase(sf::Texture &load_image_texture, sf::Sprite &save_image_sprite, int location_marker_y, int location_marker_x, sf::Vector2f target_Size_save) {
+void increase(sf::Texture& load_image_texture, sf::Sprite& save_image_sprite, int location_marker_y, int location_marker_x, sf::Vector2f target_Size_save) {
 	sf::IntRect form;
 	form.height = 4;
 	form.width = 4;
@@ -58,13 +58,6 @@ void increase(sf::Texture &load_image_texture, sf::Sprite &save_image_sprite, in
 		target_Size_save.y / 4);
 }
 
-void move_pointer(sf::RectangleShape &rectangle_pointer) {
-	if ((rectangle_pointer.getPosition().x < 620) && (rectangle_pointer.getPosition().x > 21))
-	{
-		rectangle_pointer.move(-0.1, 0);
-	}
-	else
-	{
-		rectangle_pointer.move(10, 0);
-	}
+void entering_file_location_text() {
+
 }
