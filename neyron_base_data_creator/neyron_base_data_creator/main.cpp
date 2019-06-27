@@ -141,6 +141,7 @@ int main()
 	rectangle_pointer.setFillColor(Color::Red);
 	rectangle_pointer.setPosition(22, 20);
 
+
 	int size_x = load_image.getSize().x;
 	int size_y = load_image.getSize().y;
 	//вывод осуществялть через функции
@@ -153,6 +154,11 @@ int main()
 	int save_size_y = size_y;
 
 	scaling(size_x, size_y, save_size_x, save_size_y, ratio_x_y);
+	//пустое окно
+	RectangleShape rectangle_load_img(Vector2f(size_x, size_y));
+	rectangle_load_img.setOutlineThickness(5);
+	rectangle_load_img.setOutlineColor(sf::Color(250, 150, 100));
+	rectangle_load_img.setPosition(17 + 5, 15 + 5);
 
 	double ratio_load_img_menu = (double)save_size_x / size_x;
 	cout << endl;
@@ -204,18 +210,20 @@ int main()
 			////////////////UP
 			if (((event.type == Event::KeyPressed) && (event.key.code == Keyboard::Up)) || ((event.mouseButton.button == Mouse::Button::Left) && (event.type == Event::MouseButtonPressed) && (IntRect(727, 441, 74, 74).contains(Mouse::getPosition(window)))))
 			{
+				//x < 620 x > 21 true else false
 				button_arrow_up_sprite.setColor(Color(180, 180, 180, 255));
-				if ((rectangle_pointer.getPosition().x < 620) && (rectangle_pointer.getPosition().x > 21))
-				{
-					rectangle_pointer.move(0, -1);
-				}
-				else
-				{
-					rectangle_pointer.move(0, 1);
-				}
+
+				rectangle_pointer.move(0, -1 / ratio_load_img_menu);
 				location_marker_y = (rectangle_pointer.getPosition().y - 20) * ratio_load_img_menu;
+
+				while (location_marker_y < 0)
+				{
+					rectangle_pointer.move(0, 1 / ratio_load_img_menu);
+					location_marker_y = (rectangle_pointer.getPosition().y - 20) * ratio_load_img_menu;
+				}
 				increase(load_image_texture, save_image_sprite, location_marker_y, location_marker_x, target_Size_save);
 				cout << "x =  " << location_marker_x << " y = " << location_marker_y << endl;
+				//cout << "X = " << rectangle_pointer.getPosition().x << " Y = " << rectangle_pointer.getPosition().y << endl;
 				check_button_arrow_up = 1;
 			}
 			if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Up) || ((event.mouseButton.button == Mouse::Button::Left) && (event.type == Event::MouseButtonReleased) && (check_button_arrow_up == 1)))
@@ -227,17 +235,17 @@ int main()
 			if (((event.type == Event::KeyPressed) && (event.key.code == Keyboard::Down)) || (event.mouseButton.button == Mouse::Button::Left) && (event.type == Event::MouseButtonPressed) && (IntRect(727, 517, 74, 74).contains(Mouse::getPosition(window))))
 			{
 				button_arrow_down_sprite.setColor(Color(180, 180, 180, 255));
-				if ((rectangle_pointer.getPosition().x < 620) && (rectangle_pointer.getPosition().x > 21))
-				{
-					rectangle_pointer.move(0, 1);
-				}
-				else
-				{
-					rectangle_pointer.move(0, -1);
-				}
+
+				rectangle_pointer.move(0, 1 / ratio_load_img_menu);
 				location_marker_y = (rectangle_pointer.getPosition().y - 20) * ratio_load_img_menu;
+				while (location_marker_y > save_size_y - 4 * ratio_load_img_menu)
+				{
+					rectangle_pointer.move(0, -1 / ratio_load_img_menu);
+					location_marker_y = (rectangle_pointer.getPosition().y - 20) * ratio_load_img_menu;
+				}
 				increase(load_image_texture, save_image_sprite, location_marker_y, location_marker_x, target_Size_save);
 				cout << "x =  " << location_marker_x << " y = " << location_marker_y << endl;
+				//cout << "X = " << rectangle_pointer.getPosition().x << " Y = " << rectangle_pointer.getPosition().y << endl;
 				check_button_arrow_down = 1;
 			}
 			if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Down) || (event.mouseButton.button == Mouse::Button::Left) && (event.type == Event::MouseButtonReleased) && (check_button_arrow_down == 1))
@@ -249,17 +257,17 @@ int main()
 			if (((event.type == Event::KeyPressed) && (event.key.code == Keyboard::Left)) || (event.mouseButton.button == Mouse::Button::Left) && (event.type == Event::MouseButtonPressed) && (IntRect(651, 517, 74, 74).contains(Mouse::getPosition(window))))
 			{
 				button_arrow_left_sprite.setColor(Color(180, 180, 180, 255));
-				if ((rectangle_pointer.getPosition().x < 620) && (rectangle_pointer.getPosition().x > 21))
+				rectangle_pointer.move(-1 / ratio_load_img_menu, 0);
+				location_marker_x = (rectangle_pointer.getPosition().x - 22) * ratio_load_img_menu;
+				while (location_marker_x < 0)
 				{
-					rectangle_pointer.move(-1, 0);
-				}
-				else
-				{
-					rectangle_pointer.move(1, 0);
+					rectangle_pointer.move(1 / ratio_load_img_menu, 0);
+					location_marker_x = (rectangle_pointer.getPosition().y - 20) * ratio_load_img_menu;
 				}
 				location_marker_x = (rectangle_pointer.getPosition().x - 22) * ratio_load_img_menu;
 				increase(load_image_texture, save_image_sprite, location_marker_y, location_marker_x, target_Size_save);
 				cout << "x =  " << location_marker_x << " y = " << location_marker_y << endl;
+				//cout << "X = " << rectangle_pointer.getPosition().x << " Y = " << rectangle_pointer.getPosition().y << endl;
 				check_button_arrow_left = 1;
 			}
 			if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Left) || (event.mouseButton.button == Mouse::Button::Left) && (event.type == Event::MouseButtonReleased) && (check_button_arrow_left == 1))
@@ -271,17 +279,17 @@ int main()
 			if (((event.type == Event::KeyPressed) && (event.key.code == Keyboard::Right)) || (event.mouseButton.button == Mouse::Button::Left) && (event.type == Event::MouseButtonPressed) && (IntRect(803, 517, 74, 74).contains(Mouse::getPosition(window))))
 			{
 				button_arrow_right_sprite.setColor(Color(180, 180, 180, 255));
-				if ((rectangle_pointer.getPosition().x < 620) && (rectangle_pointer.getPosition().x > 21))
+				rectangle_pointer.move(1 / ratio_load_img_menu, 0);
+				location_marker_x = (rectangle_pointer.getPosition().x - 22) * ratio_load_img_menu;
+				while (location_marker_x > save_size_x - 4 * ratio_load_img_menu)
 				{
-					rectangle_pointer.move(1, 0);
-				}
-				else
-				{
-					rectangle_pointer.move(-10, 0);
+					rectangle_pointer.move(-1 / ratio_load_img_menu, 0);
+					location_marker_x = (rectangle_pointer.getPosition().y - 20) * ratio_load_img_menu;
 				}
 				location_marker_x = (rectangle_pointer.getPosition().x - 22) * ratio_load_img_menu;
 				increase(load_image_texture, save_image_sprite, location_marker_y, location_marker_x, target_Size_save);
 				cout << "x =  " << location_marker_x << " y = " << location_marker_y << endl;
+				//cout << "X = " << rectangle_pointer.getPosition().x << " Y = " << rectangle_pointer.getPosition().y << endl;
 				check_button_arrow_right = 1;
 			}
 			if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Right) || ((event.mouseButton.button == Mouse::Button::Left) && (event.type == Event::MouseButtonReleased) && (check_button_arrow_right == 1)))
@@ -395,45 +403,9 @@ int main()
 			}
 			if (((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Num4)) || (event.mouseButton.button == Mouse::Button::Left) && (event.type == Event::MouseButtonReleased) && (check_button_right_diagonal == 1))
 			{
-			Image check_image(save_image_sprite.getTexture()->copyToImage());
-			get_color_array(entry1.color_of_image_pixels, load_image, event, location_marker_x, location_marker_y);
-			entry1.type_lien = 4;
-			fwrite(&entry1, sizeof(entry1), 1, binary_database);
-			for (int i = 0; i < 4; i++)
-			{
-				for (int j = 0; j < 4; j++)
-				{
-					cout << entry1.color_of_image_pixels[j][i][0] << " ";
-					cout << entry1.color_of_image_pixels[j][i][1] << " ";
-					cout << entry1.color_of_image_pixels[j][i][2] << " ";
-					cout << entry1.type_lien << endl;
-				}
-			}
-			button_type_4_sprite.setColor(Color(255, 255, 255, 255));
-			check_button_right_diagonal = 0;
-			}
-			/*
-			if (((event.KeyPressed) && (event.key.code == Keyboard::Right) || (event.key.code == Keyboard::Left)))
-			{
-				location_marker_x = (rectangle_pointer.getPosition().x - 22) * ratio_load_img_menu;
-			}
-			if ((event.KeyPressed) && (event.key.code == Keyboard::Up) || (event.key.code == Keyboard::Down))
-			{
-				location_marker_y = (rectangle_pointer.getPosition().y - 20) * ratio_load_img_menu;
-			}*/
-			/*
-			if ((event.KeyReleased) && (((event.key.code == Keyboard::Up) || (event.key.code == Keyboard::Down) || (event.key.code == Keyboard::Right) || (event.key.code == Keyboard::Left))))
-			{
-
-				cout << "x = " << location_marker_x << "  " << "y = " << location_marker_y << endl;
-				increase(load_image_texture, save_image_sprite, location_marker_y, location_marker_x, target_Size_save);
-			}
-			if ((event.KeyReleased) && ((event.key.code == Keyboard::Num0) || (event.key.code == Keyboard::Num1) || (event.key.code == Keyboard::Num2) || (event.key.code == Keyboard::Num3) || (event.key.code == Keyboard::Num4)))
-			{
-
 				Image check_image(save_image_sprite.getTexture()->copyToImage());
 				get_color_array(entry1.color_of_image_pixels, load_image, event, location_marker_x, location_marker_y);
-				entry1.type_lien = event.key.code - 26;
+				entry1.type_lien = 4;
 				fwrite(&entry1, sizeof(entry1), 1, binary_database);
 				for (int i = 0; i < 4; i++)
 				{
@@ -445,7 +417,10 @@ int main()
 						cout << entry1.type_lien << endl;
 					}
 				}
-			}*/
+				button_type_4_sprite.setColor(Color(255, 255, 255, 255));
+				check_button_right_diagonal = 0;
+			}
+
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Escape))
 		{
@@ -455,6 +430,7 @@ int main()
 		window.clear();
 
 		window.draw(main_sprite);
+		window.draw(rectangle_load_img);
 		window.draw(load_image_sprite);
 		window.draw(rectangle_pointer);
 		window.draw(save_image_sprite);
