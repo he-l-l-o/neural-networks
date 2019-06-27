@@ -73,8 +73,8 @@ void neural_learning(char *path)
 
 	//Инициализация слоев нейронной сети
 
-	int size0 = 16, size1 = 16, size2 = 5, size3 = 5, size4 = 5, size5 = 5; //размеры массивов нейронов
-	neuron *neuro0 = new neuron[size0];										//Нейроны входного слоя. 8 * 8 * 3 под пиксели + нейрон смещения
+	int size0 = 17, size1 = 17, size2 = 5; //размеры массивов нейронов
+	neuron *neuro0 = new neuron[size0];										//Нейроны входного слоя. 4 * 4 под пиксели + нейрон смещения
 	for (int i = 0; i < size0; i++)
 	{ //ошибка входных нейронов равна 0
 		neuro0[i].error = 0;
@@ -87,15 +87,6 @@ void neural_learning(char *path)
 	neuron *neuro2 = new neuron[size2]; //Нейроны второго слоя (скрытый)
 	neuro2[size2 - 1].out = 1;
 	neuro2[size2 - 1].error = 0;
-	neuron *neuro3 = new neuron[size3]; //Нейроны третьего слоя (скрытый)
-	neuro3[size3 - 1].out = 1;
-	neuro3[size3 - 1].error = 0;
-	neuron *neuro4 = new neuron[size4]; //Нейроны четвертого слоя (скрытый)
-	neuro4[size4 - 1].out = 1;
-	neuro4[size4 - 1].error = 0;
-	neuron *neuro5 = new neuron[size5]; //Нейроны выходного слоя по одному под каждое направление линии(один нейрон лишний, нужен для упрощения функций)
-	neuro5[size5 - 1].out = 1;
-	neuro5[size5 - 1].error = 0;
 
 	//Инициализация матриц связи между слоями
 
