@@ -90,6 +90,8 @@ void neural_learning(char *path)
 
 	//Инициализация матриц связи между слоями
 
+	new double[size1 - 1];
+
 	double **weight01 = new double *[size0]; //Веса связей между нулевым и первым слоями
 	for (int i = 0; i < size0; i++)
 	{
@@ -108,54 +110,10 @@ void neural_learning(char *path)
 			weight12[i][j] = (rand() % 100) / 100.0;
 		}
 	}
-	double **weight23 = new double *[size2]; //Веса связей между вторым и третьим слоями
-	for (int i = 0; i < size2; i++)
-	{
-		weight23[i] = new double[size3 - 1];
-		for (int j = 0; j < size3 - 1; j++)
-		{
-			weight23[i][j] = (rand() % 100) / 100.0;
-		}
-	}
-	double **weight34 = new double *[size3]; //Веса связей между третьим и четвертым слоями
-	for (int i = 0; i < size3; i++)
-	{
-		weight34[i] = new double[size4 - 1];
-		for (int j = 0; j < size4 - 1; j++)
-		{
-			weight34[i][j] = (rand() % 100) / 100.0;
-		}
-	}
-	double **weight45 = new double *[size4]; //Веса связей между четвертым и пятым слоями
-	for (int i = 0; i < size4; i++)
-	{
-		weight45[i] = new double[size5 - 1];
-		for (int j = 0; j < size5 - 1; j++)
-		{
-			weight45[i][j] = (rand() % 100) / 100.0;
-		}
-	}
 
 	srand(time(0));
 	FILE *data;
 	fopen_s(&data, path, "rb");
-	for (int i = 0; i < 120; i++)
-	{
-		if (fread(&zap, sizeof(zap), 1, data) == 0)
-		{ //считывание данных из базы
-			rewind(data);
-			fread(&zap, sizeof(zap), 1, data);
-		}
-		cout << zap.line_type << endl;
-	}
-	for (int i = 0; i < 4; i++)
-	{
-		for (int j = 0; j < 4; j++)
-		{
-			cout << zap.img[i][j];
-		}
-		cout << endl;
-	}
 
 	double error = 1;
 	while (error > 0.01)
@@ -185,144 +143,135 @@ void neural_learning(char *path)
 			}
 			forward(neuro0, size0, neuro1, size1, weight01); //вычисление выходных значений нейронов
 			forward(neuro1, size1, neuro2, size2, weight12);
-			forward(neuro2, size2, neuro3, size3, weight23);
-			forward(neuro3, size3, neuro4, size4, weight34);
-			forward(neuro4, size4, neuro5, size5, weight45);
 			if (n % 500 == 0)
-				cout << zap.line_type << " | " << neuro5[0].out << " " << neuro5[1].out << " " << neuro5[2].out << " " << neuro5[3].out << endl;
+				cout << zap.line_type << " | " << neuro2[0].out << " " << neuro2[1].out << " " << neuro2[2].out << " " << neuro2[3].out << endl;
 
 			for (int i = 0; i < 4; i++)
 			{
-				neuro5[i].error = 0;
+				neuro2[i].error = 0;
 			}
 
 			if (zap.line_type == 0)
 			{ //вычисление ошибки выходного слоя
-				if (neuro5[0].out > 0.2)
+				if (neuro2[0].out > 0.2)
 				{
-					neuro5[0].error = 0.05 - neuro5[0].out;
+					neuro2[0].error = 0.05 - neuro2[0].out;
 					error++;
 				}
-				if (neuro5[1].out > 0.2)
+				if (neuro2[1].out > 0.2)
 				{
-					neuro5[1].error = 0.05 - neuro5[1].out;
+					neuro2[1].error = 0.05 - neuro2[1].out;
 					error++;
 				}
-				if (neuro5[2].out > 0.2)
+				if (neuro2[2].out > 0.2)
 				{
-					neuro5[2].error = 0.05 - neuro5[2].out;
+					neuro2[2].error = 0.05 - neuro2[2].out;
 					error++;
 				}
-				if (neuro5[3].out > 0.2)
+				if (neuro2[3].out > 0.2)
 				{
-					neuro5[3].error = 0.05 - neuro5[3].out;
+					neuro2[3].error = 0.05 - neuro2[3].out;
 					error++;
 				}
 			}
 			if (zap.line_type == 1)
 			{
-				if (neuro5[0].out < 0.8)
+				if (neuro2[0].out < 0.8)
 				{
-					neuro5[0].error = 0.95 - neuro5[0].out;
+					neuro2[0].error = 0.95 - neuro2[0].out;
 					error++;
 				}
-				if (neuro5[1].out > 0.2)
+				if (neuro2[1].out > 0.2)
 				{
-					neuro5[1].error = 0.05 - neuro5[1].out;
+					neuro2[1].error = 0.05 - neuro2[1].out;
 					error++;
 				}
-				if (neuro5[2].out > 0.2)
+				if (neuro2[2].out > 0.2)
 				{
-					neuro5[2].error = 0.05 - neuro5[2].out;
+					neuro2[2].error = 0.05 - neuro2[2].out;
 					error++;
 				}
-				if (neuro5[3].out > 0.2)
+				if (neuro2[3].out > 0.2)
 				{
-					neuro5[3].error = 0.05 - neuro5[3].out;
+					neuro2[3].error = 0.05 - neuro2[3].out;
 					error++;
 				}
 			}
 			if (zap.line_type == 2)
 			{
-				if (neuro5[0].out > 0.2)
+				if (neuro2[0].out > 0.2)
 				{
-					neuro5[0].error = 0.05 - neuro5[0].out;
+					neuro2[0].error = 0.05 - neuro2[0].out;
 					error++;
 				}
-				if (neuro5[1].out < 0.8)
+				if (neuro2[1].out < 0.8)
 				{
-					neuro5[1].error = 0.95 - neuro5[1].out;
+					neuro2[1].error = 0.95 - neuro2[1].out;
 					error++;
 				}
-				if (neuro5[2].out > 0.2)
+				if (neuro2[2].out > 0.2)
 				{
-					neuro5[2].error = 0.05 - neuro5[2].out;
+					neuro2[2].error = 0.05 - neuro2[2].out;
 					error++;
 				}
-				if (neuro5[3].out > 0.2)
+				if (neuro2[3].out > 0.2)
 				{
-					neuro5[3].error = 0.05 - neuro5[3].out;
+					neuro2[3].error = 0.05 - neuro2[3].out;
 					error++;
 				}
 			}
 			if (zap.line_type == 3)
 			{
-				if (neuro5[0].out > 0.2)
+				if (neuro2[0].out > 0.2)
 				{
-					neuro5[0].error = 0.05 - neuro5[0].out;
+					neuro2[0].error = 0.05 - neuro2[0].out;
 					error++;
 				}
-				if (neuro5[1].out > 0.2)
+				if (neuro2[1].out > 0.2)
 				{
-					neuro5[1].error = 0.05 - neuro5[1].out;
+					neuro2[1].error = 0.05 - neuro2[1].out;
 					error++;
 				}
-				if (neuro5[2].out < 0.8)
+				if (neuro2[2].out < 0.8)
 				{
-					neuro5[2].error = 0.95 - neuro5[2].out;
+					neuro2[2].error = 0.95 - neuro2[2].out;
 					error++;
 				}
-				if (neuro5[3].out > 0.2)
+				if (neuro2[3].out > 0.2)
 				{
-					neuro5[3].error = 0.05 - neuro5[3].out;
+					neuro2[3].error = 0.05 - neuro2[3].out;
 					error++;
 				}
 			}
 			if (zap.line_type == 4)
 			{
-				if (neuro5[0].out > 0.2)
+				if (neuro2[0].out > 0.2)
 				{
-					neuro5[0].error = 0.05 - neuro5[0].out;
+					neuro2[0].error = 0.05 - neuro2[0].out;
 					error++;
 				}
-				if (neuro5[1].out > 0.2)
+				if (neuro2[1].out > 0.2)
 				{
-					neuro5[1].error = 0.05 - neuro5[1].out;
+					neuro2[1].error = 0.05 - neuro2[1].out;
 					error++;
 				}
-				if (neuro5[2].out > 0.2)
+				if (neuro2[2].out > 0.2)
 				{
-					neuro5[2].error = 0.05 - neuro5[2].out;
+					neuro2[2].error = 0.05 - neuro2[2].out;
 					error++;
 				}
-				if (neuro5[3].out < 0.8)
+				if (neuro2[3].out < 0.8)
 				{
-					neuro5[3].error = 0.95 - neuro5[3].out;
+					neuro2[3].error = 0.95 - neuro2[3].out;
 					error++;
 				}
 			}
 
-			backward(neuro5, size5, neuro4, size4, weight45); //вычисление ошибки нейронов
-			backward(neuro4, size4, neuro3, size3, weight34);
-			backward(neuro3, size3, neuro2, size2, weight23);
-			backward(neuro2, size2, neuro1, size1, weight12);
+			backward(neuro2, size2, neuro1, size1, weight12); //вычисление ошибки нейронов
 			backward(neuro1, size1, neuro0, size0, weight01);
 
-			weights_update(neuro0, size0, neuro1, size1, weight01, 0.1); //вычисление новых весов связей (0.1 - коэффицент обучения)
-			weights_update(neuro1, size1, neuro2, size2, weight12, 0.1);
-			weights_update(neuro2, size2, neuro3, size3, weight23, 0.1);
-			weights_update(neuro3, size3, neuro4, size4, weight34, 0.1);
-			weights_update(neuro4, size4, neuro5, size5, weight45, 0.1);
+			weights_update(neuro2, size2, neuro1, size1, weight12, 0.1); //вычисление новых весов связей (0.1 - коэффицент обучения)
+			weights_update(neuro1, size1, neuro0, size0, weight01, 0.1);
 		}
 		error /= 1000;
 		cout << error << endl;
@@ -337,18 +286,6 @@ void neural_learning(char *path)
 	for (int i = 0; i < size1; i++)
 	{
 		fwrite(weight12[i], sizeof(double), size2 - 1, weights);
-	}
-	for (int i = 0; i < size2; i++)
-	{
-		fwrite(weight23[i], sizeof(double), size3 - 1, weights);
-	}
-	for (int i = 0; i < size3; i++)
-	{
-		fwrite(weight34[i], sizeof(double), size4 - 1, weights);
-	}
-	for (int i = 0; i < size4; i++)
-	{
-		fwrite(weight45[i], sizeof(double), size5 - 1, weights);
 	}
 	fclose(weights);
 }
