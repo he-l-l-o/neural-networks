@@ -131,14 +131,13 @@ void neural_learning(char *path)
 				}
 			}
 
-			for (int i = 0; i < 4; i++)
+			
+			for (int i = 0, k = rand() % 3, l = 0; i < 4; i++)
 			{
 				for (int j = 0; j < 4; j++)
 				{
-					for (int k = 0; k < 1; k++)
-					{
-						neuro0[i].out = 1 / (1 + exp(-zap.img[i][j])); //заполнение входного слоя
-					}
+					neuro0[l].out = zap.img[i][j][k] / 255; //заполнение входного слоя
+					l++;
 				}
 			}
 			forward(neuro0, size0, neuro1, size1, weight01); //вычисление выходных значений нейронов
