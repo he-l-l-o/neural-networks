@@ -44,6 +44,7 @@ int main()
 	//инициализация текстбокса
 	textfield textfield;
 	textfield.set_font(font);
+	textfield.set_lenght(64);
 	textfield.set_position(Vector2f(16, 629));
 
 	Image main_image; //меню image
@@ -209,6 +210,7 @@ int main()
 		Event event;
 		while (window.pollEvent(event))
 		{
+			textfield.input(event);
 			if (event.type == Event::Closed)
 			{
 				window.close();
