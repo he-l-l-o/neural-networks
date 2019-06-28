@@ -9,6 +9,9 @@ public:
 	textfield();
 
 	void set_position(sf::Vector2f vector);
+	void render(sf::RenderWindow& window);
+	void set_font(sf::Font& font);
+
 private:
 	sf::Text text;
 	sf::RectangleShape text_box;

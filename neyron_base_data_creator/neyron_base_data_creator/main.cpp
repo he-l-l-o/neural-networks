@@ -39,9 +39,13 @@ int main()
 	RenderWindow window(VideoMode(1200, 720), "NeyronBaseDataCreator", Style::Close);
 	window.setVerticalSyncEnabled(true);
 	window.setFramerateLimit(60);
+	Font font;
+	font.loadFromFile("9041.ttf");
 	//инициализация текстбокса
 	textfield textfield;
+	textfield.set_font(font);
 	textfield.set_position(Vector2f(16, 629));
+
 	Image main_image; //меню image
 	main_image.loadFromFile("img/menu.png");
 	Image save_image; // меню спрайт
@@ -445,6 +449,7 @@ int main()
 		window.draw(button_arrow_down_sprite);
 		window.draw(button_arrow_left_sprite);
 		window.draw(button_arrow_right_sprite);
+		textfield.render(window);
 		window.display();
 	}
 	fclose(binary_database);
