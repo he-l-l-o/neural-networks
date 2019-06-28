@@ -17,40 +17,79 @@ using namespace sf;
 */
 struct entry
 {
-	short color_of_image_pixels[4][4];
+	short color_of_image_pixels[4][4][3];
 	int type_lien;
 } entry1;
-/*
-void check_file(string file_location, Image load_image) {
-	if (load_image.loadFromFile(file_location) == false) {
-		cout << "file not location. PLease, try input again" << endl;
-		getline(cin, file_location);
-		check_file(file_location, load_image);
-	}
-}*/
+
 int main()
 {
 	string file_location;
-	cout << "Please enter the location of the loaded picture.\n WARNING!!!\n The path to the file should not contain Cyrillic characters, but only Latin letters and numbers.\n";
+	cout << "Please enter the location of the loaded picture.\n WARNING!!!\n"
+		"The path to the file should not contain Cyrillic characters, but only Latin letters and numbers.\n";
 	getline(cin, file_location);
+	Image load_image; //меню текстура
+	load_image.loadFromFile(file_location);
+	int control_check;
+	control_check = check_load_img(load_image, file_location);
+	if (control_check == 1) {
+		load_image.loadFromFile(file_location);
+	}
 	//создание главного окна приложения
 	//графика основного интерфейса
-	RenderWindow window(VideoMode(1200, 720), "NeyronBaseDataCreator");
+	RenderWindow window(VideoMode(1200, 720), "NeyronBaseDataCreator", Style::Close);
 	window.setVerticalSyncEnabled(true);
 	window.setFramerateLimit(60);
 
 	Image main_image; //меню image
 	main_image.loadFromFile("img/menu.png");
-	Image load_image; //меню текстура
-	load_image.loadFromFile(file_location);
-	//	check_file(file_location, load_image);
-
 	Image save_image; // меню спрайт
+	//////КНОПЕКИ//////////
+	Image button_type_0_image;
+	button_type_0_image.loadFromFile("img/button_type_0.png");
+	Image button_type_1_image;
+	button_type_1_image.loadFromFile("img/button_type_1.png");
+	Image button_type_2_image;
+	button_type_2_image.loadFromFile("img/button_type_2.png");
+	Image button_type_3_image;
+	button_type_3_image.loadFromFile("img/button_type_3.png");
+	Image button_type_4_image;
+	button_type_4_image.loadFromFile("img/button_type_4.png");
 
-	Texture main_texture;
+	Image button_arrow_up_image;
+	button_arrow_up_image.loadFromFile("img/button_arrow_up.png");
+	Image button_arrow_down_image;
+	button_arrow_down_image.loadFromFile("img/button_arrow_down.png");
+	Image button_arrow_left_image;
+	button_arrow_left_image.loadFromFile("img/button_arrow_left.png");
+	Image button_arrow_right_image;
+	button_arrow_right_image.loadFromFile("img/button_arrow_right.png");
+
+	Texture main_texture;//главная текстура меню
 	main_texture.loadFromImage(main_image);
-	Texture load_image_texture;
+
+	Texture load_image_texture;//текстура загружаемого изображения
 	load_image_texture.loadFromImage(load_image);
+
+	Texture button_type_0_texture;//текстура кнопки 0
+	button_type_0_texture.loadFromImage(button_type_0_image);
+	Texture button_type_1_texture;//текстура кнопки 1
+	button_type_1_texture.loadFromImage(button_type_1_image);
+	Texture button_type_2_texture;//текстура кнопки 2
+	button_type_2_texture.loadFromImage(button_type_2_image);
+	Texture button_type_3_texture;//текстура кнопки 3
+	button_type_3_texture.loadFromImage(button_type_3_image);
+	Texture button_type_4_texture;//текстура кнопки 4
+	button_type_4_texture.loadFromImage(button_type_4_image);
+
+	Texture button_arrow_up_texture;
+	button_arrow_up_texture.loadFromImage(button_arrow_up_image);
+	Texture button_arrow_down_texture;
+	button_arrow_down_texture.loadFromImage(button_arrow_down_image);
+	Texture button_arrow_left_texture;
+	button_arrow_left_texture.loadFromImage(button_arrow_left_image);
+	Texture button_arrow_right_texture;
+	button_arrow_right_texture.loadFromImage(button_arrow_right_image);
+
 	Texture save_image_texture;
 
 	Sprite main_sprite;
@@ -59,18 +98,49 @@ int main()
 	Sprite load_image_sprite;
 	load_image_sprite.setTexture(load_image_texture);
 	load_image_sprite.setPosition(22, 20);
+
 	Sprite save_image_sprite; //вырезанный кусочек изображения
+
+	Sprite button_type_0_sprite;//текстура кнопки 0
+	button_type_0_sprite.setTexture(button_type_0_texture);
+	button_type_0_sprite.setPosition(654, 286);
+	Sprite button_type_1_sprite;//текстура кнопки 1
+	button_type_1_sprite.setTexture(button_type_1_texture);
+	button_type_1_sprite.setPosition(892, 19);
+	Sprite button_type_2_sprite;//текстура кнопки 2
+	button_type_2_sprite.setTexture(button_type_2_texture);
+	button_type_2_sprite.setPosition(892, 109);
+	Sprite button_type_3_sprite;//текстура кнопки 3
+	button_type_3_sprite.setTexture(button_type_3_texture);
+	button_type_3_sprite.setPosition(892, 194);
+	Sprite button_type_4_sprite;//текстура кнопки 3
+	button_type_4_sprite.setTexture(button_type_4_texture);
+	button_type_4_sprite.setPosition(892, 284);
+
+	Sprite button_arrow_up_sprite;
+	button_arrow_up_sprite.setTexture(button_arrow_up_texture);
+	button_arrow_up_sprite.setPosition(727, 441);
+	Sprite button_arrow_down_sprite;
+	button_arrow_down_sprite.setTexture(button_arrow_down_texture);
+	button_arrow_down_sprite.setPosition(727, 517);
+	Sprite button_arrow_left_sprite;
+	button_arrow_left_sprite.setTexture(button_arrow_left_texture);
+	button_arrow_left_sprite.setPosition(651, 517);
+	Sprite button_arrow_right_sprite;
+	button_arrow_right_sprite.setTexture(button_arrow_right_texture);
+	button_arrow_right_sprite.setPosition(803, 517);
 
 	Sprite check_image_sprite;
 	Texture check_image_texture;
 
-	FILE *binary_database;
+	FILE* binary_database;
 	fopen_s(&binary_database, "data\\database.data", "ab+");
 
 	//разметчик
 	RectangleShape rectangle_pointer(Vector2f(4, 4));
 	rectangle_pointer.setFillColor(Color::Red);
 	rectangle_pointer.setPosition(22, 20);
+
 
 	int size_x = load_image.getSize().x;
 	int size_y = load_image.getSize().y;
@@ -84,6 +154,11 @@ int main()
 	int save_size_y = size_y;
 
 	scaling(size_x, size_y, save_size_x, save_size_y, ratio_x_y);
+	//пустое окно
+	RectangleShape rectangle_load_img(Vector2f(size_x, size_y));
+	rectangle_load_img.setOutlineThickness(5);
+	rectangle_load_img.setOutlineColor(sf::Color(250, 150, 100));
+	rectangle_load_img.setPosition(17 + 5, 15 + 5);
 
 	double ratio_load_img_menu = (double)save_size_x / size_x;
 	cout << endl;
@@ -102,13 +177,26 @@ int main()
 
 	int location_marker_x;
 	int location_marker_y;
-	bool check_button = 0;
+
 	bool check_button_num = 0;
+
+	bool check_button_null = 0;//проверка нажатия пустой кнопки
+	bool check_button_vertical = 0;//проверка нажатися кнопки с вертикалью
+	bool check_button_horizontal = 0;//проверка нажатия кнопки с горзонталью
+	bool check_button_left_diagonal = 0;// проверка нажатия кнопки с левой диагональю
+	bool check_button_right_diagonal = 0;//проверка нажатия кнопки с правой диагональю
+
+	bool check_button_arrow_up = 0;//проверка нажатия кнопки перемещения вверх
+	bool check_button_arrow_down = 0;//проверка нажатия кнопки перемещения вниз
+	bool check_button_arrow_left = 0;//проверка нажатия кнопки перемещения влево
+	bool check_button_arrow_right = 0;//проверка нажатия кнопки перемещение вправо
+
 	location_marker_x = (rectangle_pointer.getPosition().x - 22) * ratio_load_img_menu;
 	location_marker_y = (rectangle_pointer.getPosition().y - 20) * ratio_load_img_menu;
-	cout << "loaction x = " << location_marker_x << " location y = " << location_marker_y << endl;
 
-	RectangleShape rect_save;
+	cout << "loaction x = " << location_marker_x << " location y = " << location_marker_y << endl;
+	//IntRect form;
+	increase(load_image_texture, save_image_sprite, location_marker_y, location_marker_x, target_Size_save);
 
 	while (window.isOpen())
 	{
@@ -119,110 +207,220 @@ int main()
 			{
 				window.close();
 			}
-			if (event.KeyPressed)
+			////////////////UP
+			if (((event.type == Event::KeyPressed) && (event.key.code == Keyboard::Up)) || ((event.mouseButton.button == Mouse::Button::Left) && (event.type == Event::MouseButtonPressed) && (IntRect(727, 441, 74, 74).contains(Mouse::getPosition(window)))))
 			{
-				if ((event.key.code == Keyboard::Right) || (event.key.code == Keyboard::Left))
+				//x < 620 x > 21 true else false
+				button_arrow_up_sprite.setColor(Color(180, 180, 180, 255));
+
+				rectangle_pointer.move(0, -1 / ratio_load_img_menu);
+				location_marker_y = (rectangle_pointer.getPosition().y - 20) * ratio_load_img_menu;
+
+				while (location_marker_y < 0)
 				{
-					location_marker_x = (rectangle_pointer.getPosition().x - 22) * ratio_load_img_menu;
-				}
-				if ((event.key.code == Keyboard::Up) || (event.key.code == Keyboard::Down))
-				{
+					rectangle_pointer.move(0, 1 / ratio_load_img_menu);
 					location_marker_y = (rectangle_pointer.getPosition().y - 20) * ratio_load_img_menu;
 				}
-				if ((event.key.code == Keyboard::Num0) || (event.key.code == Keyboard::Num1) || (event.key.code == Keyboard::Num2) || (event.key.code == Keyboard::Num3) || (event.key.code == Keyboard::Num4))
-				{
-					check_button_num = 1;
-				}
+				increase(load_image_texture, save_image_sprite, location_marker_y, location_marker_x, target_Size_save);
+				cout << "x =  " << location_marker_x << " y = " << location_marker_y << endl;
+				//cout << "X = " << rectangle_pointer.getPosition().x << " Y = " << rectangle_pointer.getPosition().y << endl;
+				check_button_arrow_up = 1;
 			}
-			if (event.KeyReleased)
+			if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Up) || ((event.mouseButton.button == Mouse::Button::Left) && (event.type == Event::MouseButtonReleased) && (check_button_arrow_up == 1)))
 			{
-				if ((event.key.code == Keyboard::Up) || (event.key.code == Keyboard::Down) || (event.key.code == Keyboard::Right) || (event.key.code == Keyboard::Left))
-				{
-					cout << "x = " << location_marker_x << "  "
-						 << "y = " << location_marker_y << endl;
-					IntRect form;
-					form.height = 4;
-					form.width = 4;
-					form.top = location_marker_y;
-					form.left = location_marker_x;
-
-					save_image_sprite.setTexture(load_image_texture);
-					save_image_sprite.setTextureRect(form);
-					save_image_sprite.setPosition(649, 21);
-
-					save_image_sprite.setScale(
-						target_Size_save.x / 4,
-						target_Size_save.y / 4);
-					check_button = 0;
-				}
+				button_arrow_up_sprite.setColor(Color(255, 255, 255, 255));
+				check_button_arrow_up = 0;
 			}
-			if (event.KeyReleased && check_button_num)
+			////////////////DOWN
+			if (((event.type == Event::KeyPressed) && (event.key.code == Keyboard::Down)) || (event.mouseButton.button == Mouse::Button::Left) && (event.type == Event::MouseButtonPressed) && (IntRect(727, 517, 74, 74).contains(Mouse::getPosition(window))))
 			{
-				if ((event.key.code == Keyboard::Num0) || (event.key.code == Keyboard::Num1) ||
-					(event.key.code == Keyboard::Num2) || (event.key.code == Keyboard::Num3) || (event.key.code == Keyboard::Num4))
+				button_arrow_down_sprite.setColor(Color(180, 180, 180, 255));
+
+				rectangle_pointer.move(0, 1 / ratio_load_img_menu);
+				location_marker_y = (rectangle_pointer.getPosition().y - 20) * ratio_load_img_menu;
+				while (location_marker_y > save_size_y - 4 * ratio_load_img_menu)
 				{
-					Image check_image(save_image_sprite.getTexture()->copyToImage());
-					get_color_array(entry1.color_of_image_pixels, load_image, event, location_marker_x, location_marker_y);
-					entry1.type_lien = event.key.code - 26;
-					fwrite(&entry1, sizeof(entry1), 1, binary_database);
-					for (int i = 0; i < 4; i++)
+					rectangle_pointer.move(0, -1 / ratio_load_img_menu);
+					location_marker_y = (rectangle_pointer.getPosition().y - 20) * ratio_load_img_menu;
+				}
+				increase(load_image_texture, save_image_sprite, location_marker_y, location_marker_x, target_Size_save);
+				cout << "x =  " << location_marker_x << " y = " << location_marker_y << endl;
+				//cout << "X = " << rectangle_pointer.getPosition().x << " Y = " << rectangle_pointer.getPosition().y << endl;
+				check_button_arrow_down = 1;
+			}
+			if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Down) || (event.mouseButton.button == Mouse::Button::Left) && (event.type == Event::MouseButtonReleased) && (check_button_arrow_down == 1))
+			{
+				button_arrow_down_sprite.setColor(Color(255, 255, 255, 255));
+				check_button_arrow_down = 0;
+			}
+			/////////////////LEFT
+			if (((event.type == Event::KeyPressed) && (event.key.code == Keyboard::Left)) || (event.mouseButton.button == Mouse::Button::Left) && (event.type == Event::MouseButtonPressed) && (IntRect(651, 517, 74, 74).contains(Mouse::getPosition(window))))
+			{
+				button_arrow_left_sprite.setColor(Color(180, 180, 180, 255));
+				rectangle_pointer.move(-1 / ratio_load_img_menu, 0);
+				location_marker_x = (rectangle_pointer.getPosition().x - 22) * ratio_load_img_menu;
+				while (location_marker_x < 0)
+				{
+					rectangle_pointer.move(1 / ratio_load_img_menu, 0);
+					location_marker_x = (rectangle_pointer.getPosition().y - 20) * ratio_load_img_menu;
+				}
+				location_marker_x = (rectangle_pointer.getPosition().x - 22) * ratio_load_img_menu;
+				increase(load_image_texture, save_image_sprite, location_marker_y, location_marker_x, target_Size_save);
+				cout << "x =  " << location_marker_x << " y = " << location_marker_y << endl;
+				//cout << "X = " << rectangle_pointer.getPosition().x << " Y = " << rectangle_pointer.getPosition().y << endl;
+				check_button_arrow_left = 1;
+			}
+			if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Left) || (event.mouseButton.button == Mouse::Button::Left) && (event.type == Event::MouseButtonReleased) && (check_button_arrow_left == 1))
+			{
+				button_arrow_left_sprite.setColor(Color(255, 255, 255, 255));
+				check_button_arrow_left = 0;
+			}
+			/////////////////RIGHT
+			if (((event.type == Event::KeyPressed) && (event.key.code == Keyboard::Right)) || (event.mouseButton.button == Mouse::Button::Left) && (event.type == Event::MouseButtonPressed) && (IntRect(803, 517, 74, 74).contains(Mouse::getPosition(window))))
+			{
+				button_arrow_right_sprite.setColor(Color(180, 180, 180, 255));
+				rectangle_pointer.move(1 / ratio_load_img_menu, 0);
+				location_marker_x = (rectangle_pointer.getPosition().x - 22) * ratio_load_img_menu;
+				while (location_marker_x > save_size_x - 4 * ratio_load_img_menu)
+				{
+					rectangle_pointer.move(-1 / ratio_load_img_menu, 0);
+					location_marker_x = (rectangle_pointer.getPosition().y - 20) * ratio_load_img_menu;
+				}
+				location_marker_x = (rectangle_pointer.getPosition().x - 22) * ratio_load_img_menu;
+				increase(load_image_texture, save_image_sprite, location_marker_y, location_marker_x, target_Size_save);
+				cout << "x =  " << location_marker_x << " y = " << location_marker_y << endl;
+				//cout << "X = " << rectangle_pointer.getPosition().x << " Y = " << rectangle_pointer.getPosition().y << endl;
+				check_button_arrow_right = 1;
+			}
+			if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Right) || ((event.mouseButton.button == Mouse::Button::Left) && (event.type == Event::MouseButtonReleased) && (check_button_arrow_right == 1)))
+			{
+				button_arrow_right_sprite.setColor(Color(255, 255, 255, 255));
+				check_button_arrow_right = 0;
+			}
+			//TYPE NULL
+			if (((event.type == Event::KeyPressed) && (event.key.code == Keyboard::Num0)) || (event.mouseButton.button == Mouse::Button::Left) && (event.type == Event::MouseButtonPressed) && (IntRect(654, 286, 212, 81).contains(Mouse::getPosition(window))))
+			{
+				button_type_0_sprite.setColor(Color(180, 180, 180, 255));
+				check_button_null = 1;
+			}
+			if (((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Num0)) || (event.mouseButton.button == Mouse::Button::Left) && (event.type == Event::MouseButtonReleased) && (check_button_null == 1))
+			{
+				Image check_image(save_image_sprite.getTexture()->copyToImage());
+				get_color_array(entry1.color_of_image_pixels, load_image, event, location_marker_x, location_marker_y);
+				entry1.type_lien = 0;
+				fwrite(&entry1, sizeof(entry1), 1, binary_database);
+				for (int i = 0; i < 4; i++)
+				{
+					for (int j = 0; j < 4; j++)
 					{
-						for (int j = 0; j < 4; j++)
-						{
-							cout << entry1.color_of_image_pixels[j][i] << " ";
-							cout << entry1.type_lien << endl;
-						}
+						cout << entry1.color_of_image_pixels[j][i][0] << " ";
+						cout << entry1.color_of_image_pixels[j][i][1] << " ";
+						cout << entry1.color_of_image_pixels[j][i][2] << " ";
+						cout << entry1.type_lien << endl;
 					}
-					check_button_num = 1;
-					//	check_image_sprite.setTextureRect(save_image_sprite.getTextureRect);
-					//save_image_sprite.setPosition(649, 300);
 				}
+				button_type_0_sprite.setColor(Color(255, 255, 255, 255));
+				check_button_null = 0;
 			}
-		}
+			//TYPE ONE
+			if (((event.type == Event::KeyPressed) && (event.key.code == Keyboard::Num1)) || (event.mouseButton.button == Mouse::Button::Left) && (event.type == Event::MouseButtonPressed) && (IntRect(892, 24, 212, 81).contains(Mouse::getPosition(window))))
+			{
+				button_type_1_sprite.setColor(Color(180, 180, 180, 255));
+				check_button_vertical = 1;
+			}
+			if (((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Num1)) || (event.mouseButton.button == Mouse::Button::Left) && (event.type == Event::MouseButtonReleased) && (check_button_vertical == 1))
+			{
+				Image check_image(save_image_sprite.getTexture()->copyToImage());
+				get_color_array(entry1.color_of_image_pixels, load_image, event, location_marker_x, location_marker_y);
+				entry1.type_lien = 1;
+				fwrite(&entry1, sizeof(entry1), 1, binary_database);
+				for (int i = 0; i < 4; i++)
+				{
+					for (int j = 0; j < 4; j++)
+					{
+						cout << entry1.color_of_image_pixels[j][i][0] << " ";
+						cout << entry1.color_of_image_pixels[j][i][1] << " ";
+						cout << entry1.color_of_image_pixels[j][i][2] << " ";
+						cout << entry1.type_lien << endl;
+					}
+				}
+				button_type_1_sprite.setColor(Color(255, 255, 255, 255));
+				check_button_vertical = 0;
+			}
+			//TYPE TWO
+			if (((event.type == Event::KeyPressed) && (event.key.code == Keyboard::Num2)) || (event.mouseButton.button == Mouse::Button::Left) && (event.type == Event::MouseButtonPressed) && (IntRect(892, 109, 212, 81).contains(Mouse::getPosition(window))))
+			{
+				button_type_2_sprite.setColor(Color(180, 180, 180, 255));
+				check_button_horizontal = 1;
+			}
+			if (((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Num2)) || (event.mouseButton.button == Mouse::Button::Left) && (event.type == Event::MouseButtonReleased) && (check_button_horizontal == 1))
+			{
+				Image check_image(save_image_sprite.getTexture()->copyToImage());
+				get_color_array(entry1.color_of_image_pixels, load_image, event, location_marker_x, location_marker_y);
+				entry1.type_lien = 2;
+				fwrite(&entry1, sizeof(entry1), 1, binary_database);
+				for (int i = 0; i < 4; i++)
+				{
+					for (int j = 0; j < 4; j++)
+					{
+						cout << entry1.color_of_image_pixels[j][i][0] << " ";
+						cout << entry1.color_of_image_pixels[j][i][1] << " ";
+						cout << entry1.color_of_image_pixels[j][i][2] << " ";
+						cout << entry1.type_lien << endl;
+					}
+				}
+				button_type_2_sprite.setColor(Color(255, 255, 255, 255));
+				check_button_horizontal = 0;
+			}
+			//TYPE 3
+			if (((event.type == Event::KeyPressed) && (event.key.code == Keyboard::Num3)) || (event.mouseButton.button == Mouse::Button::Left) && (event.type == Event::MouseButtonPressed) && (IntRect(892, 194, 212, 81).contains(Mouse::getPosition(window))))
+			{
+				button_type_3_sprite.setColor(Color(180, 180, 180, 255));
+				check_button_left_diagonal = 1;
+			}
+			if (((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Num3)) || (event.mouseButton.button == Mouse::Button::Left) && (event.type == Event::MouseButtonReleased) && (check_button_left_diagonal == 1))
+			{
+				Image check_image(save_image_sprite.getTexture()->copyToImage());
+				get_color_array(entry1.color_of_image_pixels, load_image, event, location_marker_x, location_marker_y);
+				entry1.type_lien = 3;
+				fwrite(&entry1, sizeof(entry1), 1, binary_database);
+				for (int i = 0; i < 4; i++)
+				{
+					for (int j = 0; j < 4; j++)
+					{
+						cout << entry1.color_of_image_pixels[j][i][0] << " ";
+						cout << entry1.type_lien << endl;
+					}
+				}
+				button_type_3_sprite.setColor(Color(255, 255, 255, 255));
+				check_button_left_diagonal = 0;
+			}
+			//TYPE 4
+			if (((event.type == Event::KeyPressed) && (event.key.code == Keyboard::Num4)) || (event.mouseButton.button == Mouse::Button::Left) && (event.type == Event::MouseButtonPressed) && (IntRect(892, 284, 212, 81).contains(Mouse::getPosition(window))))
+			{
+				button_type_4_sprite.setColor(Color(180, 180, 180, 255));
+				check_button_right_diagonal = 1;
+			}
+			if (((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Num4)) || (event.mouseButton.button == Mouse::Button::Left) && (event.type == Event::MouseButtonReleased) && (check_button_right_diagonal == 1))
+			{
+				Image check_image(save_image_sprite.getTexture()->copyToImage());
+				get_color_array(entry1.color_of_image_pixels, load_image, event, location_marker_x, location_marker_y);
+				entry1.type_lien = 4;
+				fwrite(&entry1, sizeof(entry1), 1, binary_database);
+				for (int i = 0; i < 4; i++)
+				{
+					for (int j = 0; j < 4; j++)
+					{
+						cout << entry1.color_of_image_pixels[j][i][0] << " ";
+						cout << entry1.color_of_image_pixels[j][i][1] << " ";
+						cout << entry1.color_of_image_pixels[j][i][2] << " ";
+						cout << entry1.type_lien << endl;
+					}
+				}
+				button_type_4_sprite.setColor(Color(255, 255, 255, 255));
+				check_button_right_diagonal = 0;
+			}
 
-		if (Keyboard::isKeyPressed(Keyboard::Left))
-		{
-			if ((rectangle_pointer.getPosition().x < 620) && (rectangle_pointer.getPosition().x > 21))
-			{
-				rectangle_pointer.move(-0.1, 0);
-			}
-			else
-			{
-				rectangle_pointer.move(10, 0);
-			}
-		}
-		if (Keyboard::isKeyPressed(Keyboard::Right))
-		{
-			if ((rectangle_pointer.getPosition().x < 620) && (rectangle_pointer.getPosition().x > 21))
-			{
-				rectangle_pointer.move(0.1, 0);
-			}
-			else
-			{
-				rectangle_pointer.move(-10, 0);
-			}
-		}
-		if (Keyboard::isKeyPressed(Keyboard::Up))
-		{
-			if ((rectangle_pointer.getPosition().y < 619) && (rectangle_pointer.getPosition().y > 19))
-			{
-				rectangle_pointer.move(0, -0.1);
-			}
-			else
-			{
-				rectangle_pointer.move(0, 10);
-			}
-		}
-		if (Keyboard::isKeyPressed(Keyboard::Down))
-		{
-			if ((rectangle_pointer.getPosition().y < 619) && (rectangle_pointer.getPosition().y > 19))
-			{
-				rectangle_pointer.move(0, 0.1);
-			}
-			else
-			{
-				rectangle_pointer.move(0, -10);
-			}
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Escape))
 		{
@@ -230,10 +428,21 @@ int main()
 		}
 
 		window.clear();
+
 		window.draw(main_sprite);
+		window.draw(rectangle_load_img);
 		window.draw(load_image_sprite);
 		window.draw(rectangle_pointer);
 		window.draw(save_image_sprite);
+		window.draw(button_type_0_sprite);
+		window.draw(button_type_1_sprite);
+		window.draw(button_type_2_sprite);
+		window.draw(button_type_3_sprite);
+		window.draw(button_type_4_sprite);
+		window.draw(button_arrow_up_sprite);
+		window.draw(button_arrow_down_sprite);
+		window.draw(button_arrow_left_sprite);
+		window.draw(button_arrow_right_sprite);
 		window.display();
 	}
 	fclose(binary_database);
