@@ -3,7 +3,7 @@
 
 #include <string>
 #include <SFML/Graphics.hpp>
-
+#include <iostream>
 class textfield {
 public:
 	textfield();
@@ -11,15 +11,16 @@ public:
 	void set_position(sf::Vector2f vector);//задание позиции
 	void set_font(sf::Font& font);//задание шрифта
 	void set_lenght(int string_lenght);//задание длины текстбокса
-	void input(sf::Event event);//фокусировка на строке
+	void input(sf::Event event, std::string& file_location);//фокусировка на текстбоксе и запись в строковую переменную
 	void render(sf::RenderWindow& window);
+	//void set_placeholder(std::string string);
 
 
 private:
 	sf::Text text;
 	sf::RectangleShape textbox;
 	int size;
-	int lenght;
+	int length;
 	bool focus;
 	bool render_placeholder;
 

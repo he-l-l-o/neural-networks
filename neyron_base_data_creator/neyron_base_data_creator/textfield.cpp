@@ -11,6 +11,8 @@ textfield::textfield() {
 
 	focus = false;
 	render_placeholder = false;
+
+	length = 0;
 }
 void textfield::set_position(sf::Vector2f vector) {
 	textbox.setPosition(vector);
@@ -48,7 +50,7 @@ void textfield::set_focus(bool active) {
 	}
 }
 
-void textfield::input(sf::Event event) {
+void textfield::input(sf::Event event, std::string& file_location) {
 	if (event.type == sf::Event::MouseButtonReleased) {
 		sf::Vector2f position(event.mouseButton.x, event.mouseButton.y);
 		if (textbox.getGlobalBounds().contains(position)) {
@@ -57,5 +59,31 @@ void textfield::input(sf::Event event) {
 		else {
 			set_focus(false);
 		}
+	}
+
+	if (event.type == sf::Event::TextEntered && focus) {
+		sf::String string = text.getString();
+		if (event.text.unicode == 8) {
+			if (string.getSize() > 0) {
+				length--;
+				string = string.substring(0, string.getSize() - 1);
+			}
+		}
+		else if (event.text.unicode == 24) {
+			set_focus(false);
+		}
+		else {
+			sf::String sf_string = "";
+			sf_string += event.text.unicode;
+			string += sf_string.toAnsiString();
+		}
+
+		if (string.getSize() == size) {
+			return;
+		}
+		text.setString(string);
+		length++;
+		file_location = string;
+		std::cout << file_location << std::endl;
 	}
 }

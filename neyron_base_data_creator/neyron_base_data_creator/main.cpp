@@ -24,16 +24,17 @@ struct entry
 int main()
 {
 	string file_location;
-	cout << "Please enter the location of the loaded picture.\n WARNING!!!\n"
-		"The path to the file should not contain Cyrillic characters, but only Latin letters and numbers.\n";
+	//	cout << "Please enter the location of the loaded picture.\n WARNING!!!\n"
+	//		"The path to the file should not contain Cyrillic characters, but only Latin letters and numbers.\n";
 	getline(cin, file_location);
+	//file_location = "D:\2.jpg";
 	Image load_image; //меню текстура
 	load_image.loadFromFile(file_location);
-	int control_check;
+	/*int control_check;
 	control_check = check_load_img(load_image, file_location);
 	if (control_check == 1) {
 		load_image.loadFromFile(file_location);
-	}
+	}*/
 	//создание главного окна приложения
 	//графика основного интерфейса
 	RenderWindow window(VideoMode(1200, 720), "NeyronBaseDataCreator", Style::Close);
@@ -210,7 +211,32 @@ int main()
 		Event event;
 		while (window.pollEvent(event))
 		{
-			textfield.input(event);
+			textfield.input(event, file_location);
+			if (((event.mouseButton.button == Mouse::Button::Left) && (event.type == Event::MouseButtonPressed) && (IntRect(727, 441, 74, 74).contains(Mouse::getPosition(window))))) {
+				load_image.loadFromFile(file_location);
+				load_image_texture.loadFromImage(load_image);
+				load_image_sprite.setTexture(load_image_texture);
+
+				size_x = load_image.getSize().x;
+				size_y = load_image.getSize().y;
+				cout << size_x << " " << size_y << endl;
+				save_size_x = size_x;
+				save_size_y = size_y;
+
+				ratio_x_y = (double)size_x / size_y;
+				scaling(size_x, size_y, save_size_x, save_size_y, ratio_x_y);
+				cout << size_x << " " << size_y << " " << save_size_x << " " << save_size_y << endl;
+
+				ratio_load_img_menu = (double)save_size_x / size_x;
+				cout << ratio_load_img_menu << " " << ratio_x_y << endl;
+				targetSize.x = size_x;
+				targetSize.y = size_y;
+				load_image_sprite.setScale(
+					size_x / load_image_sprite.getLocalBounds().width,
+					size_y / load_image_sprite.getLocalBounds().height
+				);
+
+			}
 			if (event.type == Event::Closed)
 			{
 				window.close();
