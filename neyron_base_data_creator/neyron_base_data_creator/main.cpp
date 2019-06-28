@@ -4,7 +4,7 @@
 #include <string>
 #include <fstream>
 #include <stdlib.h>
-
+#include "textfield.h"
 using namespace std;
 using namespace sf;
 /*
@@ -39,7 +39,9 @@ int main()
 	RenderWindow window(VideoMode(1200, 720), "NeyronBaseDataCreator", Style::Close);
 	window.setVerticalSyncEnabled(true);
 	window.setFramerateLimit(60);
-
+	//инициализация текстбокса
+	textfield textfield;
+	textfield.set_position(Vector2f(16, 629));
 	Image main_image; //меню image
 	main_image.loadFromFile("img/menu.png");
 	Image save_image; // меню спрайт

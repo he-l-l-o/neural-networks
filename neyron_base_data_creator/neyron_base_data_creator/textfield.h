@@ -4,11 +4,18 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 
-class TextField {
+class textfield {
 public:
-	TextField();
-private:
+	textfield();
 
+	void set_position(sf::Vector2f vector);
+private:
+	sf::Text text;
+	sf::RectangleShape text_box;
+	int size;
+	int lenght;
+
+	sf::Vector2f position;
 };
 
 #endif
