@@ -23,11 +23,12 @@ void forward(neuron *prev, int prev_size, neuron *next, int next_size, double **
 			temp += prev[j].out * weight[j][i];
 		}
 		if (temp > 1) {
-			next[i].out = 1 + 0.1 * (temp - 1);
+			temp = 1 + 0.1 * (temp - 1);
 		}
 		if (temp < 0) {
-			next[i].out = 0.1 * temp;
+			temp = 0.1 * temp;
 		}
+		next[i].out = temp;
 	}
 }
 
@@ -55,7 +56,7 @@ void weights_update(neuron *next, int next_size, neuron *prev, int prev_size, do
 	{
 		for (int j = 0; j < prev_size; j++)
 		{
-			weight[i][j] += learning_coefficient * next[i].error * prev[j].out;
+			weight[j][i] += learning_coefficient * next[i].error * prev[j].out;
 		}
 	}
 }
@@ -76,14 +77,15 @@ void clean(double *arr, int size) {
 }
 
 
-void neural_learning(char *path)
+int neural_learning(char *path)
 {
 	entry zap; //запись в базе данных
+	zap.line_type = 0;
 
 	//Инициализация слоев нейронной сети
 
 	long int size0 = 17, size1 = 17, size2 = 6; //размеры массивов нейронов
-	neuron *neuro0 = new neuron[size0];										//Нейроны входного слоя. 4 * 4 под пиксели + нейрон смещения
+	neuron *neuro0 = new neuron[size0];	//Нейроны входного слоя. 4 * 4 под пиксели + нейрон смещения
 	for (int i = 0; i < size0; i++)
 	{ //ошибка входных нейронов равна 0
 		neuro0[i].error = 0;
@@ -93,7 +95,7 @@ void neural_learning(char *path)
 	neuron *neuro1 = new neuron[size1]; //Нейроны первого слоя (скрытый)
 	neuro1[size1 - 1].out = 1;
 	neuro1[size1 - 1].error = 0;
-	neuron *neuro2 = new neuron[size2]; //Нейроны второго слоя (скрытый)
+	neuron *neuro2 = new neuron[size2]; //Нейроны выходного слоя
 	neuro2[size2 - 1].out = 1;
 	neuro2[size2 - 1].error = 0;
 
@@ -127,7 +129,7 @@ void neural_learning(char *path)
 	fopen_s(&data, path, "rb");
 
 	double error = 100;
-	while (error > 10)
+	while (error > 0.0001)
 	{
 		error = 0;
 		for (int n = 0; n < 1000; n++)
@@ -147,7 +149,7 @@ void neural_learning(char *path)
 			{
 				for (int j = 0; j < 4; j++)
 				{
-					neuro0[l].out = zap.img[i][j][k] / 255; //заполнение входного слоя
+					neuro0[l].out = (double)zap.img[i][j][k] / 255; //заполнение входного слоя
 					l++;
 				}
 			}
@@ -162,6 +164,10 @@ void neural_learning(char *path)
 			}
 
 			clean(res, size2 - 1);
+			if (zap.line_type > 5 || zap.line_type < 0) {
+				cout << "ALARM!";
+				return;
+			}
 			res[zap.line_type] = 1;
 			for (int i = 0; i < size2 - 1; i++) { //вычисление ошибки выходного слоя
 				neuro2[i].error = res[i] - neuro2[i].out;
@@ -174,8 +180,8 @@ void neural_learning(char *path)
 
 			backward(neuro2, size2, neuro1, size1, weight12); //вычисление ошибки нейронов
 
-			weights_update(neuro2, size2, neuro1, size1, weight12, 0.01); //вычисление новых весов связей (0.1 - коэффицент обучения)
 			weights_update(neuro1, size1, neuro0, size0, weight01, 0.01);
+			weights_update(neuro2, size2, neuro1, size1, weight12, 0.01); //вычисление новых весов связей (0.1 - коэффицент обучения)
 		}
 		error /= 1000;
 		cout << error << endl;
@@ -192,6 +198,7 @@ void neural_learning(char *path)
 		fwrite(weight12[i], sizeof(double), size2 - 1, weights);
 	}
 	fclose(weights);
+	return 0;
 }
 
 int *neural_processing(short arr[4][4])
