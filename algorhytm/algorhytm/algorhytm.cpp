@@ -86,6 +86,9 @@ int neural_learning(char *path)
 
 	long int size0 = 17, size1 = 17, size2 = 6; //размеры массивов нейронов
 	neuron *neuro0 = new neuron[size0];	//Нейроны входного слоя. 4 * 4 под пиксели + нейрон смещения
+	if(neuro0 == NULL){
+		return 1;
+	}
 	for (int i = 0; i < size0; i++)
 	{ //ошибка входных нейронов равна 0
 		neuro0[i].error = 0;
@@ -93,31 +96,52 @@ int neural_learning(char *path)
 	}
 	neuro0[size0 - 1].out = 1;
 	neuron *neuro1 = new neuron[size1]; //Нейроны первого слоя (скрытый)
+	if (neuro1 == NULL) {
+		return 1;
+	}
 	neuro1[size1 - 1].out = 1;
 	neuro1[size1 - 1].error = 0;
 	neuron *neuro2 = new neuron[size2]; //Нейроны выходного слоя
+	if (neuro2 == NULL) {
+		return 1;
+	}
 	neuro2[size2 - 1].out = 1;
 	neuro2[size2 - 1].error = 0;
 
 	double* res = new double[size2 - 1];
+	if (res == NULL) {
+		return 1;
+	}
 	clean(res, size2 - 1);
 
 
 	//Инициализация матриц связи между слоями
 
 	double **weight01 = new double *[size0]; //Веса связей между нулевым и первым слоями
+	if (weight01 == NULL) {
+		return 1;
+	}
 	for (int i = 0; i < size0; i++)
 	{
 		weight01[i] = new double[size1 - 1]; //Количество столбцов на 1 меньше размера след. массива из-за нейрона смещения
+		if (weight01[i] == NULL) {
+			return 1;
+		}
 		for (int j = 0; j < size1 - 1; j++)
 		{
 			weight01[i][j] = (rand() % 100) / 100.0; //Изначально все веса заполняются рандомно
 		}
 	}
 	double **weight12 = new double *[size1]; //Веса связей между первым и вторым слоями
+	if (weight12 == NULL) {
+		return 1;
+	}
 	for (int i = 0; i < size1; i++)
 	{
 		weight12[i] = new double[size2 - 1];
+		if (weight12[i] == NULL) {
+			return 1;
+		}
 		for (int j = 0; j < size2 - 1; j++)
 		{
 			weight12[i][j] = (rand() % 100) / 100.0;
@@ -166,7 +190,7 @@ int neural_learning(char *path)
 			clean(res, size2 - 1);
 			if (zap.line_type > 5 || zap.line_type < 0) {
 				cout << "ALARM!";
-				return;
+				return 2;
 			}
 			res[zap.line_type] = 1;
 			for (int i = 0; i < size2 - 1; i++) { //вычисление ошибки выходного слоя
