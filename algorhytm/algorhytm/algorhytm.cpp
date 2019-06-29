@@ -150,10 +150,12 @@ int neural_learning(char *path)
 
 	srand(time(0));
 	FILE *data;
-	fopen_s(&data, path, "rb");
+	if (fopen_s(&data, path, "rb") != 0) {
+		return 3;
+	}
 
 	double error = 100;
-	while (error > 0.0001)
+	while (error > 0.004)
 	{
 		error = 0;
 		for (int n = 0; n < 1000; n++)
@@ -179,8 +181,6 @@ int neural_learning(char *path)
 			}
 			forward(neuro0, size0, neuro1, size1, weight01); //вычисление выходных значений нейронов
 			forward(neuro1, size1, neuro2, size2, weight12);
-			if (n % 500 == 0)
-				cout << zap.line_type << " | " << neuro2[0].out << " " << neuro2[1].out << " " << neuro2[2].out << " " << neuro2[3].out << " " << neuro2[4].out << endl;
 
 			for (int i = 0; i < size2; i++)
 			{
@@ -189,7 +189,6 @@ int neural_learning(char *path)
 
 			clean(res, size2 - 1);
 			if (zap.line_type > 5 || zap.line_type < 0) {
-				cout << "ALARM!";
 				return 2;
 			}
 			res[zap.line_type] = 1;
@@ -212,7 +211,9 @@ int neural_learning(char *path)
 		//getchar();
 	}
 	FILE *weights;
-	fopen_s(&weights, "..\\weights.data", "wb");
+	if (fopen_s(&weights, "..\\weights.data", "wb") != 0) {
+		return 3;
+	}
 	for (int i = 0; i < size0; i++)
 	{
 		fwrite(weight01[i], sizeof(double), size1 - 1, weights);
@@ -222,6 +223,27 @@ int neural_learning(char *path)
 		fwrite(weight12[i], sizeof(double), size2 - 1, weights);
 	}
 	fclose(weights);
+	fclose(data);
+	delete neuro0;
+	neuro0 = NULL;
+	delete neuro1;
+	neuro1 = NULL;
+	delete neuro2;
+	neuro2 = NULL;
+	delete res;
+	res = NULL;
+	for (int i = 0; i < size0; i++) {
+		delete weight01[i];
+		weight01[i] = NULL;
+	}
+	delete weight01;
+	weight01 = NULL;
+	for (int i = 0; i < size0; i++) {
+		delete weight12[i];
+		weight12[i] = NULL;
+	}
+	delete weight12;
+	weight12 = NULL;
 	return 0;
 }
 
