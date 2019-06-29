@@ -129,9 +129,10 @@ void neural_learning(char *path)
 	double error = 100;
 	while (error > 10)
 	{
+		error = 0;
 		for (int n = 0; n < 1000; n++)
 		{
-			int r = rand() % 500 + 1;
+			int r = rand() % 100 + 1;
 			for (int i = 0; i < r; i++)
 			{
 				if (fread(&zap, sizeof(zap), 1, data) == 0)
@@ -167,12 +168,14 @@ void neural_learning(char *path)
 				if (neuro2[i].out > 1 || neuro2[i].out < 1) {
 					neuro2[i].error *= 0.1;
 				}
+				error += neuro2[i].error * neuro2[i].error;
 			}
+
 
 			backward(neuro2, size2, neuro1, size1, weight12); //вычисление ошибки нейронов
 
-			weights_update(neuro2, size2, neuro1, size1, weight12, 0.1); //вычисление новых весов связей (0.1 - коэффицент обучения)
-			weights_update(neuro1, size1, neuro0, size0, weight01, 0.1);
+			weights_update(neuro2, size2, neuro1, size1, weight12, 0.01); //вычисление новых весов связей (0.1 - коэффицент обучения)
+			weights_update(neuro1, size1, neuro0, size0, weight01, 0.01);
 		}
 		error /= 1000;
 		cout << error << endl;
