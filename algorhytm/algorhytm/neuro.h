@@ -25,7 +25,7 @@ void weights_update(neuron* next, int next_size, neuron* prev, int prev_size, do
 //структура для чтения базы данных
 struct entry
 {
-	short img[4][4][3];
+	short img[4][4];
 	int line_type;
 };
 
