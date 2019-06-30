@@ -21,9 +21,11 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="image_conversion.cpp" />
+    <ClCompile Include="textfield.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="image_conversion.h" />
+    <ClInclude Include="textfield.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
