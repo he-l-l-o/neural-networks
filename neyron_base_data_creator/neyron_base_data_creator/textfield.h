@@ -13,6 +13,8 @@ public:
 	void set_lenght(int string_lenght);//задание длины текстбокса
 	void input(sf::Event event, std::string& file_location);//фокусировка на текстбоксе и запись в строковую переменную
 	void render(sf::RenderWindow& window);
+	bool focus;
+
 	//void set_placeholder(std::string string);
 
 
@@ -21,7 +23,6 @@ private:
 	sf::RectangleShape textbox;
 	int size;
 	int length;
-	bool focus;
 	bool render_placeholder;
 
 	void set_focus(bool active);

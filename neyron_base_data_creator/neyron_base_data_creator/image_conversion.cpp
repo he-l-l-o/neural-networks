@@ -33,7 +33,7 @@ void get_color_array(short color_of_image_pixels[4][4][3], sf::Image load_image,
 
 int check_load_img(sf::Image load_image, std::string & file_location) {
 	while (load_image.loadFromFile(file_location) == false) {
-		std::cout << "NOPE! This file is empty in folder. Plesae, input correct road. Good luck!\n";
+		//std::cout << "NOPE! This file is empty in folder. Plesae, input correct road. Good luck!\n";
 		std::getline(std::cin, file_location);
 		load_image.loadFromFile(file_location);
 	}
@@ -56,8 +56,4 @@ void increase(sf::Texture& load_image_texture, sf::Sprite& save_image_sprite, in
 	save_image_sprite.setScale(
 		target_Size_save.x / 4,
 		target_Size_save.y / 4);
-}
-
-void entering_file_location_text() {
-
 }

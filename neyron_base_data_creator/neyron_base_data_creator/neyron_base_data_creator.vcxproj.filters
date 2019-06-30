@@ -24,10 +24,16 @@
     <ClCompile Include="main.cpp">
       <Filter>Исходные файлы\src</Filter>
     </ClCompile>
+    <ClCompile Include="textfield.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="image_conversion.h">
       <Filter>Исходные файлы\src</Filter>
+    </ClInclude>
+    <ClInclude Include="textfield.h">
+      <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
