@@ -84,7 +84,7 @@ int neural_learning(char *path)
 
 	//Инициализация слоев нейронной сети
 
-	long int size0 = 17, size1 = 17, size2 = 6; //размеры массивов нейронов
+	long long int size0 = 17, size1 = 17, size2 = 6; //размеры массивов нейронов
 	neuron *neuro0 = new neuron[size0];	//Нейроны входного слоя. 4 * 4 под пиксели + нейрон смещения
 	if(neuro0 == NULL){
 		return 1;
@@ -153,6 +153,7 @@ int neural_learning(char *path)
 	if (fopen_s(&data, path, "rb") != 0) {
 		return 3;
 	}
+	data = data;
 
 	double error = 100;
 	while (error > 0.004)
@@ -224,25 +225,25 @@ int neural_learning(char *path)
 	}
 	fclose(weights);
 	fclose(data);
-	delete neuro0;
+	delete[] neuro0;
 	neuro0 = NULL;
-	delete neuro1;
+	delete[] neuro1;
 	neuro1 = NULL;
-	delete neuro2;
+	delete[] neuro2;
 	neuro2 = NULL;
-	delete res;
+	delete[] res;
 	res = NULL;
 	for (int i = 0; i < size0; i++) {
-		delete weight01[i];
+		delete[] weight01[i];
 		weight01[i] = NULL;
 	}
-	delete weight01;
+	delete[] weight01;
 	weight01 = NULL;
 	for (int i = 0; i < size0; i++) {
-		delete weight12[i];
+		delete[] weight12[i];
 		weight12[i] = NULL;
 	}
-	delete weight12;
+	delete[] weight12;
 	weight12 = NULL;
 	return 0;
 }
