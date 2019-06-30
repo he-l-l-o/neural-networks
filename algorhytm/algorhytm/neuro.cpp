@@ -470,9 +470,9 @@ void image_processing(int*** arr, int*** res, int size_x, int size_y)
 			}
 			if (out > 0)
 			{
-				res[i][j][0] = 255;
-				res[i][j][1] = 255;
-				res[i][j][2] = 255;
+				res[i][j][0] = 0;
+				res[i][j][1] = 0;
+				res[i][j][2] = 0;
 			}
 		}
 	}
