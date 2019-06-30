@@ -13,20 +13,20 @@ int main()
 	setlocale(0, "");
 
 	// Создаем главное окно приложения
-	RenderWindow window(VideoMode(1000, 600), "NeuralNetworks");
+	RenderWindow window(VideoMode(1000, 600), "NeuralNetworks", Style::Close);
 
-	string stroka_load; //переменная для ввода текста пути загрузки
-	string stroka_save; //переменная для ввода текста пути сохранения
+	string string_load; //переменная для ввода текста пути загрузки
+	string string_save; //переменная для ввода текста пути сохранения
 
-	Font font;                                //инициализация шрифта
-	font.loadFromFile("Times New Roman.ttf"); 
+	Font font; //инициализация шрифта
+	font.loadFromFile("Times New Roman.ttf");
 
-	Text text_load(L"", font, 20);   //инициализация текста с путем для загрузки
-	text_load.setStyle(Text::Bold);  
-	text_load.setPosition(27, 532); 
-	Text text_save(L"", font, 20);   //инициализация текста с путем для сохранения
-	text_save.setStyle(Text::Bold);  
-	text_save.setPosition(557, 532); 
+	Text text_load(L"", font, 20); //инициализация текста с путем для загрузки
+	text_load.setStyle(Text::Bold);
+	text_load.setPosition(27, 532);
+	Text text_save(L"", font, 20); //инициализация текста с путем для сохранения
+	text_save.setStyle(Text::Bold);
+	text_save.setPosition(557, 532);
 
 	textfield textfiel_load;
 	textfiel_load.set_font(font);
@@ -38,23 +38,23 @@ int main()
 	textfiel_save.set_lenght(32);
 	textfiel_save.set_position(sf::Vector2f(527, 532));
 
-	Image menu_image;                                   //инициализация изображения меню
-	menu_image.loadFromFile("images/menu.png");        
-	Image load_pap_image;                               //инициализация изображения кнопки загрузки
-	load_pap_image.loadFromFile("images/Load_pap.png"); 
-	Image save_pap_image;                               //инициализация изображения кнопки сохранения
-	save_pap_image.loadFromFile("images/Save.png"); 
-	Image load_image;                                   //инициализация загруженного изображения
-	Image save_image;                                   //инициализация сохраненного изображения
+	Image menu_image; //инициализация изображения меню
+	menu_image.loadFromFile("images/menu.png");
+	Image load_pap_image; //инициализация изображения кнопки загрузки
+	load_pap_image.loadFromFile("images/Load_pap.png");
+	Image save_pap_image; //инициализация изображения кнопки сохранения
+	save_pap_image.loadFromFile("images/Save.png");
+	Image* load_image = new Image; //инициализация загруженного изображения
+	Image* save_image = new Image; //инициализация сохраненного изображения
 
-	Texture menu_image_texture;                           //инциализация текстуры для menu_image
-	menu_image_texture.loadFromImage(menu_image);        
-	Texture load_pap_image_texture;                       //инциализация текстуры для load_pap_image
-	load_pap_image_texture.loadFromImage(load_pap_image); 
-	Texture save_pap_image_texture;                       //инциализация текстуры для save_pap_image
-	save_pap_image_texture.loadFromImage(save_pap_image); 
-	Texture load_image_texture;                           //создаем текстуру загруженной картинки
-	Texture save_image_texture;                           //Создание текстуры под новое изображение
+	Texture menu_image_texture; //инциализация текстуры для menu_image
+	menu_image_texture.loadFromImage(menu_image);
+	Texture load_pap_image_texture; //инциализация текстуры для load_pap_image
+	load_pap_image_texture.loadFromImage(load_pap_image);
+	Texture save_pap_image_texture; //инциализация текстуры для save_pap_image
+	save_pap_image_texture.loadFromImage(save_pap_image);
+	Texture* load_image_texture = new Texture; //создаем текстуру загруженной картинки
+	Texture* save_image_texture = new Texture; //Создание текстуры под новое изображение
 
 	Sprite menu_image_sprite; //инициализация спрайта меню
 	menu_image_sprite.setTexture(menu_image_texture);
@@ -65,8 +65,8 @@ int main()
 	Sprite save_pap_image_sprite; //инициализация спрайта кнопки сохранения
 	save_pap_image_sprite.setTexture(save_pap_image_texture);
 	save_pap_image_sprite.setPosition(952, 532);
-	Sprite load_image_sprite; //инициализация спрайта загруженной картинки
-	Sprite save_image_sprite; //инициализация спрайта обратботанной картинки
+	Sprite* load_image_sprite = new Sprite; //инициализация спрайта загруженной картинки
+	Sprite* save_image_sprite = new Sprite; //инициализация спрайта обратботанной картинки
 
 	//создаем рамку для изображений
 	RectangleShape rectangle_load;
@@ -86,8 +86,8 @@ int main()
 		Event event;
 		while (window.pollEvent(event))
 		{
-			textfiel_load.input(event, stroka_load);
-			textfiel_save.input(event, stroka_save);
+			textfiel_load.input(event, string_load);
+			textfiel_save.input(event, string_save);
 
 			load_pap_image_sprite.setColor(Color::White);
 			save_pap_image_sprite.setColor(Color::White);
@@ -122,12 +122,25 @@ int main()
 					if (event.mouseButton.x >= 450 && event.mouseButton.x <= 476 &&
 						event.mouseButton.y >= 532 && event.mouseButton.y <= 558)
 					{
-						//getline(cin, stroka_load); //консольный ввод
+						delete load_image_sprite;
+						load_image_sprite = NULL;
+						delete load_image_texture;
+						load_image_texture = NULL;
+						delete load_image;
+						load_image = NULL;
 
-						load_image.loadFromFile(stroka_load); //взятие изображения по адресу(строки)
+						load_image = new Image;
+						load_image_texture = new Texture;
+						load_image_sprite = new Sprite;
+						if (load_image_sprite == NULL)
+						{
+							return -1;
+						}
 
-						double size_x = load_image.getSize().x; //Считываем размеры картинки
-						double size_y = load_image.getSize().y;
+						load_image->loadFromFile(string_load); //взятие изображения по адресу(строки)
+
+						double size_x = load_image->getSize().x; //Считываем размеры картинки
+						double size_y = load_image->getSize().y;
 						double ratio = size_x / size_y; // отношение x к y
 
 						int save_size_x = size_x, save_size_y = size_y; //сохраняем кол-во пикселей
@@ -165,9 +178,9 @@ int main()
 						{
 							for (int j = 0; j < save_size_x; j++)
 							{
-								arr_image[i][j][0] = load_image.getPixel(j, i).r; //Красная часть цветовой модели
-								arr_image[i][j][1] = load_image.getPixel(j, i).g; //Зеленая часть цветовой модели
-								arr_image[i][j][2] = load_image.getPixel(j, i).b; //Синяя часть цветовой модели
+								arr_image[i][j][0] = load_image->getPixel(j, i).r; //Красная часть цветовой модели
+								arr_image[i][j][1] = load_image->getPixel(j, i).g; //Зеленая часть цветовой модели
+								arr_image[i][j][2] = load_image->getPixel(j, i).b; //Синяя часть цветовой модели
 							}
 						}
 						///////////////////////////////////////////////////////////////////////////
@@ -207,9 +220,24 @@ int main()
 						}
 						///////////////////////////////////////////////////////////////////////////
 
-						load_image_texture.loadFromImage(load_image); 
+						load_image_texture->loadFromImage(*load_image);
 
-						save_image.create(save_size_x, save_size_y, Color(0, 0, 0, 100)); //создание нового изображения
+						delete save_image_sprite;
+						save_image_sprite = NULL;
+						delete save_image_texture;
+						save_image_texture = NULL;
+						delete save_image;
+						save_image = NULL;
+
+						save_image = new Image;
+						save_image_texture = new Texture;
+						save_image_sprite = new Sprite;
+						if (save_image_sprite == NULL)
+						{
+							return -1;
+						}
+
+						save_image->create(save_size_x, save_size_y, Color(0, 0, 0, 100)); //создание нового изображения
 
 						image_processing(arr_image, arr_image_processing, save_size_x, save_size_y);
 
@@ -218,31 +246,31 @@ int main()
 						{
 							for (int j = 0; j < save_size_x; j++)
 							{
-								save_image.setPixel(j, i, Color(arr_image_processing[i][j][0], arr_image_processing[i][j][1], arr_image_processing[i][j][2], 255));
+								save_image->setPixel(j, i, Color(arr_image_processing[i][j][0], arr_image_processing[i][j][1], arr_image_processing[i][j][2], 255));
 							}
 						}
 
-						save_image_texture.loadFromImage(save_image); 
+						save_image_texture->loadFromImage(*save_image);
 
-						load_image_sprite.setTexture(load_image_texture);                     
-						load_image_sprite.setPosition(259 - (size_x / 2), 259 - (size_y / 2)); //установка позиции load_image_sprite
+						load_image_sprite->setTexture(*load_image_texture);
+						load_image_sprite->setPosition(259 - (size_x / 2), 259 - (size_y / 2)); //установка позиции load_image_sprite
 
-						save_image_sprite.setTexture(save_image_texture);                     
-						save_image_sprite.setPosition(762 - (size_x / 2), 259 - (size_y / 2)); //установка позиции save_image_sprite
+						save_image_sprite->setTexture(*save_image_texture);
+						save_image_sprite->setPosition(742 - (size_x / 2), 259 - (size_y / 2)); //установка позиции save_image_sprite
 
 						Vector2f target_size(size_x, size_y); //целевой размеp загружаемого изображения
-						load_image_sprite.setScale(
-							target_size.x / load_image_sprite.getGlobalBounds().width,
-							target_size.y / load_image_sprite.getGlobalBounds().height);
+						load_image_sprite->setScale(
+							target_size.x / load_image_sprite->getGlobalBounds().width,
+							target_size.y / load_image_sprite->getGlobalBounds().height);
 						Vector2f target_size1(size_x, size_y); //целевой размеp обработанного изображения
-						save_image_sprite.setScale(
-							target_size1.x / save_image_sprite.getGlobalBounds().width,
-							target_size1.y / save_image_sprite.getGlobalBounds().height);
+						save_image_sprite->setScale(
+							target_size1.x / save_image_sprite->getGlobalBounds().width,
+							target_size1.y / save_image_sprite->getGlobalBounds().height);
 
 						rectangle_load.setSize(sf::Vector2f(size_x, size_y));
 						rectangle_save.setSize(sf::Vector2f(size_x, size_y));
 						rectangle_load.setPosition(259 - (size_x / 2), 259 - (size_y / 2));
-						rectangle_save.setPosition(762 - (size_x / 2), 259 - (size_y / 2));
+						rectangle_save.setPosition(742 - (size_x / 2), 259 - (size_y / 2));
 
 						//Освобождение памяти
 						for (int i = 0; i < save_size_y; i++)
@@ -261,7 +289,7 @@ int main()
 					if (event.mouseButton.x >= 952 && event.mouseButton.x <= 978 &&
 						event.mouseButton.y >= 532 && event.mouseButton.y <= 558)
 					{
-						save_image.saveToFile(stroka_save); //Сохранение картинки
+						save_image->saveToFile(string_save); //Сохранение картинки
 					}
 				}
 			}
@@ -281,14 +309,14 @@ int main()
 
 		window.draw(rectangle_save);
 
-		window.draw(load_image_sprite); //рисуем Загруженную картинку
+		window.draw(*load_image_sprite); //рисуем Загруженную картинку
 
-		window.draw(save_image_sprite); //рисуем полученную картинку
+		window.draw(*save_image_sprite); //рисуем полученную картинку
 
-		text_load.setString(stroka_load);
+		text_load.setString(string_load);
 		window.draw(text_load); //рисуем текст для загрузки картинки
 
-		text_save.setString(stroka_save);
+		text_save.setString(string_save);
 		window.draw(text_save); //рисуем текст для сохранения картинки
 
 		textfiel_load.render(window);
