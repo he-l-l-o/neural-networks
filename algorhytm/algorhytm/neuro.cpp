@@ -1,4 +1,5 @@
-#include "neuro.h"
+#pragma once
+//#include "neuro.h"
 #include "pch.h"
 #include <iostream>
 #include <cmath>
@@ -424,9 +425,9 @@ void image_processing(int*** arr, int*** res, int size_x, int size_y)
 					{
 						if (j + a > 0 && j + a < size_y - 3)
 						{
-							arr[i][j + a][0] = 130;
-							arr[i][j + a][1] = 130;
-							arr[i][j + a][2] = 130;
+							res[i][j + a][0] = 130;
+							res[i][j + a][1] = 130;
+							res[i][j + a][2] = 130;
 						}
 					}
 				}
@@ -436,9 +437,9 @@ void image_processing(int*** arr, int*** res, int size_x, int size_y)
 					{
 						if (i + a > 0 && i + a < size_x - 3)
 						{
-							arr[i + a][j][0] = 130;
-							arr[i + a][j][1] = 130;
-							arr[i + a][j][2] = 130;
+							res[i + a][j][0] = 130;
+							res[i + a][j][1] = 130;
+							res[i + a][j][2] = 130;
 						}
 					}
 				}
@@ -448,9 +449,9 @@ void image_processing(int*** arr, int*** res, int size_x, int size_y)
 					{
 						if (i - a > 0 && i - a < size_x - 3 && j + a > 0 && j + a < size_y - 3)
 						{
-							arr[i - a][j + a][0] = 130;
-							arr[i - a][j + a][1] = 130;
-							arr[i - a][j + a][2] = 130;
+							res[i - a][j + a][0] = 130;
+							res[i - a][j + a][1] = 130;
+							res[i - a][j + a][2] = 130;
 						}
 					}
 				}
@@ -460,18 +461,18 @@ void image_processing(int*** arr, int*** res, int size_x, int size_y)
 					{
 						if (i + a > 0 && i + a < size_x - 3 && j + a > 0 && j + a < size_y - 3)
 						{
-							arr[i + a][j + a][0] = 130;
-							arr[i + a][j + a][1] = 130;
-							arr[i + a][j + a][2] = 130;
+							res[i + a][j + a][0] = 130;
+							res[i + a][j + a][1] = 130;
+							res[i + a][j + a][2] = 130;
 						}
 					}
 				}
 			}
 			if (out > 0)
 			{
-				arr[i][j][0] = 255;
-				arr[i][j][1] = 255;
-				arr[i][j][2] = 255;
+				res[i][j][0] = 0;
+				res[i][j][1] = 0;
+				res[i][j][2] = 0;
 			}
 		}
 	}
