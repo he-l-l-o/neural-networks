@@ -27,6 +27,9 @@ int main()
 	string file_location = "img/recommend_img.jpg";
 	"The path to the file should not contain Cyrillic characters, but only Latin letters and numbers.\n";
 	Image* load_image = new Image; //меню текстура
+	if (load_image == NULL) {
+		return -1;
+	}
 	load_image->loadFromFile(file_location);
 	if (load_image->loadFromFile(file_location) == false) {
 		return 1;
@@ -75,10 +78,8 @@ int main()
 	Image button_arrow_right_image;
 	button_arrow_right_image.loadFromFile("img/button_arrow_right.png");
 
-
 	Image button_load_image;
 	button_load_image.loadFromFile("img/button_load_img.png");
-
 
 	Texture main_texture;//главная текстура меню
 	main_texture.loadFromImage(main_image);
@@ -88,7 +89,9 @@ int main()
 
 	Texture* load_image_texture = new Texture;//текстура загружаемого изображения
 	load_image_texture->loadFromImage(*load_image);
-	
+	if (load_image_texture == NULL) {
+		return -1;
+	}
 	Texture button_type_0_texture;//текстура кнопки 0
 	button_type_0_texture.loadFromImage(button_type_0_image);
 
@@ -103,7 +106,6 @@ int main()
 
 	Texture button_type_4_texture;//текстура кнопки 4
 	button_type_4_texture.loadFromImage(button_type_4_image);
-
 
 	Texture button_arrow_up_texture;
 	button_arrow_up_texture.loadFromImage(button_arrow_up_image);
@@ -127,7 +129,9 @@ int main()
 	main_sprite.setPosition(0, 0);
 
 	Sprite* load_image_sprite = new Sprite;
-
+	if (load_image_sprite == NULL) {
+		return -1;
+	}
 	load_image_sprite->setTexture(*load_image_texture);
 	load_image_sprite->setPosition(22, 20);
 
@@ -136,15 +140,19 @@ int main()
 	Sprite button_type_0_sprite;//текстура кнопки 0
 	button_type_0_sprite.setTexture(button_type_0_texture);
 	button_type_0_sprite.setPosition(654, 286);
+
 	Sprite button_type_1_sprite;//текстура кнопки 1
 	button_type_1_sprite.setTexture(button_type_1_texture);
 	button_type_1_sprite.setPosition(892, 19);
+
 	Sprite button_type_2_sprite;//текстура кнопки 2
 	button_type_2_sprite.setTexture(button_type_2_texture);
 	button_type_2_sprite.setPosition(892, 109);
+
 	Sprite button_type_3_sprite;//текстура кнопки 3
 	button_type_3_sprite.setTexture(button_type_3_texture);
 	button_type_3_sprite.setPosition(892, 194);
+
 	Sprite button_type_4_sprite;//текстура кнопки 3
 	button_type_4_sprite.setTexture(button_type_4_texture);
 	button_type_4_sprite.setPosition(892, 284);
@@ -152,12 +160,15 @@ int main()
 	Sprite button_arrow_up_sprite;
 	button_arrow_up_sprite.setTexture(button_arrow_up_texture);
 	button_arrow_up_sprite.setPosition(727, 441);
+
 	Sprite button_arrow_down_sprite;
 	button_arrow_down_sprite.setTexture(button_arrow_down_texture);
 	button_arrow_down_sprite.setPosition(727, 517);
+
 	Sprite button_arrow_left_sprite;
 	button_arrow_left_sprite.setTexture(button_arrow_left_texture);
 	button_arrow_left_sprite.setPosition(651, 517);
+
 	Sprite button_arrow_right_sprite;
 	button_arrow_right_sprite.setTexture(button_arrow_right_texture);
 	button_arrow_right_sprite.setPosition(803, 517);
@@ -170,7 +181,9 @@ int main()
 	Texture check_image_texture;
 
 	FILE* binary_database;
-	fopen_s(&binary_database, "data\\database.data", "ab+");
+	if (fopen_s(&binary_database, "data\\database.data", "ab+") != 0) {
+		return 3;
+	}
 
 	//разметчик
 	RectangleShape rectangle_pointer(Vector2f(4, 4));
