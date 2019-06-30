@@ -28,12 +28,15 @@ void get_color_array(short color_of_image_pixels[4][4], sf::Image load_image, sf
 
 			switch (type_color) {
 			case 0:
+				std::cout << "RED" << std::endl;
 				color_of_image_pixels[j][i] = load_image.getPixel(location_marker_x + j, location_marker_y + i).r;
 				break;
 			case 1:
+				std::cout << "GREEN" << std::endl;
 				color_of_image_pixels[j][i] = load_image.getPixel(location_marker_x + j, location_marker_y + i).g;
 				break;
 			case 2:
+				std::cout << "BLUE" << std::endl;
 				color_of_image_pixels[j][i] = load_image.getPixel(location_marker_x + j, location_marker_y + i).b;
 				break;
 			default: exit(4);

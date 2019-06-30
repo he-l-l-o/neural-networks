@@ -72,7 +72,7 @@ void textfield::input(sf::Event event, std::string& file_location) {
 		else if (event.text.unicode == 24) {
 			set_focus(false);
 		}
-		else {
+		else if ((event.text.unicode < 128) && (event.text.unicode != 13)) {
 			sf::String sf_string = "";
 			sf_string += event.text.unicode;
 			string += sf_string.toAnsiString();
