@@ -21,19 +21,18 @@ void scaling(int& size_x, int& size_y, int save_size_x, int save_size_y, double 
 	}
 }
 
-void get_color_array(short color_of_image_pixels[4][4][3], sf::Image load_image, sf::Event event, int location_marker_x, int location_marker_y) {
+void get_color_array(short color_of_image_pixels[4][4], sf::Image load_image, sf::Event event, int location_marker_x, int location_marker_y) {
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 4; j++) {
-			color_of_image_pixels[j][i][0] = load_image.getPixel(location_marker_x + j, location_marker_y + i).r;
-			color_of_image_pixels[j][i][1] = load_image.getPixel(location_marker_x + j, location_marker_y + i).g;
-			color_of_image_pixels[j][i][2] = load_image.getPixel(location_marker_x + j, location_marker_y + i).b;
+			color_of_image_pixels[j][i] = load_image.getPixel(location_marker_x + j, location_marker_y + i).r;
+			color_of_image_pixels[j][i] = load_image.getPixel(location_marker_x + j, location_marker_y + i).g;
+			color_of_image_pixels[j][i] = load_image.getPixel(location_marker_x + j, location_marker_y + i).b;
 		}
 	}
 }
 
 int check_load_img(sf::Image load_image, std::string & file_location) {
 	while (load_image.loadFromFile(file_location) == false) {
-		//std::cout << "NOPE! This file is empty in folder. Plesae, input correct road. Good luck!\n";
 		std::getline(std::cin, file_location);
 		load_image.loadFromFile(file_location);
 	}

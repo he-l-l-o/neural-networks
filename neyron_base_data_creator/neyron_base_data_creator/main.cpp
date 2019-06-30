@@ -17,7 +17,7 @@ using namespace sf;
 */
 struct entry
 {
-	short color_of_image_pixels[4][4][3];
+	short color_of_image_pixels[4][4];
 	int type_lien;
 };
 
@@ -81,12 +81,20 @@ int main()
 	Image button_load_image;
 	button_load_image.loadFromFile("img/button_load_img.png");
 
+	Image button_type_red;
+	button_type_red.loadFromFile("img/button_type_red.png");
+
+	Image button_type_green;
+	button_type_green.loadFromFile("img/button_type_green.png");
+
+	Image button_type_blue;
+	button_type_blue.loadFromFile("img/button_type_blue.png");
+
 	Texture main_texture;//главная текстура меню
 	main_texture.loadFromImage(main_image);
 	if (main_texture.loadFromImage(main_image) == false) {
 		return 1;
 	}
-
 	Texture* load_image_texture = new Texture;//текстура загружаемого изображения
 	load_image_texture->loadFromImage(*load_image);
 	if (load_image_texture == NULL) {
@@ -124,6 +132,13 @@ int main()
 	Texture button_load_texture;
 	button_load_texture.loadFromImage(button_load_image);
 
+	Texture button_type_red_texture;
+	button_type_red_texture.loadFromImage(button_type_red);
+	Texture button_type_green_texture;
+	button_type_green_texture.loadFromImage(button_type_green);
+	Texture button_type_blue_texture;
+	button_type_blue_texture.loadFromImage(button_type_blue);
+
 	Sprite main_sprite;
 	main_sprite.setTexture(main_texture);
 	main_sprite.setPosition(0, 0);
@@ -134,7 +149,7 @@ int main()
 	}
 	load_image_sprite->setTexture(*load_image_texture);
 	load_image_sprite->setPosition(22, 20);
-
+	
 	Sprite save_image_sprite; //вырезанный кусочек изображения
 
 	Sprite button_type_0_sprite;//текстура кнопки 0
@@ -176,6 +191,18 @@ int main()
 	Sprite button_load_sprite;
 	button_load_sprite.setTexture(button_load_texture);
 	button_load_sprite.setPosition(824, 625);
+
+	Sprite button_type_red_sprite;
+	button_type_red_sprite.setTexture(button_type_red_texture);
+	button_type_red_sprite.setPosition(970, 380);
+
+	Sprite button_type_green_sprite;
+	button_type_green_sprite.setTexture(button_type_green_texture);
+	button_type_green_sprite.setPosition(970, 380 + 82);
+
+	Sprite button_type_blue_sprite;
+	button_type_blue_sprite.setTexture(button_type_blue_texture);
+	button_type_blue_sprite.setPosition(970, 380 + 82 + 82);
 
 	Sprite check_image_sprite;
 	Texture check_image_texture;
@@ -263,7 +290,6 @@ int main()
 						load_image->loadFromFile(file_location);
 					}
 					else if (load_image->loadFromFile(file_location) == true) {
-
 						button_load_sprite.setColor(Color(127, 127, 127));
 
 						delete load_image_sprite;
@@ -334,7 +360,6 @@ int main()
 				if (((event.type == Event::KeyPressed) && (event.key.code == Keyboard::Up)) || ((event.mouseButton.button == Mouse::Button::Left) && 
 					(event.type == Event::MouseButtonPressed) && (IntRect(727, 441, 74, 74).contains(Mouse::getPosition(window)))))
 				{
-					//x < 620 x > 21 true else false
 					button_arrow_up_sprite.setColor(Color(180, 180, 180, 255));
 
 					rectangle_pointer.move(0, -1 / ratio_load_img_menu);
@@ -393,7 +418,6 @@ int main()
 					location_marker_x = (rectangle_pointer.getPosition().x - 22) * ratio_load_img_menu;
 					increase(*load_image_texture, save_image_sprite, location_marker_y, location_marker_x, target_Size_save);
 					cout << "x =  " << location_marker_x << " y = " << location_marker_y << endl;
-					//cout << "X = " << rectangle_pointer.getPosition().x << " Y = " << rectangle_pointer.getPosition().y << endl;
 					check_button_arrow_left = 1;
 				}
 				if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Left) || (event.mouseButton.button == Mouse::Button::Left) &&
@@ -417,7 +441,6 @@ int main()
 					location_marker_x = (rectangle_pointer.getPosition().x - 22) * ratio_load_img_menu;
 					increase(*load_image_texture, save_image_sprite, location_marker_y, location_marker_x, target_Size_save);
 					cout << "x =  " << location_marker_x << " y = " << location_marker_y << endl;
-					//cout << "X = " << rectangle_pointer.getPosition().x << " Y = " << rectangle_pointer.getPosition().y << endl;
 					check_button_arrow_right = 1;
 				}
 				if ((event.type == Event::KeyReleased) && (event.key.code == Keyboard::Right) || ((event.mouseButton.button == Mouse::Button::Left) &&
@@ -446,9 +469,9 @@ int main()
 					{
 						for (int j = 0; j < 4; j++)
 						{
-							cout << entry1.color_of_image_pixels[j][i][0] << " ";
-							cout << entry1.color_of_image_pixels[j][i][1] << " ";
-							cout << entry1.color_of_image_pixels[j][i][2] << " ";
+							cout << entry1.color_of_image_pixels[j][i] << " ";
+							cout << entry1.color_of_image_pixels[j][i] << " ";
+							cout << entry1.color_of_image_pixels[j][i] << " ";
 							cout << entry1.type_lien << endl;
 						}
 					}
@@ -475,9 +498,9 @@ int main()
 					{
 						for (int j = 0; j < 4; j++)
 						{
-							cout << entry1.color_of_image_pixels[j][i][0] << " ";
-							cout << entry1.color_of_image_pixels[j][i][1] << " ";
-							cout << entry1.color_of_image_pixels[j][i][2] << " ";
+							cout << entry1.color_of_image_pixels[j][i] << " ";
+							cout << entry1.color_of_image_pixels[j][i] << " ";
+							cout << entry1.color_of_image_pixels[j][i] << " ";
 							cout << entry1.type_lien << endl;
 						}
 					}
@@ -504,9 +527,9 @@ int main()
 					{
 						for (int j = 0; j < 4; j++)
 						{
-							cout << entry1.color_of_image_pixels[j][i][0] << " ";
-							cout << entry1.color_of_image_pixels[j][i][1] << " ";
-							cout << entry1.color_of_image_pixels[j][i][2] << " ";
+							cout << entry1.color_of_image_pixels[j][i] << " ";
+							cout << entry1.color_of_image_pixels[j][i] << " ";
+							cout << entry1.color_of_image_pixels[j][i] << " ";
 							cout << entry1.type_lien << endl;
 						}
 					}
@@ -533,7 +556,7 @@ int main()
 					{
 						for (int j = 0; j < 4; j++)
 						{
-							cout << entry1.color_of_image_pixels[j][i][0] << " ";
+							cout << entry1.color_of_image_pixels[j][i] << " ";
 							cout << entry1.type_lien << endl;
 						}
 					}
@@ -558,9 +581,9 @@ int main()
 					{
 						for (int j = 0; j < 4; j++)
 						{
-							cout << entry1.color_of_image_pixels[j][i][0] << " ";
-							cout << entry1.color_of_image_pixels[j][i][1] << " ";
-							cout << entry1.color_of_image_pixels[j][i][2] << " ";
+							cout << entry1.color_of_image_pixels[j][i] << " ";
+							cout << entry1.color_of_image_pixels[j][i] << " ";
+							cout << entry1.color_of_image_pixels[j][i] << " ";
 							cout << entry1.type_lien << endl;
 						}
 					}
@@ -592,6 +615,9 @@ int main()
 		window.draw(button_arrow_left_sprite);
 		window.draw(button_arrow_right_sprite);
 		textfield.render(window);
+		window.draw(button_type_red_sprite);
+		window.draw(button_type_green_sprite);
+		window.draw(button_type_blue_sprite);
 		window.display();
 	}
 
