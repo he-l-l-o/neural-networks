@@ -396,9 +396,9 @@ void image_processing(int*** arr, int*** res, int size_x, int size_y)
 {
 	short arr2[4][4][3];
 	int out;
-	for (int i = 0; i < size_x - 3; i++)
+	for (int i = 0; i < size_y - 3; i++)
 	{
-		for (int j = 0; j < size_y - 3; j++)
+		for (int j = 0; j < size_x - 3; j++)
 		{
 			for (int k = 0; k < 3; k++)
 			{
