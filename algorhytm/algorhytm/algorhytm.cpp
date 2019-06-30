@@ -153,7 +153,6 @@ int neural_learning(char *path)
 	if (fopen_s(&data, path, "rb") != 0) {
 		return 3;
 	}
-	data = data;
 
 	double error = 100;
 	while (error > 0.004)
@@ -248,165 +247,182 @@ int neural_learning(char *path)
 	return 0;
 }
 
-int *neural_processing(short arr[4][4])
+int neural_processing(short arr[4][4][3], int k)
 {
 	//Инициализация слоев нейронной сети
 
-	int size0 = 16, size1 = 16, size2 = 5, size3 = 5, size4 = 5, size5 = 5; //размеры массивов нейронов
-	neuron *neuro0 = new neuron[size0];										//Нейроны входного слоя. 8 * 8 * 3 под пиксели + нейрон смещения
+	long long int size0 = 17, size1 = 17, size2 = 6; //размеры массивов нейронов
+	neuron* neuro0 = new neuron[size0];	//Нейроны входного слоя. 4 * 4 под пиксели + нейрон смещения
+	if (neuro0 == NULL) {
+		return -1;
+	}
 	for (int i = 0; i < size0; i++)
 	{ //ошибка входных нейронов равна 0
 		neuro0[i].error = 0;
 		neuro0[i].out = 0;
 	}
 	neuro0[size0 - 1].out = 1;
-	neuron *neuro1 = new neuron[size1]; //Нейроны первого слоя (скрытый)
+	neuron* neuro1 = new neuron[size1]; //Нейроны первого слоя (скрытый)
+	if (neuro1 == NULL) {
+		return -1;
+	}
 	neuro1[size1 - 1].out = 1;
 	neuro1[size1 - 1].error = 0;
-	neuron *neuro2 = new neuron[size2]; //Нейроны второго слоя (скрытый)
+	neuron* neuro2 = new neuron[size2]; //Нейроны выходного слоя
+	if (neuro2 == NULL) {
+		return -1;
+	}
 	neuro2[size2 - 1].out = 1;
 	neuro2[size2 - 1].error = 0;
-	neuron *neuro3 = new neuron[size3]; //Нейроны третьего слоя (скрытый)
-	neuro3[size3 - 1].out = 1;
-	neuro3[size3 - 1].error = 0;
-	neuron *neuro4 = new neuron[size4]; //Нейроны четвертого слоя (скрытый)
-	neuro4[size4 - 1].out = 1;
-	neuro4[size4 - 1].error = 0;
-	neuron *neuro5 = new neuron[size5]; //Нейроны выходного слоя по одному под каждое направление линии(один нейрон лишний, нужен для упрощения функций)
-	neuro5[size5 - 1].out = 1;
-	neuro5[size5 - 1].error = 0;
 
 	//Инициализация матриц связи между слоями
 
-	double **weight01 = new double *[size0]; //Веса связей между нулевым и первым слоями
+	double** weight01 = new double* [size0]; //Веса связей между нулевым и первым слоями
+	if (weight01 == NULL) {
+		return -1;
+	}
 	for (int i = 0; i < size0; i++)
 	{
 		weight01[i] = new double[size1 - 1]; //Количество столбцов на 1 меньше размера след. массива из-за нейрона смещения
+		if (weight01[i] == NULL) {
+			return -1;
+		}
 	}
-	double **weight12 = new double *[size1]; //Веса связей между первым и вторым слоями
+	double** weight12 = new double* [size1]; //Веса связей между первым и вторым слоями
+	if (weight12 == NULL) {
+		return -1;
+	}
 	for (int i = 0; i < size1; i++)
 	{
 		weight12[i] = new double[size2 - 1];
-	}
-	double **weight23 = new double *[size2]; //Веса связей между вторым и третьим слоями
-	for (int i = 0; i < size2; i++)
-	{
-		weight23[i] = new double[size3 - 1];
-	}
-	double **weight34 = new double *[size3]; //Веса связей между третьим и четвертым слоями
-	for (int i = 0; i < size3; i++)
-	{
-		weight34[i] = new double[size4 - 1];
-	}
-	double **weight45 = new double *[size4]; //Веса связей между четвертым и пятым слоями
-	for (int i = 0; i < size4; i++)
-	{
-		weight45[i] = new double[size5 - 1];
+		if (weight12[i] == NULL) {
+			return -1;
+		}
 	}
 
 	FILE *weights;
-	fopen_s(&weights, "..\\weights.data", "rb");
+	if (fopen_s(&weights, "..\\weights.data", "rb") != 0) {
+		return -2;
+	}
 	for (int i = 0; i < size0; i++)
 	{
-		fread(weight01[i], sizeof(double), size1 - 1, weights);
+		if (fread(weight01[i], sizeof(double), size1 - 1, weights) == 0) {
+			return -3;
+		}
 	}
 	for (int i = 0; i < size1; i++)
 	{
-		fread(weight12[i], sizeof(double), size2 - 1, weights);
-	}
-	for (int i = 0; i < size2; i++)
-	{
-		fread(weight23[i], sizeof(double), size3 - 1, weights);
-	}
-	for (int i = 0; i < size3; i++)
-	{
-		fread(weight34[i], sizeof(double), size4 - 1, weights);
-	}
-	for (int i = 0; i < size4; i++)
-	{
-		fread(weight45[i], sizeof(double), size5 - 1, weights);
+		if (fread(weight12[i], sizeof(double), size2 - 1, weights) == 0) {
+			return -3;
+		}
 	}
 
 	srand(time(0));
 
+	int l = 0;
 	for (int i = 0; i < 4; i++)
 	{
 		for (int j = 0; j < 4; j++)
 		{
-			for (int k = 0; k < 1; k++)
-			{
-				neuro0[i].out = 1 / (1 + exp(-arr[i][j])); //заполнение входного слоя
-			}
+			neuro0[l].out = arr[i][j][k] / 255; //заполнение входного слоя
+			l++;
 		}
 	}
 	forward(neuro0, size0, neuro1, size1, weight01); //вычисление выходных значений нейронов
 	forward(neuro1, size1, neuro2, size2, weight12);
-	forward(neuro2, size2, neuro3, size3, weight23);
-	forward(neuro3, size3, neuro4, size4, weight34);
-	forward(neuro4, size4, neuro5, size5, weight45);
 
-	int *out = new int[4];
-	for (int i = 0; i < 4; i++)
-	{
-		if (neuro5[i].out > 0.8)
-		{
-			out[i] = 1;
+	int ans = 0;
+	for (int i = 0; i < size2 - 1; i++) {
+		if (neuro2[i].out > neuro2[ans].out) {
+			ans = i;
 		}
 	}
-	return out;
+	fclose(weights);
+	delete[] neuro0;
+	neuro0 = NULL;
+	delete[] neuro1;
+	neuro1 = NULL;
+	delete[] neuro2;
+	neuro2 = NULL;
+	for (int i = 0; i < size0; i++) {
+		delete[] weight01[i];
+		weight01[i] = NULL;
+	}
+	delete[] weight01;
+	weight01 = NULL;
+	for (int i = 0; i < size0; i++) {
+		delete[] weight12[i];
+		weight12[i] = NULL;
+	}
+	delete[] weight12;
+	weight12 = NULL;
+	return ans;
 }
 
-void image_processing(int ***&arr, int ***&res, int size_x, int size_y)
+void image_processing(int ***arr, int ***res, int size_x, int size_y)
 {
-	short arr2[4][4];
-	int *out;
-	for (int i = 0; i < size_x - 7; i++)
+	short arr2[4][4][3];
+	int out;
+	for (int i = 0; i < size_x - 3; i++)
 	{
-		for (int j = 0; j < size_y - 7; j++)
+		for (int j = 0; j < size_y - 3; j++)
 		{
-			for (int a = 0; a < 8; a++)
-			{
-				for (int b = 0; b < 8; b++)
+			for (int k = 0; k < 3; k++) {
+				for (int a = 0; a < 4; a++)
 				{
-					arr2[a][b] = arr[i + a][j + b][0];
+					for (int b = 0; b < 4; b++)
+					{
+						arr2[a][b][k] = arr[i + a][j + b][k];
+					}
 				}
 			}
-			out = neural_processing(arr2);
-			if (out[0] == 1)
-			{
-				for (int k = -5; k < 5; k++)
-				{
-					res[i][j + k][0] = 255;
-					res[i][j + k][1] = 255;
-					res[i][j + k][2] = 255;
+			if (out = neural_processing(arr2, 0) == 0) {
+				if (out = neural_processing(arr2, 1) == 0) {
+					out = neural_processing(arr2, 2);
 				}
 			}
-			if (out[1] == 1)
-			{
-				for (int k = -5; k < 5; k++)
-				{
-					res[i + k][j][0] = 255;
-					res[i + k][j][1] = 255;
-					res[i + k][j][2] = 255;
+			if (i % 3 == 0 && j % 3 == 0) {
+				if (out == 1) {
+					for (int a = -2; a < 3; a++) {
+						if (j + a > 0 && j + a < size_y - 3) {
+							arr[i][j + a][0] = 130;
+							arr[i][j + a][1] = 130;
+							arr[i][j + a][2] = 130;
+						}
+					}
+				}
+				if (out == 2) {
+					for (int a = -2; a < 3; a++) {
+						if (i + a > 0 && i + a < size_x - 3) {
+							arr[i + a][j][0] = 130;
+							arr[i + a][j][1] = 130;
+							arr[i + a][j][2] = 130;
+						}
+					}
+				}
+				if (out == 3) {
+					for (int a = -2; a < 3; a++) {
+						if (i - a > 0 && i - a < size_x - 3 && j + a > 0 && j + a < size_y - 3) {
+							arr[i - a][j + a][0] = 130;
+							arr[i - a][j + a][1] = 130;
+							arr[i - a][j + a][2] = 130;
+						}
+					}
+				}
+				if (out == 4) {
+					for (int a = -2; a < 3; a++) {
+						if (i + a > 0 && i + a < size_x - 3 && j + a > 0 && j + a < size_y - 3) {
+							arr[i + a][j + a][0] = 130;
+							arr[i + a][j + a][1] = 130;
+							arr[i + a][j + a][2] = 130;
+						}
+					}
 				}
 			}
-			if (out[2] == 1)
-			{
-				for (int k = -5; k < 5; k++)
-				{
-					res[i + k][j + k][0] = 255;
-					res[i + k][j + k][1] = 255;
-					res[i + k][j + k][2] = 255;
-				}
-			}
-			if (out[3] == 1)
-			{
-				for (int k = -5; k < 5; k++)
-				{
-					res[i - k][j + k][0] = 255;
-					res[i - k][j + k][1] = 255;
-					res[i - k][j + k][2] = 255;
-				}
+			if (out > 0) {
+				arr[i][j][0] = 255;
+				arr[i][j][1] = 255;
+				arr[i][j][2] = 255;
 			}
 		}
 	}
