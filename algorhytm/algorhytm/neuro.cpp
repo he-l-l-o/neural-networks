@@ -1,4 +1,5 @@
-#include "neuro.h"
+#pragma once
+//#include "neuro.h"
 #include "pch.h"
 #include <iostream>
 #include <cmath>
