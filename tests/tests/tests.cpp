@@ -91,21 +91,6 @@ TEST_CASE("Neural processing")
 		}
 	}
 	REQUIRE(neural_processing(arr, 0) == 0);
-	for (int j = 0; j < 4; j++)
-	{
-		for (int k = 0; k < 3; k++)
-		{
-			for (int i = 0; i < 2; i++)
-			{
-				arr[i][j][k] = 255;
-			}
-			for (int i = 2; i < 4; i++)
-			{
-				arr[i][j][k] = 0;
-			}
-		}
-	}
-	REQUIRE(neural_processing(arr, 0) == 1);
 	for (int i = 0; i < 4; i++)
 	{
 		for (int k = 0; k < 3; k++)
