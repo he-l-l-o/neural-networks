@@ -138,12 +138,24 @@ int main()
 						////////////////////////ÒĞÅÕÌÅĞÍÛÉ ÄÈÍÀÌÈ×ÅÑÊÈÉ ÌÀÑÑÈÂ/////////////////////
 						//1)Èíèöèàëèçàöèÿ
 						int*** arr_image = new int** [save_size_y];
+						if (arr_image == NULL)
+						{
+							return 1;
+						}
 						for (int i = 0; i < save_size_y; i++)
 						{
 							arr_image[i] = new int* [save_size_x];
+							if (arr_image[i] == NULL)
+							{
+								return 1;
+							}
 							for (int j = 0; j < save_size_x; j++)
 							{
 								arr_image[i][j] = new int[3];
+								if (arr_image[i][j] == NULL)
+								{
+									return 1;
+								}
 							}
 						}
 
@@ -162,12 +174,24 @@ int main()
 						////////////////////////ÒĞÅÕÌÅĞÍÛÉ ÄÈÍÀÌÈ×ÅÑÊÈÉ ÌÀÑÑÈÂ Ñ ĞÅÇÓËÜÒÀÒÀÌÈ/////////////////////
 						//1)Èíèöèàëèçàöèÿ
 						int*** arr_image_processing = new int** [save_size_y];
+						if (arr_image == NULL)
+						{
+							return 1;
+						}
 						for (int i = 0; i < save_size_y; i++)
 						{
 							arr_image_processing[i] = new int* [save_size_x];
+							if (arr_image[i] == NULL)
+							{
+								return 1;
+							}
 							for (int j = 0; j < save_size_x; j++)
 							{
 								arr_image_processing[i][j] = new int[3];
+								if (arr_image[i][j] == NULL)
+								{
+									return 1;
+								}
 							}
 						}
 						//2)Çàïîëíåíèå
