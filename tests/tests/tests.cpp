@@ -2,6 +2,8 @@
 #include "catch.hpp"
 #include "..\\..\\algorhytm\algorhytm\neuro.h"
 #include "..\..\\develop_graphics\develop_graphics\ratio.h"
+#include "..\..\\neyron_base_data_creator\neyron_base_data_creator\image_conversion.h"
+#include "..\..\\neyron_base_data_creator\neyron_base_data_creator\textfield.h"
 
 TEST_CASE("ratio")
 {
@@ -121,4 +123,15 @@ TEST_CASE("Neural processing")
 		}
 	}
 	REQUIRE(neural_processing(arr, 0) == 2);
+}
+TEST_CASE("Scaling")
+{
+	int size_x = 800;
+	int size_y = 1000;
+	int save_size_x = size_x;
+	int save_size_y = size_y;
+	double ratio_x_y = (double)size_x / size_y;
+	scaling(size_x, size_y, save_size_x, save_size_y, ratio_x_y);
+	REQUIRE(size_x == 640);
+	REQUIRE(size_y == 600);
 }

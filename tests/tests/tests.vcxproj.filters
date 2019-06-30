@@ -21,6 +21,9 @@
     <ClCompile Include="..\..\algorhytm\algorhytm\neuro.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\neyron_base_data_creator\neyron_base_data_creator\image_conversion.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="catch.hpp">
