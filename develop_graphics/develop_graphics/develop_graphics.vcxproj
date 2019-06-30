@@ -121,10 +121,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\algorhytm\algorhytm\neuro.cpp" />
     <ClCompile Include="..\..\neyron_base_data_creator\neyron_base_data_creator\textfield.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\algorhytm\algorhytm\neuro.h" />
     <ClInclude Include="..\..\neyron_base_data_creator\neyron_base_data_creator\textfield.h" />
     <ClInclude Include="ratio.h" />
   </ItemGroup>

@@ -3,6 +3,7 @@
 #include <sstream>
 #include "ratio.h"
 #include "../..//neyron_base_data_creator/neyron_base_data_creator/textfield.h"
+#include "../..//algorhytm/algorhytm/neuro.h"
 
 using namespace sf;
 using namespace std;
@@ -18,14 +19,14 @@ int main()
 	string stroka_save; //переменная для ввода текста пути сохранения
 
 	Font font;                                //инициализация шрифта
-	font.loadFromFile("Times New Roman.ttf"); //передаем файл с шрифтом в font
+	font.loadFromFile("Times New Roman.ttf"); 
 
 	Text text_load(L"", font, 20);   //инициализация текста с путем для загрузки
-	text_load.setStyle(Text::Bold);  //делаем текст загрузки жирным
-	text_load.setPosition(27, 532);  //местоположение текста загрузки
+	text_load.setStyle(Text::Bold);  
+	text_load.setPosition(27, 532); 
 	Text text_save(L"", font, 20);   //инициализация текста с путем для сохранения
-	text_save.setStyle(Text::Bold);  //делаем текст загрузки жирным
-	text_save.setPosition(557, 532); //местоположение текста загрузки
+	text_save.setStyle(Text::Bold);  
+	text_save.setPosition(557, 532); 
 
 	textfield textfiel_load;
 	textfiel_load.set_font(font);
@@ -38,20 +39,20 @@ int main()
 	textfiel_save.set_position(sf::Vector2f(527, 532));
 
 	Image menu_image;                                   //инициализация изображения меню
-	menu_image.loadFromFile("images/menu.png");         //передаем изображение в menu_image
+	menu_image.loadFromFile("images/menu.png");        
 	Image load_pap_image;                               //инициализация изображения кнопки загрузки
-	load_pap_image.loadFromFile("images/Load_pap.png"); //передаем изображение в load_pap_image
+	load_pap_image.loadFromFile("images/Load_pap.png"); 
 	Image save_pap_image;                               //инициализация изображения кнопки сохранения
-	save_pap_image.loadFromFile("images/Save.png");     //передаем изображение в save_pap_image
+	save_pap_image.loadFromFile("images/Save.png"); 
 	Image load_image;                                   //инициализация загруженного изображения
 	Image save_image;                                   //инициализация сохраненного изображения
 
 	Texture menu_image_texture;                           //инциализация текстуры для menu_image
-	menu_image_texture.loadFromImage(menu_image);         //передача menu_image в menu_image_texture
+	menu_image_texture.loadFromImage(menu_image);        
 	Texture load_pap_image_texture;                       //инциализация текстуры для load_pap_image
-	load_pap_image_texture.loadFromImage(load_pap_image); //передача load_pap_image в load_pap_image_texture
+	load_pap_image_texture.loadFromImage(load_pap_image); 
 	Texture save_pap_image_texture;                       //инциализация текстуры для save_pap_image
-	save_pap_image_texture.loadFromImage(save_pap_image); //передача save_pap_image в save_pap_image_texture
+	save_pap_image_texture.loadFromImage(save_pap_image); 
 	Texture load_image_texture;                           //создаем текстуру загруженной картинки
 	Texture save_image_texture;                           //Создание текстуры под новое изображение
 
@@ -206,25 +207,27 @@ int main()
 						}
 						///////////////////////////////////////////////////////////////////////////
 
-						load_image_texture.loadFromImage(load_image); //передача load_image в load_image_texture
+						load_image_texture.loadFromImage(load_image); 
 
 						save_image.create(save_size_x, save_size_y, Color(0, 0, 0, 100)); //создание нового изображения
+
+						image_processing(arr_image, arr_image_processing, save_size_x, save_size_y);
 
 						//Создание изображения из массива пискелей
 						for (int i = 0; i < save_size_y; i++)
 						{
 							for (int j = 0; j < save_size_x; j++)
 							{
-								save_image.setPixel(j, i, Color(arr_image[i][j][0], arr_image[i][j][1], arr_image[i][j][2], 255));
+								save_image.setPixel(j, i, Color(arr_image_processing[i][j][0], arr_image_processing[i][j][1], arr_image_processing[i][j][2], 255));
 							}
 						}
 
-						save_image_texture.loadFromImage(save_image); //передача save_image в save_image_texture
+						save_image_texture.loadFromImage(save_image); 
 
-						load_image_sprite.setTexture(load_image_texture);                      //передача load_image_texture в load_image_texture
+						load_image_sprite.setTexture(load_image_texture);                     
 						load_image_sprite.setPosition(259 - (size_x / 2), 259 - (size_y / 2)); //установка позиции load_image_sprite
 
-						save_image_sprite.setTexture(save_image_texture);                      //передача save_image_texture в save_image_sprite
+						save_image_sprite.setTexture(save_image_texture);                     
 						save_image_sprite.setPosition(762 - (size_x / 2), 259 - (size_y / 2)); //установка позиции save_image_sprite
 
 						Vector2f target_size(size_x, size_y); //целевой размеp загружаемого изображения
@@ -258,9 +261,7 @@ int main()
 					if (event.mouseButton.x >= 952 && event.mouseButton.x <= 978 &&
 						event.mouseButton.y >= 532 && event.mouseButton.y <= 558)
 					{
-						//getline(cin, stroka_save); //консольный ввод
-
-						save_image.saveToFile(stroka_save /*"images/SaveImage.jpg"*/); //Сохранение картинки
+						save_image.saveToFile(stroka_save); //Сохранение картинки
 					}
 				}
 			}

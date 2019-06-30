@@ -21,12 +21,18 @@
     <ClCompile Include="..\..\neyron_base_data_creator\neyron_base_data_creator\textfield.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\algorhytm\algorhytm\neuro.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ratio.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
     <ClInclude Include="..\..\neyron_base_data_creator\neyron_base_data_creator\textfield.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\algorhytm\algorhytm\neuro.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
   </ItemGroup>
