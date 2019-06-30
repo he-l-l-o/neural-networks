@@ -68,7 +68,7 @@ void weights_update(neuron* next, int next_size, neuron* prev, int prev_size, do
 //структура для чтения базы данных
 struct entry
 {
-	short img[4][4][3];
+	short img[4][4];
 	int line_type;
 };
 
@@ -183,11 +183,11 @@ int neural_learning(char* path)
 				}
 			}
 
-			for (int i = 0, k = rand() % 3, l = 0; i < 4; i++)
+			for (int i = 0, l = 0; i < 4; i++)
 			{
 				for (int j = 0; j < 4; j++)
 				{
-					neuro0[l].out = (double)zap.img[i][j][k] / 255; //заполнение входного слоя
+					neuro0[l].out = (double)zap.img[i][j] / 255; //заполнение входного слоя
 					l++;
 				}
 			}
@@ -396,9 +396,9 @@ void image_processing(int*** arr, int*** res, int size_x, int size_y)
 {
 	short arr2[4][4][3];
 	int out;
-	for (int i = 0; i < size_x - 3; i++)
+	for (int i = 0; i < size_y - 3; i++)
 	{
-		for (int j = 0; j < size_y - 3; j++)
+		for (int j = 0; j < size_x - 3; j++)
 		{
 			for (int k = 0; k < 3; k++)
 			{

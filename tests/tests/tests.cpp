@@ -1,6 +1,18 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 #include "..\\..\\algorhytm\algorhytm\neuro.h"
+#include "..\..\\develop_graphics\develop_graphics\ratio.h"
+
+TEST_CASE("ratio")
+{
+	double size_x = 2000, size_y = 1000;
+	double ratio = size_x / size_y;
+
+	ratio_func(size_x, size_y, ratio);
+
+	REQUIRE(size_x == 475);
+	REQUIRE(size_y == 237.5);
+}
 
 TEST_CASE("Basic neural network testing")
 {
@@ -44,4 +56,69 @@ TEST_CASE("Side functions")
 	clean(arr, size);
 	REQUIRE(arr[0] == 0);
 	REQUIRE(arr[1] == 0);
+}
+
+TEST_CASE("Neural learning")
+{
+	char* path = new char[100];
+	path = (char*)"..\\test1.data\0";
+	int a = neural_learning(path);
+	REQUIRE(a == 0);
+	path = (char*)"";
+	a = neural_learning(path);
+	REQUIRE(a == 3);
+}
+
+TEST_CASE("Neural processing")
+{
+	char* path = new char[100];
+	path = (char*)"..\\test2.data\0";
+	int a = neural_learning(path);
+	REQUIRE(a == 0);
+	short arr[4][4][3];
+	for (int i = 0; i < 4; i++)
+	{
+		for (int k = 0; k < 3; k++)
+		{
+			for (int j = 0; j < 2; j++)
+			{
+				arr[i][j][k] = 255;
+			}
+			for (int j = 2; j < 4; j++)
+			{
+				arr[i][j][k] = 255;
+			}
+		}
+	}
+	REQUIRE(neural_processing(arr, 0) == 0);
+	for (int j = 0; j < 4; j++)
+	{
+		for (int k = 0; k < 3; k++)
+		{
+			for (int i = 0; i < 2; i++)
+			{
+				arr[i][j][k] = 255;
+			}
+			for (int i = 2; i < 4; i++)
+			{
+				arr[i][j][k] = 0;
+			}
+		}
+	}
+	REQUIRE(neural_processing(arr, 0) == 1);
+	for (int i = 0; i < 4; i++)
+	{
+		for (int k = 0; k < 3; k++)
+		{
+			for (int j = 0; j < 2; j++)
+			{
+				arr[i][j][k] = 0;
+			}
+			for (int j = 2; j < 4; j++)
+			{
+				arr[i][j][k] = 255;
+			}
+		}
+	}
+	REQUIRE(neural_processing(arr, 0) == 2);
 }
