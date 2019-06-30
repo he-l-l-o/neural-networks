@@ -1,6 +1,18 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 #include "..\\..\\algorhytm\algorhytm\neuro.h"
+#include "..\..\\develop_graphics\develop_graphics\ratio.h"
+
+TEST_CASE("ratio")
+{
+	double size_x = 2000, size_y = 1000;
+	double ratio = size_x / size_y;
+
+	ratio_func(size_x, size_y, ratio);
+
+	REQUIRE(size_x == 475);
+	REQUIRE(size_y == 237.5);
+}
 
 TEST_CASE("Basic neural network testing")
 {
