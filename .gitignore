@@ -11,6 +11,7 @@
 *.userprefs
 
 # Build results
+*.exe
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/
@@ -68,7 +69,6 @@ artifacts/
 *.pidb
 *.svclog
 *.scc
-*.exe
 
 # Chutzpah Test files
 _Chutzpah*
