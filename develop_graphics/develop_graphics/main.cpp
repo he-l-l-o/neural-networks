@@ -41,11 +41,13 @@ int main()
 	Image menu_image; //инициализация изображения меню
 	menu_image.loadFromFile("images/menu.png");
 	Image load_pap_image; //инициализация изображения кнопки загрузки
-	load_pap_image.loadFromFile("images/Load_pap.png");
+	load_pap_image.loadFromFile("images/load_pap.png");
 	Image save_pap_image; //инициализация изображения кнопки сохранения
-	save_pap_image.loadFromFile("images/Save.png");
+	save_pap_image.loadFromFile("images/save.png");
 	Image* load_image = new Image; //инициализация загруженного изображения
 	Image* save_image = new Image; //инициализация сохраненного изображения
+	Image convert_image;
+	convert_image.loadFromFile("images/convert.png");
 
 	Texture menu_image_texture; //инциализация текстуры для menu_image
 	menu_image_texture.loadFromImage(menu_image);
@@ -55,6 +57,8 @@ int main()
 	save_pap_image_texture.loadFromImage(save_pap_image);
 	Texture* load_image_texture = new Texture; //создаем текстуру загруженной картинки
 	Texture* save_image_texture = new Texture; //Создание текстуры под новое изображение
+	Texture convert_texture;
+	convert_texture.loadFromImage(convert_image);
 
 	Sprite menu_image_sprite; //инициализация спрайта меню
 	menu_image_sprite.setTexture(menu_image_texture);
@@ -67,6 +71,10 @@ int main()
 	save_pap_image_sprite.setPosition(952, 532);
 	Sprite* load_image_sprite = new Sprite; //инициализация спрайта загруженной картинки
 	Sprite* save_image_sprite = new Sprite; //инициализация спрайта обратботанной картинки
+	Sprite convert_sprite;
+	convert_sprite.setTexture(convert_texture);
+	convert_sprite.setPosition(490, 532);
+
 
 	//создаем рамку для изображений
 	RectangleShape rectangle_load;
@@ -90,11 +98,16 @@ int main()
 			textfiel_save.input(event, string_save);
 
 			load_pap_image_sprite.setColor(Color::White);
+			convert_sprite.setColor(Color::White);
 			save_pap_image_sprite.setColor(Color::White);
 
 			if (IntRect(450, 532, 27, 27).contains(Mouse::getPosition(window)))
 			{
 				load_pap_image_sprite.setColor(Color(180, 180, 180, 255));
+			}
+			if (IntRect(490, 532, 27, 27).contains(Mouse::getPosition(window)))
+			{
+				convert_sprite.setColor(Color(180, 180, 180, 255));
 			}
 			if (IntRect(952, 532, 26, 26).contains(Mouse::getPosition(window)))
 			{
@@ -113,13 +126,63 @@ int main()
 				{
 					load_pap_image_sprite.setColor(Color(180, 180, 180, 255));
 				}
+				if (IntRect(490, 532, 26, 26).contains(Mouse::getPosition(window)))
+				{
+					convert_sprite.setColor(Color(180, 180, 180, 255));
+				}
 				if (IntRect(952, 532, 26, 26).contains(Mouse::getPosition(window)))
 				{
 					save_pap_image_sprite.setColor(Color(180, 180, 180, 255));
 				}
 				if (event.mouseButton.button == sf::Mouse::Left)
 				{
-					if (event.mouseButton.x >= 450 && event.mouseButton.x <= 476 &&
+					if (event.mouseButton.x >= 450 && event.mouseButton.x <= 516 &&
+						event.mouseButton.y >= 532 && event.mouseButton.y <= 558)
+					{
+						delete load_image_sprite;
+						load_image_sprite = NULL;
+						delete load_image_texture;
+						load_image_texture = NULL;
+						delete load_image;
+						load_image = NULL;
+
+						load_image = new Image;
+						load_image_texture = new Texture;
+						load_image_sprite = new Sprite;
+						if (load_image_sprite == NULL)
+						{
+							return -1;
+						}
+
+						load_image->loadFromFile(string_load); //взятие изображения по адресу(строки)
+
+						double size_x = load_image->getSize().x; //Считываем размеры картинки
+						double size_y = load_image->getSize().y;
+						double ratio = size_x / size_y; // отношение x к y
+
+						int save_size_x = size_x, save_size_y = size_y; //сохраняем кол-во пикселей
+
+						////////////////////////СЖАТИЕ ИЗОБРАЖЕНИЯ ДО РАЗМЕРОВ ОКНА////////////////
+						ratio_func(size_x, size_y, ratio); //расчет нового разрешения загруженного изображения
+						///////////////////////////////////////////////////////////////////////////
+
+						load_image_texture->loadFromImage(*load_image);
+
+						load_image_sprite->setTexture(*load_image_texture);
+						load_image_sprite->setPosition(259 - (size_x / 2), 259 - (size_y / 2)); //установка позиции load_image_sprite
+
+						Vector2f target_size(size_x, size_y); //целевой размеp загружаемого изображения
+						load_image_sprite->setScale(
+							target_size.x / load_image_sprite->getGlobalBounds().width,
+							target_size.y / load_image_sprite->getGlobalBounds().height);
+
+						rectangle_load.setSize(sf::Vector2f(size_x, size_y));
+						rectangle_load.setPosition(259 - (size_x / 2), 259 - (size_y / 2));
+					}
+				}
+				if (event.mouseButton.button == sf::Mouse::Left)
+				{
+					if (event.mouseButton.x >= 490 && event.mouseButton.x <= 516 &&
 						event.mouseButton.y >= 532 && event.mouseButton.y <= 558)
 					{
 						delete load_image_sprite;
@@ -303,6 +366,8 @@ int main()
 
 		window.draw(load_pap_image_sprite); //рисуем иконку папки
 
+		window.draw(convert_sprite);//рисуем кнопку обратки изображения
+
 		window.draw(save_pap_image_sprite); //рисуем иконку сохранения
 
 		window.draw(rectangle_load); //рисуем рамку изображения
@@ -312,12 +377,6 @@ int main()
 		window.draw(*load_image_sprite); //рисуем Загруженную картинку
 
 		window.draw(*save_image_sprite); //рисуем полученную картинку
-
-		text_load.setString(string_load);
-		window.draw(text_load); //рисуем текст для загрузки картинки
-
-		text_save.setString(string_save);
-		window.draw(text_save); //рисуем текст для сохранения картинки
 
 		textfiel_load.render(window);
 
